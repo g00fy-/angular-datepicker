@@ -1,0 +1,65 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/date.css"/>
+    <!-- endbuild -->
+  </head>
+  <body ng-app="dateInput">
+
+    <div class="row-fluid">
+        <div class="span6">
+            <h2>Calendar</h2>
+
+            <h3>views</h3>
+            <h5>default</h5>
+            <pre>&lt;div calendar="start"&gt;&lt;/div&gt; </pre>
+            <div calendar="start" class="datetimepicker"></div>
+            <!--<h5>year</h5>-->
+            <!--<pre>&lt;div calendar="start"  <strong>year</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<div calendar="start" class="datetimepicker" year></div>-->
+            <!--<h5>month</h5>-->
+            <!--<pre>&lt;div calendar="start <strong>month</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<div calendar="start" class="datetimepicker" month></div>-->
+            <!--<h5>date</h5>-->
+            <!--<pre>&lt;div calendar="start" <strong>date</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<div calendar="start" class="datetimepicker" date></div>-->
+            <!--<h5>hours</h5>-->
+            <!--<pre>&lt;div calendar="start" <strong>hours</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<div calendar="start" class="datetimepicker" hours></div>-->
+            <!--<h5>minutes</h5>-->
+            <!--<pre>&lt;div calendar="start" <strong>minutes</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<div calendar="start" class="datetimepicker" minutes></div>-->
+        <!--</div>-->
+        <!--<div class="span6">-->
+            <!--<h3>Input</h3>-->
+            <!--<h5>default</h5>-->
+            <!--<pre>&lt;input type="datetime" <strong>ng-model="model" date-time</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<input type="datetime" date-time ng-model="start">-->
+            <!--<h5>Input format</h5>-->
+            <!--<pre>&lt;input type="datetime" ng-model="model" date-time <strong>format="long"</strong>&gt;&lt;/div&gt; </pre>-->
+            <!--<input type="datetime" date-time ng-model="end" hours format="short">-->
+            <!--<h5>Date range</h5>-->
+            <!--<pre>&lt;div date-range start="start" end="end" &gt;&lt;/div&gt; </pre>-->
+            <!--<div date-range start="a" end="b" style="position: relative"></div>-->
+        <!--</div>-->
+    </div>
+
+    <script src="components/jquery/jquery.js"></script>
+    <script src="components/angular/angular.js"></script>
+    <!-- build:js module.min.js -->
+    <script src="scripts/module.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>
