@@ -2,7 +2,7 @@
   var Module = angular.module('dateInput', []);
 
 
-  Module.directive('calendar', function () {
+  Module.directive('datePicker', function () {
     var viewOptions = ['month', 'date', 'year', 'month', 'hours', 'minutes'];
 
     function isValidDate(date) {
@@ -113,7 +113,7 @@
 
     return {
       scope     : {
-        date  : '=calendar',
+        date  : '=datePicker',
         after : '=?',
         before: '=?'
       },
@@ -382,7 +382,7 @@
 
         element.bind('focus', function () {
           if (!picker) {
-            picker = $compile('<div calendar="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>')(scope);
+            picker = $compile('<div date-picker="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>')(scope);
             body.append(picker);
             picker.bind('mousedown', function () {
               return false;
@@ -405,7 +405,7 @@
 
   Module.directive('dateRange', function () {
     return {
-      template: '<div class="dropdown-menu" style="display: block">\n    <table >\n        <tr>\n            <td valign="top"><div calendar="start" class="datetimepicker" date after="start" before="end"></div></td>\n            <td valign="top"><div calendar="end" class="datetimepicker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
+      template: '<div class="dropdown-menu" style="display: block">\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="datetimepicker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="datetimepicker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
       scope   : {
         start: '=',
         end  : '='
