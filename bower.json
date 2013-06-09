@@ -1,15 +1,19 @@
 {
   "name": "angular-datepicker",
-  "main": ["app/scripts/module.js","app/styles/date.css"],
-  "ignore": ["*"],
+  "main": "app/scripts/module.js",
+  "license": "MIT",
   "version": "0.0.0",
-  "dependencies": {
+  "ignore": [
+    "**/.*",
+    "gruntFile.js",
+    "package.json"
+  ],
+  "dependencies": {},
+  "devDependencies": {
     "angular": "~1.0.5",
     "json3": "~3.2.4",
     "es5-shim": "~2.0.8",
-    "jquery": "~2.0.2"
-  },
-  "devDependencies": {
+    "jquery": "~2.0.2",
     "angular-mocks": "~1.0.5",
     "angular-scenario": "~1.0.5"
   }
