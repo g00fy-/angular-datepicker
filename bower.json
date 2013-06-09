@@ -1,5 +1,7 @@
 {
   "name": "angular-datepicker",
+  "main": ["app/scripts/module.js","app/styles/date.css"],
+  "ignore": ["*"],
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.0.5",
