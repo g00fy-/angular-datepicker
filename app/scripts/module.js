@@ -384,12 +384,12 @@
           if (!picker) {
             picker = $compile('<div date-picker="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>')(scope);
             body.append(picker);
+            scope.$digest();
+            var pos = angular.extend({}, element.position(), { height: element[0].offsetHeight });
+            picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: 'absolute'});
             picker.bind('mousedown', function () {
               return false;
             });
-            var pos = angular.extend({}, element.position(), { height: element[0].offsetHeight });
-            picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: 'absolute'});
-            scope.$digest();
           }
           return false;
         });
@@ -405,7 +405,7 @@
 
   Module.directive('dateRange', function () {
     return {
-      template: '<div class="dropdown-menu" style="display: block">\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="datetimepicker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="datetimepicker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
+      template: '<div>\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="datetimepicker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="datetimepicker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
       scope   : {
         start: '=',
         end  : '='

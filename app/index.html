@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="styles/date.css"/>
     <!-- endbuild -->
   </head>
-  <body ng-app="dateInput">
+  <body ng-app="sample">
 
     <div class="row-fluid">
         <div class="span6">
@@ -50,16 +50,46 @@
             <h5>Input format</h5>
             <pre>&lt;input type="datetime" ng-model="model" date-time <strong>format="long"</strong>&gt;&lt;/div&gt; </pre>
             <input type="datetime" date-time ng-model="end" hours format="short">
+            <h5>A button</h5>
+            <pre ng-non-bindable>&lt;div class=&quot;dropdown&quot;&gt;
+  &lt;a class=&quot;dropdown-toggle btn btn-danger&quot;&gt;
+    pick a date: {{(date|date)}}
+  &lt;/a&gt;
+  &lt;div class=&quot;dropdown-menu&quot; ng-click=&quot;$event.preventDefault();$event.stopPropagation()&quot;&gt;
+    &lt;div date-picker=&quot;date&quot; class=&quot;datetimepicker&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+            <div class="dropdown">
+              <a class="dropdown-toggle btn btn-danger">
+                pick a date: {{(date|date)}}
+              </a>
+              <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
+                <div date-picker="date" class="datetimepicker"></div>
+              </div>
+            </div>
             <h5>Date range</h5>
             <pre>&lt;div date-range start="start" end="end" &gt;&lt;/div&gt; </pre>
-            <div date-range start="a" end="b" style="position: relative"></div>
+            <div date-range start="a" end="b" style="position: relative; z-index:0"></div>
+            <h5>Date range button</h5>
+            <div class="dropdown">
+              <a class="dropdown-toggle btn btn-danger">
+                {{(a|date)||"pick start"}} - {{(b|date)||"pick end"}}
+              </a>
+              <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
+                <div date-range start="a" end="b"></div>
+              </div>
+            </div>
         </div>
     </div>
 
     <script src="components/jquery/jquery.js"></script>
     <script src="components/angular/angular.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap.js"></script>
     <!-- build:js module.min.js -->
     <script src="scripts/module.js"></script>
     <!-- endbuild -->
+    <script>
+      angular.module('sample',['dateInput','ui.bootstrap'])
+    </script>
   </body>
 </html>
