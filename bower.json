@@ -1,10 +1,10 @@
 {
   "name": "angular-datepicker",
-  "main": ["dist/module.min.js","dist/date.min.css"],
+  "main": ["module.min.js","date.min.css"],
   "license": "MIT",
   "version": "0.0.1",
   "ignore": [
-    "**/.*"
+    ".gitignore","README.md"
   ],
   "dependencies": {},
   "devDependencies": {
