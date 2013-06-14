@@ -1,4 +1,5 @@
 (function () {
+  'use strict';
   var Module = angular.module('dateInput', []);
 
 
@@ -12,7 +13,7 @@
     function getVisibleMinutes(date) {
       console.time('getVisibleMinutes');
       date = new Date(date || new Date());
-      date = new Date(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours());
+      date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
       var minutes = [];
       var step = 5;
       var stop = date.getTime() + 60 * 60 * 1000;
@@ -62,7 +63,7 @@
       var years = [];
       date = new Date(date || new Date());
       date.setFullYear(date.getFullYear() - (date.getFullYear() % 10));
-      for (var i = 0; i < 12; i++){
+      for (var i = 0; i < 12; i++) {
         years.push(new Date(date.getFullYear() + (i - 1), 0, 1));
       }
       console.timeEnd('getVisibleYears');
@@ -77,7 +78,7 @@
       var days = [];
       for (var i = 0; i < 7; i++) {
         days.push(new Date(date));
-        date.setDate(date.getDate()+1);
+        date.setDate(date.getDate() + 1);
       }
       console.timeEnd('getDaysOfWeek');
       return days;
@@ -89,7 +90,7 @@
       var year = date.getFullYear();
       var months = [];
       for (var month = 0; month < 12; month++) {
-        months.push(new Date(year,month,1));
+        months.push(new Date(year, month, 1));
       }
       console.timeEnd('getVisibleMonths');
       return months;
@@ -112,19 +113,16 @@
     }
 
     return {
-      scope     : {
+      scope      : {
         date  : '=datePicker',
         after : '=?',
         before: '=?'
       },
-      link      : function (scope, element, attrs) {
-        function dateIsValid() {
-          return isValidDate(scope.date);
-        }
+      link       : function (scope, element, attrs) {
 
         scope.views = [];
         for (var attr in attrs) { //noinspection JSUnfilteredForInLoop
-          if (viewOptions.indexOf(attr) != -1) { //noinspection JSUnfilteredForInLoop
+          if (viewOptions.indexOf(attr) !== -1) { //noinspection JSUnfilteredForInLoop
             scope.views.push(attr);
           }
         }
@@ -134,7 +132,7 @@
         scope.view = scope.views[0];
 
         function hasView(view) {
-          return scope.views.indexOf(view) != -1;
+          return scope.views.indexOf(view) !== -1;
         }
 
         function ensureDate() {
@@ -198,12 +196,22 @@
         scope.setView = function setView(view) {
           if (hasView(view)) {
             scope.view = view;
-            switch(view){
-              case 'minutes':scope.minutes=getVisibleMinutes(scope.visibleDate);break;
-              case 'hours'  :scope.hours = getVisibleHours(scope.visibleDate);break;
-              case 'date'   :scope.weeks = getVisibleWeeks(scope.visibleDate);break;
-              case 'month'  :scope.months = getVisibleMonths(scope.visibleDate);break;
-              case 'year'   :scope.years = getVisibleYears(scope.visibleDate);break;
+            switch (view) {
+            case 'minutes':
+              scope.minutes = getVisibleMinutes(scope.visibleDate);
+              break;
+            case 'hours'  :
+              scope.hours = getVisibleHours(scope.visibleDate);
+              break;
+            case 'date'   :
+              scope.weeks = getVisibleWeeks(scope.visibleDate);
+              break;
+            case 'month'  :
+              scope.months = getVisibleMonths(scope.visibleDate);
+              break;
+            case 'year'   :
+              scope.years = getVisibleYears(scope.visibleDate);
+              break;
             }
           }
         };
@@ -260,46 +268,56 @@
         }
 
         scope.isSameMinutes = function (date) {
-          if (!validDate())return false;
+          if (!validDate()){
+            return false;
+          }
           var b = scope.date;
-          return (date.getTime() - date.getSeconds() * 1000 - date.getMilliseconds()) == (b.getTime() - b.getSeconds() * 1000 - b.getMilliseconds());
+          return (date.getTime() - date.getSeconds() * 1000 - date.getMilliseconds()) === (b.getTime() - b.getSeconds() * 1000 - b.getMilliseconds());
         };
 
         scope.isSameMonth = function (date) {
-          if (!validDate())return false;
-          return date.getFullYear() === scope.date.getFullYear() && date.getMonth() == scope.date.getMonth();
+          if (!validDate()){
+            return false;
+          }
+          return date.getFullYear() === scope.date.getFullYear() && date.getMonth() === scope.date.getMonth();
         };
 
         scope.isSameYear = function (date) {
-          if (!validDate())return false;
+          if (!validDate()){
+            return false;
+          }
           return date.getFullYear() === scope.date.getFullYear();
         };
 
         scope.isSameDate = function (date) {
-          if (!validDate())return false;
+          if (!validDate()){
+            return false;
+          }
           return scope.date.getDate() === date.getDate() && scope.isSameMonth(date);
         };
 
         scope.isSameHour = function (date) {
-          if (!validDate())return false;
+          if (!validDate()){
+            return false;
+          }
           return scope.date.getHours() === date.getHours() && scope.isSameDate(date);
         };
 
         scope.isOldMonth = function (date) {
           return date
-            .getTime() < scope.visibleDate.getTime() && date.getMonth() != scope.visibleDate.getMonth();
+            .getTime() < scope.visibleDate.getTime() && date.getMonth() !== scope.visibleDate.getMonth();
         };
 
         scope.isNewHour = function (date) {
-          return date.getTime() > scope.visibleDate.getTime() && date.getHours() != scope.visibleDate.getHours();
+          return date.getTime() > scope.visibleDate.getTime() && date.getHours() !== scope.visibleDate.getHours();
         };
 
         scope.isOldHour = function (date) {
-          return date.getTime() < scope.visibleDate.getTime() && date.getHours() != scope.visibleDate.getHours();
+          return date.getTime() < scope.visibleDate.getTime() && date.getHours() !== scope.visibleDate.getHours();
         };
 
         scope.isNewMonth = function (date) {
-          return date.getTime() > scope.visibleDate.getTime() && date.getMonth() != scope.visibleDate.getMonth();
+          return date.getTime() > scope.visibleDate.getTime() && date.getMonth() !== scope.visibleDate.getMonth();
         };
 
 
@@ -318,39 +336,40 @@
 
         //hours
         scope.$watch('[visibleDate.getDate(),visibleDate.getHours()].join()', function () {
-          if (scope.view == 'hours') scope.hours = getVisibleHours(scope.visibleDate);
+          if (scope.view === 'hours') {
+            scope.hours = getVisibleHours(scope.visibleDate);
+          }
         });
         //date
         scope.$watch('[visibleDate.getFullYear(),visibleDate.getMonth(),visibleDate.getDate()].join()', function () {
-          if (scope.view == 'date') {
+          if (scope.view === 'date') {
             scope.weeks = getVisibleWeeks(scope.visibleDate);
             scope.weekdays = getDaysOfWeek(scope.visibleDate);
           }
         });
 
         scope.$watch('[visibleDate.getFullYear(),visibleDate.getMonth()].join()', function () {
-          if (scope.view == 'month') {
+          if (scope.view === 'month') {
             scope.months = getVisibleMonths(scope.visibleDate);
           }
         });
 
         scope.$watch('visibleDate.getYear()', function () {
-          if (scope.view == 'year') {
+          if (scope.view === 'year') {
             scope.years = getVisibleYears(scope.visibleDate);
           }
         });
 
-        scope.$watch('visibleDate.getTime()', function (a,b) {
-          if (scope.view == 'minutes') {
+        scope.$watch('visibleDate.getTime()', function () {
+          if (scope.view === 'minutes') {
             scope.minutes = getVisibleMinutes(scope.visibleDate);
           }
         });
 
       },
-      transclude: true,
-      replace   : true,
-//      template  : '<div ng-transclude ng-switch="view">\n    <div class="datetimepicker-days" ng-switch-when="date">\n        <table class=" table-condensed">\n            <thead>\n            <tr>\n                <th class="prev" style="visibility: visible;" ng-click="prevMonth()">‹</th>\n                <th colspan="5" class="switch"  ng-click="setView(\'month\')">{{visibleDate|date:"yyyy MMMM"}}</th>\n                <th class="next" style="visibility: visible;" ng-click="nextMonth()">›</i></th>\n            </tr>\n            <tr>\n                <th class="dow" ng-repeat="day in weekdays">{{ day|date:"EEE"}}</th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr ng-repeat="week in weeks">\n                <td class="day" ng-repeat="day in week" ng-class="{\'active\':isSameDate(day),\'old\':isOldMonth(day),\'new\':isNewMonth(day),\'after\':isAfter(day),\'before\':isBefore(day)}" ng-click="setDate(day)">{{ day.getDate() }}</td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <th colspan="7" class="today" style="display: none;">Today</th>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n ' + '<div class="datetimepicker-years" ng-switch-when="year">\n    <table class="table-condensed">\n        <thead>\n        <tr>\n            <th class="prev" style="visibility: visible;" ng-click="prevYear(10)">‹</th>\n            <th colspan="5" class="switch">{{years[0].getFullYear()}}-{{years[years.length-1].getFullYear()}}</th>\n            <th class="next" style="visibility: visible;" ng-click="nextYear(10)">›</i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr>\n            <td colspan="7">\n                <span class="year" ng-repeat="year in years" ng-class="{\'active\':isSameYear(year)}" ng-click="setYear(year)">{{year.getFullYear()}}</span>\n            </td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n\n<div class="datetimepicker-months" ng-switch-when="month">\n    <table class="table-condensed">\n        <thead>\n        <tr>\n            <th class="prev" style="visibility: visible;" ng-click="prevYear()">‹</th>\n            <th colspan="5" class="switch" ng-click="setView(\'year\')">{{ visibleDate|date:"yyyy" }}</th>\n            <th class="next" style="visibility: visible;" ng-click="nextYear()">›</i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr>\n            <td colspan="7">\n                <span class="month" ng-repeat="month in months"\n                      ng-class="{\'active\':isSameMonth(month),\'after\':isAfter(month),\'before\':isBefore(month)}"\n                      ng-click="setMonth(month)">{{month|date:\'MMM\'}}</span>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <th colspan="7" class="today" style="display: none;">Today</th>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n\n<div class="datetimepicker-hours" ng-switch-when="hours">\n    <table class=" table-condensed">\n        <thead>\n        <tr>\n            <th class="prev" style="visibility: visible;" ng-click="prevDay()">‹</th>\n            <th colspan="5" class="switch" ng-click="setView(\'date\')">{{ visibleDate|date:"dd MMMM yyyy" }}</th>\n            <th class="next" style="visibility: visible;" ng-click="nextDay()">›</i></th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr>\n            <td colspan="7">\n                <span class="hour" ng-repeat="hour in hours"\n                      ng-class="{\'old\':isOldHour(hour),\'new\':isNewHour(hour),\'active\':isSameHour(hour)}"\n                      ng-click="setHours(hour)">{{hour|date:"HH:mm"}}</span>\n            </td>\n        </tr>\n        </tbody>\n        <tfoot>\n        <tr>\n            <th colspan="7" class="today" style="display: none;">Today</th>\n        </tr>\n        </tfoot>\n    </table>\n</div>\n<div class="datetimepicker-minutes" ng-switch-when="minutes">\n    <table class=" table-condensed">\n        <thead>\n        <tr>\n            <th class="prev" style="visibility: visible;" ng-click="prevHour()">‹</th>\n            <th colspan="5" class="switch" ng-click="setView(\'hours\')">{{ visibleDate|date:"dd MMMM yyyy HH:mm" }}</th>\n            <th class="next" style="visibility: visible;" ng-click="nextHour()">›</i></th>\n        </tr>\n  ' + '          </thead>\n            <tbody>\n            <tr>\n <td colspan="7">\n  <span class="minute" ng-repeat="minute in minutes" ng-class="{active:isSameMinutes(minute)}" ng-click="setMinutes(minute)">{{minute|date:"HH:mm"}}</span>\n                </td>\n            </tr>\n            </tbody>\n            <tfoot>\n            <tr>\n                <th colspan="7" class="today" style="display: none;">Today</th>\n            </tr>\n            </tfoot>\n        </table>\n    </div>\n</div>'
-      templateUrl:'scripts/template.html'
+      transclude : true,
+      replace    : true,
+      templateUrl: 'scripts/template.html'
     };
   });
 
@@ -360,13 +379,13 @@
     return {
       require: 'ngModel',
       link   : function (scope, element, attrs, ngModel) {
-        var format = attrs.format || "yyyy-MM-dd HH:mm";
+        var format = attrs.format || 'yyyy-MM-dd HH:mm';
 
         var viewsOptions = ['date', 'year', 'month', 'hours', 'minutes', 'month'];
         var views = [];
-        for (attr in attrs) {
+        for (var attr in attrs) {
           //noinspection JSUnfilteredForInLoop
-          if (viewsOptions.indexOf(attr) != -1) { //noinspection JSUnfilteredForInLoop
+          if (viewsOptions.indexOf(attr) !== -1) { //noinspection JSUnfilteredForInLoop
             views.push(attr);
           }
         }
@@ -396,7 +415,9 @@
         element.bind('blur', function () {
           clear();
           clear = angular.noop;
-          if (picker)picker.remove();
+          if (picker){
+            picker.remove();
+          }
           picker = null;
         });
       }
