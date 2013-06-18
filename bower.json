@@ -8,7 +8,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "angular": "~1.0.5",
+    "angular-unstable": "latest",
     "json3": "~3.2.4",
     "es5-shim": "~2.0.8",
     "jquery": "~2.0.2",

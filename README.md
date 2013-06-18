@@ -1,6 +1,19 @@
 # AngularJS datepicker directives
 
-#### Examples
+#### Requirements
+
+-  Angular v1.1.4+
+-  jQuery or your own implementation of `position()` on top of `jQuery Lite`
+
+
+#### Development version 
+
+Checkout branch `dev`, run `grunt install` and `bower install`.
+To build run `gunt build`
+
+## Examples
+
+Live demo : http://run.plnkr.co/erJj712N4bbkGsub/
 
 
 ##### defaults
