@@ -1,4 +1,4 @@
-(function () {
+(function (angular) {
   'use strict';
   var Module = angular.module('dateInput', []);
 
@@ -11,7 +11,6 @@
     }
 
     function getVisibleMinutes(date) {
-      console.time('getVisibleMinutes');
       date = new Date(date || new Date());
       date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
       var minutes = [];
@@ -21,12 +20,10 @@
         minutes.push(date);
         date = new Date(date.getTime() + step * 60 * 1000);
       }
-      console.timeEnd('getVisibleMinutes');
       return minutes;
     }
 
     function getVisibleWeeks(date) {
-      console.time('getVisibleWeeks');
       date = new Date(date || new Date());
       date.setDate(1);
       date.setHours(0);
@@ -53,25 +50,21 @@
         }
         weeks.push(week);
       }
-      console.timeEnd('getVisibleWeeks');
       return weeks;
     }
 
 
     function getVisibleYears(date) {
-      console.time('getVisibleYears');
       var years = [];
       date = new Date(date || new Date());
       date.setFullYear(date.getFullYear() - (date.getFullYear() % 10));
       for (var i = 0; i < 12; i++) {
         years.push(new Date(date.getFullYear() + (i - 1), 0, 1));
       }
-      console.timeEnd('getVisibleYears');
       return years;
     }
 
     function getDaysOfWeek(date) {
-      console.time('getDaysOfWeek');
       date = new Date(date || new Date());
       date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       date.setDate(date.getDate() - (date.getDay() - 1));
@@ -80,24 +73,20 @@
         days.push(new Date(date));
         date.setDate(date.getDate() + 1);
       }
-      console.timeEnd('getDaysOfWeek');
       return days;
     }
 
     function getVisibleMonths(date) {
-      console.time('getVisibleMonths');
       date = new Date(date || new Date());
       var year = date.getFullYear();
       var months = [];
       for (var month = 0; month < 12; month++) {
         months.push(new Date(year, month, 1));
       }
-      console.timeEnd('getVisibleMonths');
       return months;
     }
 
     function getVisibleHours(date) {
-      console.time('getVisibleHours');
       date = new Date(date || new Date());
       date.setHours(0);
       date.setMinutes(0);
@@ -108,7 +97,6 @@
         hours.push(date);
         date = new Date(date.getTime() + 60 * 60 * 1000);
       }
-      console.timeEnd('getVisibleHours');
       return hours;
     }
 
@@ -426,7 +414,7 @@
 
   Module.directive('dateRange', function () {
     return {
-      template: '<div>\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="datetimepicker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="datetimepicker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
+      template: '<div>\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="date-picker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="date-picker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
       scope   : {
         start: '=',
         end  : '='
@@ -445,7 +433,7 @@
       }
     };
   });
-})();
+})(angular);
 angular.module("dateInput").run(["$templateCache", function($templateCache) {
 
   $templateCache.put("scripts/template.html",
