@@ -1,6 +1,6 @@
 (function (angular) {
   'use strict';
-  var Module = angular.module('dateInput', []);
+  var Module = angular.module('datePicker', []);
 
 
   Module.directive('datePicker', function () {
@@ -357,7 +357,7 @@
       },
       transclude : true,
       replace    : true,
-      templateUrl: 'scripts/template.html'
+      templateUrl: 'templates/datepicker.html'
     };
   });
 
@@ -392,7 +392,7 @@
             picker = $compile('<div date-picker="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>')(scope);
             body.append(picker);
             scope.$digest();
-            var pos = angular.extend({}, element.position(), { height: element[0].offsetHeight });
+            var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
             picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: 'absolute'});
             picker.bind('mousedown', function () {
               return false;
@@ -414,7 +414,7 @@
 
   Module.directive('dateRange', function () {
     return {
-      template: '<div>\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="date-picker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="date-picker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
+      templateUrl: 'templates/daterange.html',
       scope   : {
         start: '=',
         end  : '='

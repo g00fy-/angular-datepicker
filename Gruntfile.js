@@ -69,7 +69,7 @@ module.exports = function (grunt) {
       dist  : {
         files: [
           {
-            dot: true,
+            dot: false,
             src: [
               '.tmp',
               '<%= yeoman.dist %>'
@@ -128,10 +128,10 @@ module.exports = function (grunt) {
             expand : true,
             flatten: true,
             dot    : true,
-            cwd    : '<%= yeoman.app %>',
             dest   : '<%= yeoman.dist %>',
             src    : [
-              'styles/date.css'
+              'README.md',
+              'bower.json'
             ]
           }
         ]
@@ -141,9 +141,9 @@ module.exports = function (grunt) {
       dist: {
         options: {
           base      : '<%= yeoman.app %>',
-          module:     'dateInput'
+          module:     'datePicker'
         },
-        src    : '<%= yeoman.app %>/scripts/*.html',
+        src    : '<%= yeoman.app %>/templates/*.html',
         dest   : '.tmp/templates.js'
       }
     },
@@ -185,7 +185,8 @@ module.exports = function (grunt) {
     'concat',
     'cssmin',
     'ngmin',
-    'uglify'
+    'uglify',
+    'copy:dist'
   ]);
 
   grunt.registerTask('default', ['build']);
