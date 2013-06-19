@@ -1,6 +1,6 @@
 (function (angular) {
   'use strict';
-  var Module = angular.module('dateInput', []);
+  var Module = angular.module('datePicker', []);
 
 
   Module.directive('datePicker', function () {
@@ -357,7 +357,7 @@
       },
       transclude : true,
       replace    : true,
-      templateUrl: 'scripts/template.html'
+      templateUrl: 'templates/datepicker.html'
     };
   });
 
@@ -392,7 +392,7 @@
             picker = $compile('<div date-picker="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>')(scope);
             body.append(picker);
             scope.$digest();
-            var pos = angular.extend({}, element.position(), { height: element[0].offsetHeight });
+            var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
             picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: 'absolute'});
             picker.bind('mousedown', function () {
               return false;
@@ -414,7 +414,7 @@
 
   Module.directive('dateRange', function () {
     return {
-      template: '<div>\n    <table >\n        <tr>\n            <td valign="top"><div date-picker="start" class="date-picker" date after="start" before="end"></div></td>\n            <td valign="top"><div date-picker="end" class="date-picker" date after="start" before="end"></div></td>\n        </tr>\n    </table>\n    \n    \n</div>',
+      templateUrl: 'templates/daterange.html',
       scope   : {
         start: '=',
         end  : '='
@@ -434,9 +434,9 @@
     };
   });
 })(angular);
-angular.module("dateInput").run(["$templateCache", function($templateCache) {
+angular.module("datePicker").run(["$templateCache", function($templateCache) {
 
-  $templateCache.put("scripts/template.html",
+  $templateCache.put("templates/datepicker.html",
     "<div ng-transclude ng-switch=\"view\">\r" +
     "\n" +
     "    <div class=\"datetimepicker-days\" ng-switch-when=\"date\">\r" +
@@ -684,6 +684,32 @@ angular.module("dateInput").run(["$templateCache", function($templateCache) {
     "        </table>\r" +
     "\n" +
     "    </div>\r" +
+    "\n" +
+    "</div>"
+  );
+
+  $templateCache.put("templates/daterange.html",
+    "<div>\r" +
+    "\n" +
+    "    <table>\r" +
+    "\n" +
+    "        <tr>\r" +
+    "\n" +
+    "            <td valign=\"top\">\r" +
+    "\n" +
+    "                <div date-picker=\"start\" class=\"date-picker\" date after=\"start\" before=\"end\"></div>\r" +
+    "\n" +
+    "            </td>\r" +
+    "\n" +
+    "            <td valign=\"top\">\r" +
+    "\n" +
+    "                <div date-picker=\"end\" class=\"date-picker\" date after=\"start\" before=\"end\"></div>\r" +
+    "\n" +
+    "            </td>\r" +
+    "\n" +
+    "        </tr>\r" +
+    "\n" +
+    "    </table>\r" +
     "\n" +
     "</div>"
   );
