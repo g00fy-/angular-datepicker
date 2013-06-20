@@ -382,7 +382,7 @@
           return dateFilter(value, format);
         }
 
-        ngModel.$formatters = [formatter];
+        ngModel.$formatters.push(formatter);
 
         var picker = null;
         var clear = angular.noop;
