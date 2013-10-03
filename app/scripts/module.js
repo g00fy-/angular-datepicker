@@ -53,7 +53,6 @@
       return weeks;
     }
 
-
     function getVisibleYears(date) {
       var years = [];
       date = new Date(date || new Date());
@@ -355,8 +354,7 @@
         });
 
       },
-      transclude : true,
-      replace    : true,
+      replace:true,
       templateUrl: 'templates/datepicker.html'
     };
   });
@@ -377,6 +375,13 @@
             views.push(attr);
           }
         }
+
+
+        scope.$watch(''+attrs.ngModel+'.getTime()',function(a,b){
+          if(a!=b){
+            ngModel.$setViewValue(a);
+          }
+        });
 
         function formatter(value) {
           return dateFilter(value, format);
