@@ -378,7 +378,7 @@
 
 
         scope.$watch(''+attrs.ngModel+'.getTime()',function(a,b){
-          if(a!=b){
+          if(a!==b){
             ngModel.$setViewValue(a);
           }
         });
