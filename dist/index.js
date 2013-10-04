@@ -376,13 +376,6 @@
           }
         }
 
-
-        scope.$watch(''+attrs.ngModel+'.getTime()',function(a,b){
-          if(a!==b){
-            ngModel.$setViewValue(a);
-          }
-        });
-
         function formatter(value) {
           return dateFilter(value, format);
         }
