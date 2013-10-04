@@ -15,7 +15,7 @@
             <tbody>
             <tr ng-repeat="week in weeks">
                 <td class="day" ng-repeat="day in week"
-                    ng-class="{'active':isSameDate(day),'old':isOldMonth(day),'new':isNewMonth(day),'after':isAfter(day),'before':isBefore(day)}"
+                    ng-class="{'today':isToday(day),'active':isSameDate(day),'old':isOldMonth(day),'new':isNewMonth(day),'after':isAfter(day),'before':isBefore(day)}"
                     ng-click="setDate(day)">{{ day.getDate() }}
                 </td>
             </tr>

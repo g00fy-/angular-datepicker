@@ -235,6 +235,7 @@
         };
 
         scope.visibleDate = new Date();
+        scope.todayDate = new Date();
 
         scope.$watch('date', function (date) {
           if (date) {
@@ -253,6 +254,10 @@
         function validDate() {
           return scope.date instanceof Date;
         }
+
+        scope.isToday = function (date) {
+          return date.toDateString() === scope.todayDate.toDateString();
+        };
 
         scope.isSameMinutes = function (date) {
           if (!validDate()){
@@ -460,7 +465,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "            <tbody>\n" +
     "            <tr ng-repeat=\"week in weeks\">\n" +
     "                <td class=\"day\" ng-repeat=\"day in week\"\n" +
-    "                    ng-class=\"{'active':isSameDate(day),'old':isOldMonth(day),'new':isNewMonth(day),'after':isAfter(day),'before':isBefore(day)}\"\n" +
+    "                    ng-class=\"{'today':isToday(day),'active':isSameDate(day),'old':isOldMonth(day),'new':isNewMonth(day),'after':isAfter(day),'before':isBefore(day)}\"\n" +
     "                    ng-click=\"setDate(day)\">{{ day.getDate() }}\n" +
     "                </td>\n" +
     "            </tr>\n" +

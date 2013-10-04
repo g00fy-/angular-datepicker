@@ -5,15 +5,34 @@
 -  Angular v1.1.4+
 -  jQuery or your own implementation of `position()` on top of `jQuery Lite`
 
+#### Installation
 
-#### Development version 
+- link CSS & JS files
+- load module via dependency array of your main ng module
 
-Checkout branch `dev`, run `grunt install` and `bower install`.
-To build run `gunt build`
+```html
+<!DOCTYPE html>
+<html ng-app="demo">
+<head>
+  <link href="//rawgithub.com/g00fy-/angular-datepicker/master/dist/index.css" rel="stylesheet">
+</head>
+<body>
+  <h1>angular-datepicker</h1>
+  <input ng-model="myDate" type="datetime" date-time>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="//code.angularjs.org/1.1.5/angular.js"></script>
+  <script src="//rawgithub.com/g00fy-/angular-datepicker/master/dist/index.js"></script>
+  <script>
+    angular.module('demo', ['datePicker'])
+  </script>
+</body>
+</html>
+```
+
 
 ## Examples
 
-Live demo : http://run.plnkr.co/erJj712N4bbkGsub/
+Live demo : http://run.plnkr.co/Zzy29J1uOEBEeIc1/
 
 
 ##### defaults
@@ -77,3 +96,9 @@ Live demo : http://run.plnkr.co/erJj712N4bbkGsub/
 ```html
 <div date-range start="start" end="end"></div>
 ```
+
+
+#### Development version
+
+Checkout branch `dev`, run `grunt install` and `bower install`.
+To build run `gunt build`
