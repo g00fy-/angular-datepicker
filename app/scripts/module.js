@@ -235,6 +235,7 @@
         };
 
         scope.visibleDate = new Date();
+        scope.todayDate = new Date();
 
         scope.$watch('date', function (date) {
           if (date) {
@@ -253,6 +254,10 @@
         function validDate() {
           return scope.date instanceof Date;
         }
+
+        scope.isToday = function (date) {
+          return date.toDateString() === scope.todayDate.toDateString();
+        };
 
         scope.isSameMinutes = function (date) {
           if (!validDate()){
