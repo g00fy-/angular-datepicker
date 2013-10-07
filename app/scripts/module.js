@@ -108,11 +108,13 @@
       link       : function (scope, element, attrs) {
 
         scope.views = [];
+
         for (var attr in attrs) { //noinspection JSUnfilteredForInLoop
           if (viewOptions.indexOf(attr) !== -1) { //noinspection JSUnfilteredForInLoop
             scope.views.push(attr);
           }
         }
+
         if (!scope.views.length) {
           scope.views = ['date', 'month', 'year', 'hours', 'minutes'];
         }
@@ -327,6 +329,7 @@
             scope.hours = getVisibleHours(scope.visibleDate);
           }
         });
+
         //date
         scope.$watch('[visibleDate.getFullYear(),visibleDate.getMonth(),visibleDate.getDate()].join()', function () {
           if (scope.view === 'date') {
@@ -376,13 +379,6 @@
           }
         }
 
-
-        scope.$watch(''+attrs.ngModel+'.getTime()',function(a,b){
-          if(a!==b){
-            ngModel.$setViewValue(a);
-          }
-        });
-
         function formatter(value) {
           return dateFilter(value, format);
         }
@@ -390,13 +386,31 @@
         ngModel.$formatters.push(formatter);
 
         var picker = null;
-        var clear = angular.noop;
+        var clear = function(){
+          if(picker){
+            picker.remove();
+            picker = null;
+          }
+        };
+        var template = '<div date-picker="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>';
+
+        function update(obj,date){
+          ngModel.$setViewValue(date);
+        }
 
         element.bind('focus', function () {
           if (!picker) {
-            picker = $compile('<div date-picker="' + attrs.ngModel + '" class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu" format="' + format + '" ' + views.join(' ') + '></div>')(scope);
+            // create picker element
+            picker = $compile(template)(scope);
             body.append(picker);
             scope.$digest();
+
+
+            scope.$on('setDate', update);
+            scope.$on('setMonth',update);
+            scope.$on('setHours',update);
+            scope.$on('setYear', update);
+
             var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
             picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: 'absolute'});
             picker.bind('mousedown', function () {
@@ -405,14 +419,7 @@
           }
           return false;
         });
-        element.bind('blur', function () {
-          clear();
-          clear = angular.noop;
-          if (picker){
-            picker.remove();
-          }
-          picker = null;
-        });
+        element.bind('blur', clear);
       }
     };
   });
