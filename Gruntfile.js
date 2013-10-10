@@ -22,15 +22,40 @@ module.exports = function (grunt) {
   grunt.initConfig({
     yeoman : yeomanConfig,
     watch  : {
+      less: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+        tasks: ['recess', 'copy:styles'],
+        options:{
+          nospawn: true
+        }
+      },
+      styles: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
+        tasks: ['copy:styles']
+      },
       livereload: {
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
-          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+//          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+          '.tmp/styles/{,*/}*.css',
           '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-        ],
-        tasks: ['livereload']
+        ]
       }
+    },
+    recess: {
+        options: {
+            compile: true
+        },
+        dist: {
+            files: [{
+                expand: true,
+                cwd: '<%= yeoman.app %>/styles',
+                src: 'style.less',
+                dest: '.tmp/styles/',
+                ext: '.css'
+            }]
+        }
     },
     connect: {
       options   : {
@@ -122,6 +147,12 @@ module.exports = function (grunt) {
       }
     },
     copy   : {
+      styles: {
+        expand: true,
+        cwd: '<%= yeoman.app %>/styles',
+        dest: '.tmp/styles/',
+        src: '{,*/}*.css'
+      },
       dist: {
         files: [
           {
@@ -147,6 +178,18 @@ module.exports = function (grunt) {
         dest   : '.tmp/templates.js'
       }
     },
+    concurrent: {
+      server: [
+        'recess',
+        'copy:styles'
+      ],
+      test: [
+        'copy:styles'
+      ],
+      dist: [
+        'copy:styles'
+      ]
+    },
     concat: {
       options: {
         separator: '\n'
@@ -166,7 +209,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     'clean:server',
-    'livereload-start',
+//    'livereload-start',
+    'concurrent:server',
     'connect:livereload',
     'open',
     'watch'
@@ -180,6 +224,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'recess',
     'jshint',
     'ngtemplates',
     'concat',

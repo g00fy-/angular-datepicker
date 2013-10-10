@@ -25,7 +25,9 @@
     "matchdep": "~0.1.1",
     "grunt-google-cdn": "~0.1.1",
     "grunt-ngmin": "~0.0.2",
-    "grunt-angular-templates": "~0.3.8"
+    "grunt-angular-templates": "~0.3.8",
+    "grunt-recess": "~0.4.0",
+    "grunt-concurrent": "~0.4.0"
   },
   "engines": {
     "node": ">=0.8.0"

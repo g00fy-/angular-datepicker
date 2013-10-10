@@ -1,3 +1,91 @@
-[date-picker] {
+@import "mixins.less";
+@import "variables.less";
 
+[date-picker-wrapper]{
+  position: relative !important;
+  display:block;
+}
+
+[date-time-append] [date-picker]{
+  position: relative;
+  margin-right: -1000px;
+  margin-bottom: -1000px;
+}
+
+[date-range] [date-picker] {
+  .after.before{
+    .buttonBackground(@btnInfoBackground, spin(@btnInfoBackgroundHighlight, 20));
+  }
+}
+
+[date-picker] {
+  .user-select(none);
+  .border-radius(4px);
+
+  /* GENERAL */
+
+  padding: 4px;
+
+  table {
+    margin: 0;
+  }
+
+  td, th {
+    padding: 4px 5px;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    .border-radius(4px);
+    border: none;
+
+  }
+
+  .switch{
+    width: 145px;
+  }
+
+  span {
+      display: block;
+			width: 23%;
+			height: 26px;
+			line-height: 25px;
+			float: left;
+			margin: 1%;
+			cursor: pointer;
+			.border-radius(4px);
+			&:hover {
+				background: @grayLighter;
+			}
+			&.disabled, &.disabled:hover {
+				background:none;
+				color: @grayLight;
+				cursor: default;
+			}
+
+  }
+
+  .active {
+    .buttonBackground(@btnPrimaryBackground, spin(@btnPrimaryBackground, 20));
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+  }
+
+  .disabled {
+    background: none;
+    color: #999999 !important;
+    cursor: default;
+  }
+
+  /* SPECIFIC */
+
+  [ng-switch-when="year"], [ng-switch-when="month"], [ng-switch-when="minutes"]{
+    span {
+      height: 54px;
+      line-height: 54px;
+    }
+  }
+  th:hover, [ng-switch-when="date"] td:hover{
+    background: @grayLighter;
+	  cursor: pointer;
+  }
 }

@@ -19,6 +19,8 @@
     table-layout: fixed;
 }
 
+
+
 [date-picker] {
   z-index: 11000; /* to avoid bootstrap-modal issues */
   padding: 4px;

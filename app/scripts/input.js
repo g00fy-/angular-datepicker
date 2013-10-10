@@ -15,11 +15,12 @@
           (attrs.maxView ? 'max-view="'+attrs.maxView+'" ' : '')+
           (attrs.template ? 'template="'+attrs.template+'" ' : '')+
           (attrs.minView ? 'min-view="'+attrs.minView+'" ' : '')+
-          'class="datetimepicker datetimepicker-dropdown-bottom-left dropdown-menu"></div>';
+          'class="dropdown-menu"></div>';
     },
     format:'yyyy-MM-dd HH:mm',
     views: ['date', 'year', 'month', 'hours', 'minutes', 'month'],
-    dismiss:false
+    dismiss:false,
+    position:'relative'
   });
 
   Module.directive('dateTimeAppend',function(){
@@ -47,6 +48,8 @@
         var index = views.indexOf(view);
         var dismiss = attrs.dismiss ? $parse(attrs.dismiss)(scope) : dateTimeConfig.dismiss;
         var picker = null;
+        var position = attrs.position || dateTimeConfig.position;
+        var container =  null;
 
         if(index == -1){
           views.splice(index,1);
@@ -83,18 +86,14 @@
           }
         }
 
-        function dismissPicker(){
-          if(dismiss){
-            clear();
-          }
-        }
-
         function clear() {
           if (picker) {
-            console.log('remove',picker);
-            window.picker = picker;
             picker.remove();
             picker = null;
+          }
+          if(container){
+            container.remove();
+            container = null;
           }
         }
 
@@ -103,20 +102,34 @@
 
           // create picker element
           picker = $compile(template)(scope);
-          body.append(picker);
-
           scope.$digest();
-          console.log(picker[0]);
-          window.picker = picker;
 
           scope.$on('setDate', function(event){
             updateInput(event);
-            dismissPicker();
+            if(dismiss){
+              clear()
+            }
           });
 
+          scope.$on('$destroy',clear);
+
           // move picker below input element
-          var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
-          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: 'absolute'});
+
+          if(position=='absolute'){
+            console.log('absolute');
+            var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
+            picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position});
+            body.append(picker);
+          }else{
+            // relative
+            console.log('relative')
+//            container = angular.element('<div date-picker-wrapper></div>');
+//            element.before(container);
+//            container.append(picker);
+            element.before(picker);
+            picker.css({position:'relative',top:element[0].offsetHeight, display:'block'});
+          }
+
           picker.bind('mousedown', function () {
             return false;
           });

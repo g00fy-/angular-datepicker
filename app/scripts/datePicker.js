@@ -6,14 +6,14 @@
   Module.constant('datePickerConfig', {
     template: 'templates/datepicker.html',
     view: 'month',
-    views: ['year', 'month', 'date', 'hours', 'minutes']
+    views: ['year', 'month', 'date', 'hours', 'minutes'],
+    step: 5
   });
 
-  function getVisibleMinutes(date) {
+  function getVisibleMinutes(date, step) {
     date = new Date(date || new Date());
     date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
     var minutes = [];
-    var step = 5;
     var stop = date.getTime() + 60 * 60 * 1000;
     while (date.getTime() < stop) {
       minutes.push(date);
@@ -103,7 +103,6 @@
     return {
       // this is a bug ?
       template:'<div ng-include="template"></div>',
-//      replace: true,
       scope: {
         model: '=datePicker',
         after: '=?',
@@ -116,6 +115,8 @@
         scope.view = attrs.view || datePickerConfig.view;
         scope.now = new Date();
         scope.template = attrs.template || datePickerConfig.template;
+
+        var step = parseInt(attrs.step || datePickerConfig.step);
         var index;
 
         if (attrs.minView) {
@@ -184,7 +185,7 @@
               scope.hours = getVisibleHours(date);
               break;
             case 'minutes':
-              scope.minutes = getVisibleMinutes(date);
+              scope.minutes = getVisibleMinutes(date, step);
               break;
           }
         }
