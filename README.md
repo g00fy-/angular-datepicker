@@ -13,7 +13,7 @@ To build run `gunt build`
 
 ## Examples
 
-Live demo : http://run.plnkr.co/erJj712N4bbkGsub/
+Live demo : http://embed.plnkr.co/iVKsZL6gIuAwKbdv8M4G/preview
 
 
 ##### defaults
