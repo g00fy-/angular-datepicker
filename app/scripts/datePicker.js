@@ -102,7 +102,7 @@
     //noinspection JSUnusedLocalSymbols
     return {
       // this is a bug ?
-      template:'<div ng-include="template"></div>',
+      template: '<div ng-include="template"></div>',
       scope: {
         model: '=datePicker',
         after: '=?',
@@ -116,24 +116,26 @@
         scope.now = new Date();
         scope.template = attrs.template || datePickerConfig.template;
 
-        var step = parseInt(attrs.step || datePickerConfig.step);
+        var step = parseInt(attrs.step || datePickerConfig.step, 10);
         var index;
 
+        /** @namespace attrs.minView */
         if (attrs.minView) {
           index = scope.views.indexOf(attrs.minView);
           scope.views.splice(0, index);
         }
+        /** @namespace attrs.maxView */
         if (attrs.maxView) {
           index = scope.views.indexOf(attrs.maxView);
           scope.views.splice(index + 1);
         }
 
-        if (scope.views.length == 1) {
+        if (scope.views.length === 1) {
           scope.view = scope.views[0];
         }
 
         scope.setView = function (nextView) {
-          if (scope.views.indexOf(nextView) != -1) {
+          if (scope.views.indexOf(nextView) !== -1) {
             scope.view = nextView;
           }
         };
@@ -148,16 +150,20 @@
 
             //noinspection FallThroughInSwitchStatementJS
             switch (scope.view) {
-              case 'minutes':
-                scope.model.setMinutes(date.getMinutes());
-              case 'hours':
-                scope.model.setHours(date.getHours());
-              case 'date':
-                scope.model.setDate(date.getDate());
-              case 'month':
-                scope.model.setMonth(date.getMonth());
-              case 'year':
-                scope.model.setFullYear(date.getFullYear());
+            case 'minutes':
+              scope.model.setMinutes(date.getMinutes());
+            /*falls through*/
+            case 'hours':
+              scope.model.setHours(date.getHours());
+            /*falls through*/
+            case 'date':
+              scope.model.setDate(date.getDate());
+            /*falls through*/
+            case 'month':
+              scope.model.setMonth(date.getMonth());
+            /*falls through*/
+            case 'year':
+              scope.model.setFullYear(date.getFullYear());
             }
             scope.$emit('setDate', scope.model, scope.view);
           }
@@ -171,50 +177,52 @@
           var view = scope.view;
           var date = scope.date;
           switch (view) {
-            case 'year':
-              scope.years = getVisibleYears(date);
-              break;
-            case 'month':
-              scope.months = getVisibleMonths(date);
-              break;
-            case 'date':
-              scope.weekdays = scope.weekdays || getDaysOfWeek();
-              scope.weeks = getVisibleWeeks(date);
-              break;
-            case 'hours':
-              scope.hours = getVisibleHours(date);
-              break;
-            case 'minutes':
-              scope.minutes = getVisibleMinutes(date, step);
-              break;
+          case 'year':
+            scope.years = getVisibleYears(date);
+            break;
+          case 'month':
+            scope.months = getVisibleMonths(date);
+            break;
+          case 'date':
+            scope.weekdays = scope.weekdays || getDaysOfWeek();
+            scope.weeks = getVisibleWeeks(date);
+            break;
+          case 'hours':
+            scope.hours = getVisibleHours(date);
+            break;
+          case 'minutes':
+            scope.minutes = getVisibleMinutes(date, step);
+            break;
           }
         }
 
-        function watch(){
-          if(scope.view!='date'){
+        function watch() {
+          if (scope.view !== 'date') {
             return scope.view;
           }
-          return scope.model ? scope.model.getMonth(): null;
+          return scope.model ? scope.model.getMonth() : null;
         }
 
 
-        scope.$watch(watch,update);
+        scope.$watch(watch, update);
 
         scope.next = function (delta) {
           var date = scope.date;
           delta = delta || 1;
           switch (scope.view) {
-            case 'year':
-            case 'month':
-              date.setFullYear(date.getFullYear() + delta);
-              break;
-            case 'date':
-              date.setMonth(date.getMonth() + delta);
-              break;
-            case 'hours':
-            case 'minutes':
-              date.setHours(date.getHours() + delta);
-              break;
+          case 'year':
+          /*falls through*/
+          case 'month':
+            date.setFullYear(date.getFullYear() + delta);
+            break;
+          case 'date':
+            date.setMonth(date.getMonth() + delta);
+            break;
+          case 'hours':
+          /*falls through*/
+          case 'minutes':
+            date.setHours(date.getHours() + delta);
+            break;
           }
           update();
         };
@@ -232,23 +240,23 @@
         };
 
         scope.isSameMonth = function (date) {
-          return scope.isSameYear(date) && scope.model.getMonth() == date.getMonth();
+          return scope.isSameYear(date) && scope.model.getMonth() === date.getMonth();
         };
 
         scope.isSameYear = function (date) {
-          return (scope.model ? scope.model.getFullYear() == date.getFullYear() : false);
+          return (scope.model ? scope.model.getFullYear() === date.getFullYear() : false);
         };
 
         scope.isSameDay = function (date) {
-          return scope.isSameMonth(date) && scope.model.getDate() == date.getDate();
+          return scope.isSameMonth(date) && scope.model.getDate() === date.getDate();
         };
 
         scope.isSameHour = function (date) {
-          return scope.isSameDay(date) && scope.model.getHours() == date.getHours();
+          return scope.isSameDay(date) && scope.model.getHours() === date.getHours();
         };
 
         scope.isSameMinutes = function (date) {
-          return scope.isSameHour(date) && scope.model.getMinutes() == date.getMinutes();
+          return scope.isSameHour(date) && scope.model.getMinutes() === date.getMinutes();
         };
 
         scope.isNow = function (date) {
@@ -256,19 +264,21 @@
           var now = scope.now;
           //noinspection FallThroughInSwitchStatementJS
           switch (scope.view) {
-            case 'hour':
-              is &= date.getHours() == now.getHours();
-            case 'date':
-              is &= date.getDate() == now.getDate();
-            case 'month':
-              is &= date.getMonth() == now.getMonth();
-            case 'year':
-              is &= date.getFullYear() == now.getFullYear();
+          case 'hour':
+            is &= date.getHours() === now.getHours();
+          /*falls through*/
+          case 'date':
+            is &= date.getDate() === now.getDate();
+          /*falls through*/
+          case 'month':
+            is &= date.getMonth() === now.getMonth();
+          /*falls through*/
+          case 'year':
+            is &= date.getFullYear() === now.getFullYear();
           }
           return is;
-        }
+        };
       }
     };
   });
-
 })(angular);

@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 
   // configurable paths
   var yeomanConfig = {
-    app : 'app',
+    app: 'app',
     dist: 'dist'
   };
 
@@ -20,12 +20,12 @@ module.exports = function (grunt) {
   }
 
   grunt.initConfig({
-    yeoman : yeomanConfig,
-    watch  : {
+    yeoman: yeomanConfig,
+    watch: {
       less: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
         tasks: ['recess', 'copy:styles'],
-        options:{
+        options: {
           nospawn: true
         }
       },
@@ -44,22 +44,24 @@ module.exports = function (grunt) {
       }
     },
     recess: {
-        options: {
-            compile: true
-        },
-        dist: {
-            files: [{
-                expand: true,
-                cwd: '<%= yeoman.app %>/styles',
-                src: 'style.less',
-                dest: '.tmp/styles/',
-                ext: '.css'
-            }]
-        }
+      options: {
+        compile: true
+      },
+      dist: {
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/styles',
+            src: 'style.less',
+            dest: '.tmp/styles/',
+            ext: '.css'
+          }
+        ]
+      }
     },
     connect: {
-      options   : {
-        port    : 9000,
+      options: {
+        port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost'
       },
@@ -74,7 +76,7 @@ module.exports = function (grunt) {
           }
         }
       },
-      test      : {
+      test: {
         options: {
           middleware: function (connect) {
             return [
@@ -85,13 +87,13 @@ module.exports = function (grunt) {
         }
       }
     },
-    open   : {
+    open: {
       server: {
         url: 'http://localhost:<%= connect.options.port %>'
       }
     },
-    clean  : {
-      dist  : {
+    clean: {
+      dist: {
         files: [
           {
             dot: false,
@@ -104,49 +106,49 @@ module.exports = function (grunt) {
       },
       server: '.tmp'
     },
-    jshint : {
+    jshint: {
       options: {
         jshintrc: '.jshintrc'
       },
-      all    : [
+      all: [
         'Gruntfile.js',
         '<%= yeoman.app %>/scripts/{,*/}*.js'
       ]
     },
-    karma  : {
+    karma: {
       unit: {
         configFile: 'karma.conf.js',
-        singleRun : true
+        singleRun: true
       }
     },
-    cssmin : {
+    cssmin: {
       dist: {
         expand: true,
-        cwd   : '<%= yeoman.dist %>',
-        src   : ['*.css', '!*.min.css'],
-        dest  : '<%= yeoman.dist %>',
-        ext   : '.min.css'
+        cwd: '<%= yeoman.dist %>',
+        src: ['*.css', '!*.min.css'],
+        dest: '<%= yeoman.dist %>',
+        ext: '.min.css'
       }
     },
-    ngmin  : {
+    ngmin: {
       dist: {
         expand: true,
-        cwd   : '<%= yeoman.dist %>',
-        src   : ['*.js', '!*.min.js'],
-        dest  : '<%= yeoman.dist %>',
-        ext   : '.min.js'
+        cwd: '<%= yeoman.dist %>',
+        src: ['*.js', '!*.min.js'],
+        dest: '<%= yeoman.dist %>',
+        ext: '.min.js'
       }
     },
-    uglify : {
+    uglify: {
       dist: {
         expand: true,
-        cwd   : '<%= yeoman.dist %>',
-        src   : ['*.min.js'],
-        dest  : '<%= yeoman.dist %>',
-        ext   : '.min.js'
+        cwd: '<%= yeoman.dist %>',
+        src: ['*.min.js'],
+        dest: '<%= yeoman.dist %>',
+        ext: '.min.js'
       }
     },
-    copy   : {
+    copy: {
       styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/styles',
@@ -156,11 +158,11 @@ module.exports = function (grunt) {
       dist: {
         files: [
           {
-            expand : true,
+            expand: true,
             flatten: true,
-            dot    : true,
-            dest   : '<%= yeoman.dist %>',
-            src    : [
+            dot: true,
+            dest: '<%= yeoman.dist %>',
+            src: [
               'README.md',
               'bower.json'
             ]
@@ -171,11 +173,11 @@ module.exports = function (grunt) {
     ngtemplates: {
       dist: {
         options: {
-          base      : '<%= yeoman.app %>',
-          module:     'datePicker'
+          base: '<%= yeoman.app %>',
+          module: 'datePicker'
         },
-        src    : '<%= yeoman.app %>/templates/*.html',
-        dest   : '.tmp/templates.js'
+        src: '<%= yeoman.app %>/templates/*.html',
+        dest: '.tmp/templates.js'
       }
     },
     concurrent: {
@@ -195,11 +197,11 @@ module.exports = function (grunt) {
         separator: '\n'
       },
       js: {
-        src: ['<%= yeoman.app %>/scripts/module.js','.tmp/templates.js'],
+        src: ['<%= yeoman.app %>/scripts/*.js', '.tmp/templates.js'],
         dest: '<%= yeoman.dist %>/index.js'
       },
       css: {
-        src: ['<%= yeoman.app %>/styles/date.css'],
+        src: ['.tmp/{,*/}*.css'],
         dest: '<%= yeoman.dist %>/index.css'
       }
     }
