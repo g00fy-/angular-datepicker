@@ -1,5 +1,7 @@
 # AngularJS datepicker directives
 
+## WIP
+
 #### Requirements
 
 -  Angular v1.1.4+
@@ -8,12 +10,12 @@
 
 #### Development version 
 
-Checkout branch `dev`, run `grunt install` and `bower install`.
+Checkout, run `grunt install` and `bower install`.
 To build run `gunt build`
 
 ## Examples
 
-Live demo : http://run.plnkr.co/erJj712N4bbkGsub/
+Live demo : todo
 
 
 ##### defaults
@@ -23,47 +25,33 @@ Live demo : http://run.plnkr.co/erJj712N4bbkGsub/
 ```
 
 
-##### year view
+##### views:
+
+(initial) view
 
 ```html
-<div date-picker="start" year></div>
+<div date-picker="start" view="year"></div>
 ```
 
-
-##### month view
+(max) view
 
 ```html
-<div date-picker="start" month></div>
+<div date-picker="start" max-view="month"></div>
 ```
 
+(min) view 
 
 ##### only date view
 
 ```html
-<div date-picker="start" date></div>
+<div date-picker="start" min-view="date"></div>
 ```
-
-
-##### hours view
-
-```html
-<div date-picker="start" hours></div>
-```
-
-
-##### minutes view
-
-```html
-<div date-picker="start" minutes></div>
-```
-
 
 ##### input as datepicker
 
 ```html
 <input type="datetime" date-time ng-model="start">
 ```
-
 
 ##### input with formatted value
 

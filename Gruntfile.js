@@ -11,7 +11,8 @@ module.exports = function (grunt) {
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    tmp: '.tmp'
   };
 
   try {
@@ -36,9 +37,8 @@ module.exports = function (grunt) {
       livereload: {
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
-//          '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-          '.tmp/styles/{,*/}*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+          '<%= yeoman.tmp %>/styles/{,*/}*.css',
+          '{<%= yeoman.tmp %>,<%= yeoman.app %>}/scripts/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: '<%= yeoman.app %>/styles',
             src: 'style.less',
-            dest: '.tmp/styles/',
+            dest: '<%= yeoman.tmp %>/styles/',
             ext: '.css'
           }
         ]
@@ -70,7 +70,7 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               lrSnippet,
-              mountFolder(connect, '.tmp'),
+              mountFolder(connect, '<%= yeoman.tmp %>'),
               mountFolder(connect, yeomanConfig.app)
             ];
           }
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, '.tmp'),
+              mountFolder(connect, '<%= yeoman.tmp %>'),
               mountFolder(connect, 'test')
             ];
           }
@@ -98,13 +98,13 @@ module.exports = function (grunt) {
           {
             dot: false,
             src: [
-              '.tmp',
+              '<%= yeoman.tmp %>',
               '<%= yeoman.dist %>'
             ]
           }
         ]
       },
-      server: '.tmp'
+      server: '<%= yeoman.tmp %>'
     },
     jshint: {
       options: {
@@ -152,22 +152,8 @@ module.exports = function (grunt) {
       styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/styles',
-        dest: '.tmp/styles/',
+        dest: '<%= yeoman.tmp %>/styles/',
         src: '{,*/}*.css'
-      },
-      dist: {
-        files: [
-          {
-            expand: true,
-            flatten: true,
-            dot: true,
-            dest: '<%= yeoman.dist %>',
-            src: [
-              'README.md',
-              'bower.json'
-            ]
-          }
-        ]
       }
     },
     ngtemplates: {
@@ -177,7 +163,7 @@ module.exports = function (grunt) {
           module: 'datePicker'
         },
         src: '<%= yeoman.app %>/templates/*.html',
-        dest: '.tmp/templates.js'
+        dest: '<%= yeoman.tmp %>/templates.js'
       }
     },
     concurrent: {
@@ -197,11 +183,19 @@ module.exports = function (grunt) {
         separator: '\n'
       },
       js: {
-        src: ['<%= yeoman.app %>/scripts/*.js', '.tmp/templates.js'],
-        dest: '<%= yeoman.dist %>/index.js'
+        src: ['<%= yeoman.app %>/scripts/{datePicker,input,dateRange}.js', '<%= yeoman.tmp %>/templates.js'],
+        dest: '<%= yeoman.dist %>/index.js',
+        options: {
+          banner:'\'use strict\';\n(function(angular){\n',
+          footer:'})(angular);',
+          // Replace all 'use strict' statements in the code with a single one at the top
+          process: function(src) {
+            return src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+          }
+        }
       },
       css: {
-        src: ['.tmp/{,*/}*.css'],
+        src: ['<%= yeoman.tmp %>/{,*/}*.css'],
         dest: '<%= yeoman.dist %>/index.css'
       }
     }
@@ -225,15 +219,14 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'jshint',
     'clean:dist',
     'recess',
-    'jshint',
     'ngtemplates',
     'concat',
     'cssmin',
     'ngmin',
-    'uglify',
-    'copy:dist'
+    'uglify'
   ]);
 
   grunt.registerTask('default', ['build']);
