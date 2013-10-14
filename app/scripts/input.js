@@ -10,7 +10,7 @@ Module.constant('dateTimeConfig', {
     return '' +
         '<div ' +
         'date-picker="' + attrs.ngModel + '" ' +
-        'view="' + attrs.view + '" ' +
+        (attrs.view ? 'view="' + attrs.view + '" ' : '') +
         (attrs.maxView ? 'max-view="' + attrs.maxView + '" ' : '') +
         (attrs.template ? 'template="' + attrs.template + '" ' : '') +
         (attrs.minView ? 'min-view="' + attrs.minView + '" ' : '') +
@@ -119,11 +119,12 @@ Module.directive('dateTime', function ($compile, $document, $filter, dateTimeCon
           body.append(picker);
         } else {
           // relative
-//            container = angular.element('<div date-picker-wrapper></div>');
-//            element.before(container);
-//            container.append(picker);
-          element.before(picker);
-          picker.css({position: 'relative', top: element[0].offsetHeight, display: 'block'});
+            container = angular.element('<div date-picker-wrapper></div>');
+            element.before(container);
+            container.append(picker);
+//          this approach doesn't work
+//          element.before(picker);
+            picker.css({top: element[0].offsetHeight, display: 'block'});
         }
 
         picker.bind('mousedown', function () {
