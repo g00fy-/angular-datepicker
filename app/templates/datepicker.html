@@ -14,7 +14,7 @@
       <tbody>
       <tr ng-repeat="week in weeks">
         <td ng-repeat="day in week"
-            ng-class="{'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}"
+            ng-class="{'now':isNow(day),'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}"
             ng-click="setDate(day)" ng-bind="day.getDate()">
         </td>
       </tr>
@@ -33,7 +33,7 @@
       <tbody>
       <tr>
         <td colspan="7">
-                    <span ng-class="{'active':isSameYear(year),'btn-danger':isNow(year)}"
+                    <span ng-class="{'active':isSameYear(year),'now':isNow(year)}"
                           ng-repeat="year in years"
                           ng-click="setDate(year)" ng-bind="year.getFullYear()"></span>
 
@@ -56,7 +56,7 @@
       <tr>
         <td colspan="7">
                 <span ng-repeat="month in months"
-                      ng-class="{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'btn-danger':isNow(month)}"
+                      ng-class="{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}"
                       ng-click="setDate(month)">{{month|date:'MMM'}}</span>
 
         </td>
@@ -77,7 +77,7 @@
       <tr>
         <td colspan="7">
                 <span ng-repeat="hour in hours"
-                      ng-class="{'old':isOldHour(hour),'new':isNewHour(hour),'active':isSameHour(hour)}"
+                      ng-class="{'now':isNow(hour),'active':isSameHour(hour)}"
                       ng-click="setDate(hour)" ng-bind="hour.getHours()+':00'"></span>
         </td>
       </tr>
@@ -98,7 +98,7 @@
       <tr>
         <td colspan="7">
                     <span ng-repeat="minute in minutes"
-                          ng-class="{active:isSameMinutes(minute)}"
+                          ng-class="{active:isSameMinutes(minute),'now':isNow(minute)}"
                           ng-click="setDate(minute)">{{minute|date:"HH:mm"}}</span>
         </td>
       </tr>

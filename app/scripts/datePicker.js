@@ -263,7 +263,10 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
         var now = scope.now;
         //noinspection FallThroughInSwitchStatementJS
         switch (scope.view) {
-        case 'hour':
+        case 'minutes':
+          is &= ~~(date.getMinutes()/step) === ~~(now.getMinutes()/step);
+        /*falls through*/
+        case 'hours':
           is &= date.getHours() === now.getHours();
         /*falls through*/
         case 'date':
