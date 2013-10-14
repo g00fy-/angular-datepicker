@@ -119,12 +119,12 @@ Module.directive('dateTime', function ($compile, $document, $filter, dateTimeCon
           body.append(picker);
         } else {
           // relative
-            container = angular.element('<div date-picker-wrapper></div>');
-            element.before(container);
-            container.append(picker);
+          container = angular.element('<div date-picker-wrapper></div>');
+          element.before(container);
+          container.append(picker);
 //          this approach doesn't work
 //          element.before(picker);
-            picker.css({top: element[0].offsetHeight, display: 'block'});
+          picker.css({top: element[0].offsetHeight, display: 'block'});
         }
 
         picker.bind('mousedown', function () {
