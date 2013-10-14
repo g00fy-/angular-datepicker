@@ -38,6 +38,7 @@ Module.directive('dateTime', function ($compile, $document, $filter, dateTimeCon
 
   return {
     require: 'ngModel',
+    scope:true,
     link: function (scope, element, attrs, ngModel) {
       var format = attrs.format || dateTimeConfig.format;
       var parentForm = element.inheritedData('$formController');
