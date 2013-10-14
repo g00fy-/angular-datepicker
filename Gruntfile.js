@@ -70,7 +70,7 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               lrSnippet,
-              mountFolder(connect, '<%= yeoman.tmp %>'),
+              mountFolder(connect, yeomanConfig.tmp),
               mountFolder(connect, yeomanConfig.app)
             ];
           }
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, '<%= yeoman.tmp %>'),
+              mountFolder(connect, yeomanConfig.tmp),
               mountFolder(connect, 'test')
             ];
           }
@@ -205,7 +205,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     'clean:server',
-//    'livereload-start',
+    'recess',
     'concurrent:server',
     'connect:livereload',
     'open',
