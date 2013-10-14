@@ -471,9 +471,10 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "      </thead>\n" +
     "      <tbody>\n" +
     "      <tr ng-repeat=\"week in weeks\">\n" +
-    "        <td ng-repeat=\"day in week\"\n" +
+    "        <td ng-repeat=\"day in week\">\n" +
+    "          <span\n" +
     "            ng-class=\"{'now':isNow(day),'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}\"\n" +
-    "            ng-click=\"setDate(day)\" ng-bind=\"day.getDate()\">\n" +
+    "            ng-click=\"setDate(day)\" ng-bind=\"day.getDate()\"></span>\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "      </tbody>\n" +
