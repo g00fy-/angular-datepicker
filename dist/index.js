@@ -265,7 +265,10 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
         var now = scope.now;
         //noinspection FallThroughInSwitchStatementJS
         switch (scope.view) {
-        case 'hour':
+        case 'minutes':
+          is &= ~~(date.getMinutes()/step) === ~~(now.getMinutes()/step);
+        /*falls through*/
+        case 'hours':
           is &= date.getHours() === now.getHours();
         /*falls through*/
         case 'date':
@@ -468,7 +471,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "      <tbody>\n" +
     "      <tr ng-repeat=\"week in weeks\">\n" +
     "        <td ng-repeat=\"day in week\"\n" +
-    "            ng-class=\"{'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}\"\n" +
+    "            ng-class=\"{'now':isNow(day),'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}\"\n" +
     "            ng-click=\"setDate(day)\" ng-bind=\"day.getDate()\">\n" +
     "        </td>\n" +
     "      </tr>\n" +
@@ -487,7 +490,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "      <tbody>\n" +
     "      <tr>\n" +
     "        <td colspan=\"7\">\n" +
-    "                    <span ng-class=\"{'active':isSameYear(year),'btn-danger':isNow(year)}\"\n" +
+    "                    <span ng-class=\"{'active':isSameYear(year),'now':isNow(year)}\"\n" +
     "                          ng-repeat=\"year in years\"\n" +
     "                          ng-click=\"setDate(year)\" ng-bind=\"year.getFullYear()\"></span>\n" +
     "\n" +
@@ -510,7 +513,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "      <tr>\n" +
     "        <td colspan=\"7\">\n" +
     "                <span ng-repeat=\"month in months\"\n" +
-    "                      ng-class=\"{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'btn-danger':isNow(month)}\"\n" +
+    "                      ng-class=\"{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}\"\n" +
     "                      ng-click=\"setDate(month)\">{{month|date:'MMM'}}</span>\n" +
     "\n" +
     "        </td>\n" +
@@ -531,7 +534,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "      <tr>\n" +
     "        <td colspan=\"7\">\n" +
     "                <span ng-repeat=\"hour in hours\"\n" +
-    "                      ng-class=\"{'old':isOldHour(hour),'new':isNewHour(hour),'active':isSameHour(hour)}\"\n" +
+    "                      ng-class=\"{'now':isNow(hour),'active':isSameHour(hour)}\"\n" +
     "                      ng-click=\"setDate(hour)\" ng-bind=\"hour.getHours()+':00'\"></span>\n" +
     "        </td>\n" +
     "      </tr>\n" +
@@ -552,7 +555,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "      <tr>\n" +
     "        <td colspan=\"7\">\n" +
     "                    <span ng-repeat=\"minute in minutes\"\n" +
-    "                          ng-class=\"{active:isSameMinutes(minute)}\"\n" +
+    "                          ng-class=\"{active:isSameMinutes(minute),'now':isNow(minute)}\"\n" +
     "                          ng-click=\"setDate(minute)\">{{minute|date:\"HH:mm\"}}</span>\n" +
     "        </td>\n" +
     "      </tr>\n" +

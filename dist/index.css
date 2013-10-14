@@ -129,7 +129,8 @@
   background: none;
 }
 
-[date-picker] .active {
+[date-picker] .active,
+[date-picker] .now {
   color: #ffffff;
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -148,18 +149,57 @@
 }
 
 [date-picker] .active:hover,
+[date-picker] .now:hover,
 [date-picker] .active:active,
+[date-picker] .now:active,
 [date-picker] .active.active,
+[date-picker] .now.active,
 [date-picker] .active.disabled,
-[date-picker] .active[disabled] {
+[date-picker] .now.disabled,
+[date-picker] .active[disabled],
+[date-picker] .now[disabled] {
   color: #ffffff;
   background-color: #0044cc;
   *background-color: #003bb3;
 }
 
 [date-picker] .active:active,
-[date-picker] .active.active {
+[date-picker] .now:active,
+[date-picker] .active.active,
+[date-picker] .now.active {
   background-color: #003399 \9;
+}
+
+[date-picker] .now {
+  color: #ffffff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #ee735b;
+  *background-color: #ee905b;
+  background-image: -moz-linear-gradient(top, #ee5f5b, #ee905b);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#ee905b));
+  background-image: -webkit-linear-gradient(top, #ee5f5b, #ee905b);
+  background-image: -o-linear-gradient(top, #ee5f5b, #ee905b);
+  background-image: linear-gradient(to bottom, #ee5f5b, #ee905b);
+  background-repeat: repeat-x;
+  border-color: #ee905b #ee905b #e56218;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffee5f5b', endColorstr='#ffee905b', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+[date-picker] .now:hover,
+[date-picker] .now:active,
+[date-picker] .now.active,
+[date-picker] .now.disabled,
+[date-picker] .now[disabled] {
+  color: #ffffff;
+  background-color: #ee905b;
+  *background-color: #ec8044;
+}
+
+[date-picker] .now:active,
+[date-picker] .now.active {
+  background-color: #e9712d \9;
 }
 
 [date-picker] .disabled {
