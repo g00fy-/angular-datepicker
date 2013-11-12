@@ -26,7 +26,7 @@ Module.directive('dateTimeAppend', function () {
   return {
     link: function (scope, element) {
       element.bind('click', function () {
-        element.find('input').focus();
+        element.find('input')[0].focus();
       });
     }
   };
