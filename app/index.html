@@ -16,37 +16,90 @@
   <div class="span6">
     <h2>Calendar</h2>
 
-    <h3>views</h3>
-    <h5>default</h5>
-    <pre>&lt;div date-picker="start"&gt;&lt;/div&gt; </pre>
+    <div>
+      <h3>default views</h3>
 
-    <div date-picker="start"  max-view="date" min-view="date"></div>
+      <h5>year</h5>
+      <div date-picker="start" view="year"></div>
 
-    <h5>year</h5>
-    <pre>&lt;div date-picker="start"  <strong>year</strong>&gt;&lt;/div&gt; </pre>
-    <div date-picker="start" view="year"></div>
-    <h5>month</h5>
-    <pre>&lt;div date-picker="start <strong>month</strong>&gt;&lt;/div&gt; </pre>
-    <div date-picker="start" view="month"></div>
-    <h5>date</h5>
-    <pre>&lt;div date-picker="start" <strong>date</strong>&gt;&lt;/div&gt; </pre>
-    <div date-picker="start" view="date"></div>
-    <h5>hours</h5>
-    <pre>&lt;div date-picker="start" <strong>hours</strong>&gt;&lt;/div&gt; </pre>
-    <div date-picker="start" view="hours"></div>
-    <h5>minutes</h5>
-    <pre>&lt;div date-picker="start" <strong>minutes</strong>&gt;&lt;/div&gt; </pre>
-    <div date-picker="start" view="minutes"></div>
+      <h5>month</h5>
+      <div date-picker="start" view="month"></div>
+
+      <h5>date</h5>
+      <div date-picker="start" view="date"></div>
+
+      <h5>hours</h5>
+      <div date-picker="start" view="hours"></div>
+
+      <h5>minutes</h5>
+      <div date-picker="start" view="minutes"></div>
+    </div>
+
+
+
+    <div>
+      <h3>min views</h3>
+
+      <h5>year</h5>
+      <div date-picker="start" min-view="year"></div>
+
+      <h5>month</h5>
+      <div date-picker="start" min-view="month"></div>
+
+      <h5>date</h5>
+      <div date-picker="start" min-view="date"></div>
+
+      <h5>hours</h5>
+      <div date-picker="start" min-view="hours"></div>
+
+      <h5>minutes</h5>
+      <div date-picker="start" min-view="minutes"></div>
+    </div>
+    
+    
+    <div>
+      <h3>max views</h3>
+
+      <h5>year</h5>
+      <div date-picker="start" max-view="year"></div>
+
+      <h5>month</h5>
+      <div date-picker="start" max-view="month"></div>
+
+      <h5>date</h5>
+      <div date-picker="start" max-view="date"></div>
+
+      <h5>hours</h5>
+      <div date-picker="start" max-view="hours"></div>
+
+      <h5>maxutes</h5>
+      <div date-picker="start" max-view="minutes"></div>
+    </div>
+
+    <div>
+      <h3>max & min views</h3>
+
+      <h5>time</h5>
+      <div date-picker="start" max-view="hours" min-view="minutes"></div>
+
+      <h5>date</h5>
+      <div date-picker="start" max-view="year" min-view="date"></div>
+
+    </div>
+
+
   </div>
+
+
   <div class="span6">
     <h3>Input</h3>
     <h5>default</h5>
     <pre></pre>
-      <input type="text" date-time ng-model="start" required="true" view="hours" position="absolute">
+    <input type="text" date-time ng-model="start" required="true" view="hours" position="absolute">
 
     <h3>Input with append</h3>
     <h5>default</h5>
-    <pre>&lt;input type="datetime" <strong>ng-model="model" date-time</strong>&gt;&lt;/div&gt; </pre>
+
     <div class="input-append input-prepend" date-time-append>
       <span class="add-on"><i class="icon-calendar"></i></span>
       <input type="text" date-time ng-model="start" required="true" view="hours">
@@ -54,24 +107,16 @@
     </div>
     <h3>Input with prepend</h3>
     <h5>default</h5>
-    <pre>&lt;input type="datetime" <strong>ng-model="model" date-time</strong>&gt;&lt;/div&gt; </pre>
+
     <div class="input-prepend" date-time-append>
       <span class="add-on"><i class="icon-calendar"></i></span>
       <input type="text" date-time ng-model="start" required="true" view="hours" position="absolute">
     </div>
 
     <h5>Input format</h5>
-    <pre>&lt;input type="datetime" ng-model="model" date-time <strong>format="long"</strong>&gt;&lt;/div&gt; </pre>
     <!--<input type="datetime" date-time ng-model="end" hours format="short">-->
     <h5>A button</h5>
-            <pre ng-non-bindable>&lt;div class=&quot;dropdown&quot;&gt;
-  &lt;a class=&quot;dropdown-toggle btn btn-danger&quot;&gt;
-    pick a date: {{(date|date)}}
-  &lt;/a&gt;
-  &lt;div class=&quot;dropdown-menu&quot; ng-click=&quot;$event.preventDefault();$event.stopPropagation()&quot;&gt;
-    &lt;div date-picker=&quot;date&quot; class=&quot;datetimepicker&quot;&gt;&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</pre>
+
     <div class="dropdown">
       <a class="dropdown-toggle btn btn-danger">
         pick a date: {{(date|date)}}
@@ -81,6 +126,9 @@
         <div date-picker="date"></div>
       </div>
     </div>
+
+
+
     <h5>Date range</h5>
     <pre>&lt;div date-range start="start" end="end" &gt;&lt;/div&gt; </pre>
     <div date-range start="a" end="b" style="position: relative; z-index:0"></div>

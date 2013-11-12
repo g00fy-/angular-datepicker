@@ -116,20 +116,14 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
       scope.template = attrs.template || datePickerConfig.template;
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
-      var index;
 
-      /** @namespace attrs.minView */
-      if (attrs.minView) {
-        index = scope.views.indexOf(attrs.minView);
-        scope.views.splice(0, index);
-      }
-      /** @namespace attrs.maxView */
-      if (attrs.maxView) {
-        index = scope.views.indexOf(attrs.maxView);
-        scope.views.splice(index + 1);
-      }
+      /** @namespace attrs.minView, attrs.maxView */
+      scope.views =scope.views.slice(
+        scope.views.indexOf(attrs.maxView || 'year'),
+        scope.views.indexOf(attrs.minView || 'minutes')+1
+      );
 
-      if (scope.views.length === 1) {
+      if (scope.views.length === 1 || scope.views.indexOf(scope.view)==-1) {
         scope.view = scope.views[0];
       }
 
