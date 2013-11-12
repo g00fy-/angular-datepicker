@@ -15,7 +15,7 @@ To build run `gunt build`
 
 ## Examples
 
-Live demo : todo
+[Live demo](https://rawgithub.com/g00fy-/angular-datepicker/master/app/index.html)
 
 
 ##### defaults
