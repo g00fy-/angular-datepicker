@@ -123,7 +123,7 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
         scope.views.indexOf(attrs.minView || 'minutes')+1
       );
 
-      if (scope.views.length === 1 || scope.views.indexOf(scope.view)==-1) {
+      if (scope.views.length === 1 || scope.views.indexOf(scope.view)===-1) {
         scope.view = scope.views[0];
       }
 
