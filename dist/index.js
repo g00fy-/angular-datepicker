@@ -325,7 +325,7 @@ Module.constant('dateTimeConfig', {
         'class="dropdown-menu"></div>';
   },
   format: 'yyyy-MM-dd HH:mm',
-  views: ['date', 'year', 'month', 'hours', 'minutes', 'month'],
+  views: ['date', 'year', 'month', 'hours', 'minutes'],
   dismiss: false,
   position: 'relative'
 });
@@ -411,9 +411,9 @@ Module.directive('dateTime', function ($compile, $document, $filter, dateTimeCon
         picker = $compile(template)(scope);
         scope.$digest();
 
-        scope.$on('setDate', function (event) {
+        scope.$on('setDate', function (event, date, view) {
           updateInput(event);
-          if (dismiss) {
+          if (dismiss && views[views.length - 1] === view) {
             clear();
           }
         });

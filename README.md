@@ -4,8 +4,7 @@
 
 #### Requirements
 
--  Angular v1.1.4+
--  jQuery or your own implementation of `position()` on top of `jQuery Lite`
+-  Angular v1.2+
 
 
 #### Development version 
