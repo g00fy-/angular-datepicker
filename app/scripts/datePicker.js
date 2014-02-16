@@ -98,7 +98,7 @@ function getVisibleHours(date) {
   return hours;
 }
 
-Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
+Module.directive('datePicker', function datePickerDirective(datePickerConfig, $injector) {
 
   //noinspection JSUnusedLocalSymbols
   return {
@@ -110,7 +110,6 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
       before: '=?'
     },
     link: function (scope, element, attrs) {
-
       scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
@@ -120,7 +119,7 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
 
       /** @namespace attrs.minView, attrs.maxView */
-      scope.views =scope.views.slice(
+      scope.views = scope.views.slice(
         scope.views.indexOf(attrs.maxView || 'year'),
         scope.views.indexOf(attrs.minView || 'minutes')+1
       );
@@ -275,6 +274,28 @@ Module.directive('datePicker', function datePickerDirective(datePickerConfig) {
           is &= date.getFullYear() === now.getFullYear();
         }
         return is;
+      };
+
+
+      /**
+       * Asynchronous Event Service Injection.
+       * The events service should broadcast 'calendar:events' when new events came in.
+       */
+      scope.eventService = attrs.eventService || false;
+      if(scope.eventService && $injector.has(scope.eventService)) {
+          scope.eventService =  $injector.get(scope.eventService);
+          scope.$on('calendar:events', function() { scope.$apply(); });
+      }
+
+      /**
+       * Forwarders to the event service interface.
+       */
+      scope.hasEvent = function(date) {
+        return (scope.eventService) ? scope.eventService.hasEvent(date) : false;
+      };
+
+      scope.getEvents = function(date) {
+        return (scope.eventService) ? scope.eventService.getEvents(date) : false;
       };
     }
   };

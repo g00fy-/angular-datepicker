@@ -1,0 +1,80 @@
+.eventCalendar tbody tr:nth-child(odd) {
+  background-color: rgba(0,0,0,0.1);
+}
+.eventCalendar th {
+  background-color: rgba(0,0,0,0.2);
+}
+
+.eventCalendar td:nth-child(even) {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.eventCalendar thead th {
+  background-color: transparent;
+  border:0;
+}
+
+.eventCalendar thead tr:last-child th {
+   border: 1px solid black;
+}
+
+.eventCalendar table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.eventCalendar td, [date-picker] th{
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}
+.eventCalendar [ng-switch-when=date] td {
+  width: calc(100% / 7 );
+  vertical-align: top;
+}
+
+.eventCalendar td span {
+  float: right;
+  font-size: 12px;
+  display: block;
+  padding: 0;
+  width: 33%;
+  margin: 0;
+}
+.eventCalendar .now {
+  color:navy;
+  font-weight:bold;
+}
+calendar.eventCalendar [ng-switch-when=date] td {
+  position: relative;
+  padding: 0;
+  padding-top:25px;
+}
+
+calendar.eventCalendar [ng-switch-when=date] td span {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  text-align: right;
+  padding:0;
+  width: auto;
+  background: transparent !important;
+}
+
+calendar.eventCalendar [ng-switch-when=date] td span.now {
+  color: black;
+}
+
+.eventCalendar .event {
+  display: block;
+  clear:both;
+  padding:2px;
+  margin: 2px;
+  color: white;
+  font-size:11px;
+  font-family:arial;
+  background-color: rgba(0,0,0,0.5); 
+  text-align: left; 
+  cursor: pointer;
+  transition: background 0.5s ease-in-out;
+}

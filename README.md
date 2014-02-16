@@ -64,3 +64,8 @@ To build run `gunt build`
 ```html
 <div date-range start="start" end="end"></div>
 ```
+
+##### calendar with events
+```html
+<calendar view="date" event-source="CalendarEvents"></calendar>
+```

@@ -8,6 +8,8 @@
   <meta name="viewport" content="width=device-width">
   <!-- build:css styles/main.css -->
   <link rel="stylesheet" href="styles/bootstrap.css">
+
+  <link rel="stylesheet" href="styles/calendar.css">
   <link rel="stylesheet" href="styles/style.css"/>
   <!-- endbuild -->
   <link rel="stylesheet" href="../dist/index.css"/>
@@ -158,6 +160,15 @@
         <div date-range start="a" end="b"></div>
       </div>
     </div>
+
+    <h5>Calendar</h5>
+    <calendar></calendar>
+
+    <div ng-controller="SampleCtrl">
+      <h5>Calendar with custom events</h5>
+      <calendar class="eventCalendar" view="date" event-service="CalendarEvents"></calendar>
+      <button ng-click="addCalendarEvent()">Add a calendar event</button>
+    </div>
   </div>
 </div>
 
@@ -167,9 +178,28 @@
 <script src="scripts/datePicker.js"></script>
 <script src="scripts/dateRange.js"></script>
 <script src="scripts/input.js"></script>
+<script src="scripts/calendar.js"></script>
 <!-- endbuild -->
 <script>
-  angular.module('sample', ['datePicker', 'ui.bootstrap']);
+  angular.module('sample', ['datePicker', 'ui.bootstrap', 'calendar'])
+  .controller('SampleCtrl', function($scope, CalendarEvents) {
+    var events = [{
+      start: new Date(),
+      title: 'test'
+    }];
+  
+    CalendarEvents.setEvents(events);
+
+    $scope.addCalendarEvent = function() {
+      var date = new Date();
+      date.setDate(events.length);
+      events.push({
+        start: date,
+        title: 'Event #'+events.length
+      });
+      CalendarEvents.setEvents(events);
+    };
+  });
 </script>
 </body>
 </html>
