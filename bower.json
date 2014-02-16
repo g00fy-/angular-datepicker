@@ -2,6 +2,10 @@
   "name": "angular-datepicker",
   "license": "MIT",
   "version": "1.0.0",
+  "main": [
+    "./dist/index.js",
+    "./dist/index.css"
+  ],
   "ignore": [
     ".gitignore","README.md"
   ],
