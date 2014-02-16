@@ -66,5 +66,6 @@ To build run `gunt build`
 ```
 
 ##### calendar with events
+```html
 <calendar view="date" event-source="CalendarEvents"></calendar>
-
+```
