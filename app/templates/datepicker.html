@@ -34,11 +34,9 @@
       <tbody>
       <tr>
         <td colspan="7">
-                    <span ng-class="{'active':isSameYear(year),'now':isNow(year)}"
-                          ng-repeat="year in years"
-                          ng-click="setDate(year)" ng-bind="year.getFullYear()"></span>
-
-
+          <span ng-class="{'active':isSameYear(year),'now':isNow(year)}"
+                ng-repeat="year in years"
+                ng-click="setDate(year)" ng-bind="year.getFullYear()"></span>
         </td>
       </tr>
       </tbody>
@@ -56,10 +54,10 @@
       <tbody>
       <tr>
         <td colspan="7">
-                <span ng-repeat="month in months"
-                      ng-class="{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}"
-                      ng-click="setDate(month)">{{month|date:'MMM'}}</span>
-
+          <span ng-repeat="month in months"
+                ng-class="{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}"
+                ng-click="setDate(month)"
+                ng-bind="month|date:'MMM'"></span>
         </td>
       </tr>
       </tbody>
@@ -77,9 +75,9 @@
       <tbody>
       <tr>
         <td colspan="7">
-                <span ng-repeat="hour in hours"
-                      ng-class="{'now':isNow(hour),'active':isSameHour(hour)}"
-                      ng-click="setDate(hour)" ng-bind="hour.getHours()+':00'"></span>
+          <span ng-repeat="hour in hours"
+                ng-class="{'now':isNow(hour),'active':isSameHour(hour)}"
+                ng-click="setDate(hour)" ng-bind="hour|time"></span>
         </td>
       </tr>
       </tbody>
@@ -98,9 +96,10 @@
       <tbody>
       <tr>
         <td colspan="7">
-                    <span ng-repeat="minute in minutes"
-                          ng-class="{active:isSameMinutes(minute),'now':isNow(minute)}"
-                          ng-click="setDate(minute)">{{minute|date:"HH:mm"}}</span>
+          <span ng-repeat="minute in minutes"
+                ng-class="{active:isSameMinutes(minute),'now':isNow(minute)}"
+                ng-click="setDate(minute)"
+                ng-bind="minute|time"></span>
         </td>
       </tr>
       </tbody>

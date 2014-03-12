@@ -9,6 +9,22 @@ Module.constant('datePickerConfig', {
   step: 5
 });
 
+Module.filter('time',function () {
+  function format(date){
+    return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+  }
+
+  return function (date) {
+    if (!(date instanceof Date)) {
+      date = new Date(date);
+      if (isNaN(date.getTime())) {
+        return undefined;
+      }
+    }
+    return format(date);
+  };
+});
+
 function getVisibleMinutes(date, step) {
   date = new Date(date || new Date());
   date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
@@ -41,7 +57,8 @@ function getVisibleWeeks(date) {
 
   var weeks = [];
   while (weeks.length < 6) {
-    if(date.getYear()== startYear && date.getMonth() > startMonth) break;
+    /*jshint -W116 */
+    if(date.getYear()=== startYear && date.getMonth() > startMonth) break;
     var week = [];
     for (var i = 0; i < 7; i++) {
       week.push(new Date(date));
@@ -98,6 +115,37 @@ function getVisibleHours(date) {
   return hours;
 }
 
+
+function isAfter(model, date) {
+  return model && model.getTime() <= date.getTime();
+}
+
+function isBefore(model, date) {
+  return model.getTime() >= date.getTime();
+}
+
+function isSameYear(model, date) {
+  return model && model.getFullYear() === date.getFullYear();
+}
+
+function isSameMonth(model, date) {
+  return isSameYear(model, date) && model.getMonth() === date.getMonth();
+}
+
+function isSameDay(model, date) {
+  return isSameMonth(model, date) && model.getDate() === date.getDate();
+}
+
+function isSameHour(model, date) {
+  return isSameDay(model, date) && model.getHours() === date.getHours();
+}
+
+function isSameMinutes(model, date) {
+  return isSameHour(model, date) && model.getMinutes() === date.getMinutes();
+}
+
+
+
 Module.directive('datePicker', ['datePickerConfig', function datePickerDirective(datePickerConfig) {
 
   //noinspection JSUnusedLocalSymbols
@@ -118,6 +166,7 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
       scope.template = attrs.template || datePickerConfig.template;
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
+      var partial = !!attrs.partial;
 
       /** @namespace attrs.minView, attrs.maxView */
       scope.views =scope.views.slice(
@@ -139,12 +188,12 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
         scope.date = date;
         // change next view
         var nextView = scope.views[scope.views.indexOf(scope.view) + 1];
-        if (!nextView || scope.model) {
+        if ((!nextView || partial) || scope.model) {
 
           scope.model = new Date(scope.model || date);
-
+          var view = partial ? 'minutes' : scope.view;
           //noinspection FallThroughInSwitchStatementJS
-          switch (scope.view) {
+          switch (view) {
           case 'minutes':
             scope.model.setMinutes(date.getMinutes());
           /*falls through*/
@@ -227,31 +276,31 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
       };
 
       scope.isAfter = function (date) {
-        return scope.after ? scope.after.getTime() <= date.getTime() : false;
+        return scope.after && isAfter(date, scope.after);
       };
 
       scope.isBefore = function (date) {
-        return scope.before ? scope.before.getTime() >= date.getTime() : false;
+        return scope.before && isBefore(date, scope.before);
       };
 
       scope.isSameMonth = function (date) {
-        return scope.isSameYear(date) && scope.model.getMonth() === date.getMonth();
+        return isSameMonth(scope.model, date);
       };
 
       scope.isSameYear = function (date) {
-        return (scope.model ? scope.model.getFullYear() === date.getFullYear() : false);
+        return isSameYear(scope.model, date);
       };
 
       scope.isSameDay = function (date) {
-        return scope.isSameMonth(date) && scope.model.getDate() === date.getDate();
+        return isSameDay(scope.model, date);
       };
 
       scope.isSameHour = function (date) {
-        return scope.isSameDay(date) && scope.model.getHours() === date.getHours();
+        return isSameHour(scope.model, date);
       };
 
       scope.isSameMinutes = function (date) {
-        return scope.isSameHour(date) && scope.model.getMinutes() === date.getMinutes();
+        return isSameMinutes(scope.model, date);
       };
 
       scope.isNow = function (date) {
