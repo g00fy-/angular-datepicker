@@ -125,7 +125,12 @@
 [date-picker] span.disabled,
 [date-picker] span.disabled:hover {
   color: #999999;
-  cursor: default;
+  cursor: default!important;
+  background: none;
+}
+
+[date-picker] span.other-month {
+  color: #999999;
   background: none;
 }
 
