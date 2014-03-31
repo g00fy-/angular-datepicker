@@ -14,7 +14,7 @@
 </head>
 <body ng-app="sample">
 <div class="row-fluid">
-  <div class="span6">
+  <div class="span4">
     <h2>Calendar</h2>
 
     <div>
@@ -103,12 +103,20 @@
       <div date-picker="start" max-view="year" min-view="date"></div>
 
     </div>
+  </div>
 
+  <div class="span4">
+      <div class="">
+          <h3>min & max dates</h3>
+          <h5>String</h5>
+          Set a start date & end date with the date range
+          <div date-picker="start" min-date="a" max-date="b"></div>
+      </div>
 
   </div>
 
 
-  <div class="span6">
+  <div class="span4">
     <h3>Input</h3>
     <h5>default</h5>
     <input type="text" date-time ng-model="start" required="true" view="hours" partial="true">
@@ -143,6 +151,8 @@
       </div>
     </div>
 
+    <h3>Input with autoclose</h3>
+    <input type="text" date-time ng-model="start" required="true" view="year" min-view="month" dismiss="true">
 
     <h5>Date range</h5>
 

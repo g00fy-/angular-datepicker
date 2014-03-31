@@ -47,6 +47,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       var view = attrs.view || views[0];
       var index = views.indexOf(view);
       var dismiss = attrs.dismiss ? $parse(attrs.dismiss)(scope) : dateTimeConfig.dismiss;
+      var minView = attrs.minView || dateTimeConfig.views[ dateTimeConfig.views.length - 1 ];
       var picker = null;
       var position = attrs.position || dateTimeConfig.position;
       var container = null;
@@ -106,8 +107,11 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
         scope.$on('setDate', function (event, date, view) {
           updateInput(event);
-          if (dismiss && views[views.length - 1] === view) {
-            clear();
+          if (dismiss && minView === view) {
+            // Angular does not provide a "blur" equivalent
+            if (document.activeElement !== document.body){
+              document.activeElement.blur();
+            }
           }
         });
 

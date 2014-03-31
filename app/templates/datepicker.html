@@ -15,8 +15,8 @@
       <tr ng-repeat="week in weeks">
         <td ng-repeat="day in week">
           <span
-            ng-class="{'now':isNow(day),'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}"
-            ng-click="setDate(day)" ng-bind="day.getDate()"></span>
+            ng-class="{'now':isNow(day),'disabled':!isValid(day, 'day'), 'active':isSameDay(day),'other-month':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}"
+            ng-click="isValid(day, 'day') && setDate(day)" ng-bind="day.getDate()"></span>
         </td>
       </tr>
       </tbody>
@@ -34,9 +34,9 @@
       <tbody>
       <tr>
         <td colspan="7">
-          <span ng-class="{'active':isSameYear(year),'now':isNow(year)}"
+          <span ng-class="{'active':isSameYear(year),'disabled':!isValid(year, 'year'), 'now':isNow(year)}"
                 ng-repeat="year in years"
-                ng-click="setDate(year)" ng-bind="year.getFullYear()"></span>
+                ng-click="isValid(year, 'year') && setDate(year)" ng-bind="year.getFullYear()"></span>
         </td>
       </tr>
       </tbody>
@@ -55,8 +55,8 @@
       <tr>
         <td colspan="7">
           <span ng-repeat="month in months"
-                ng-class="{'active':isSameMonth(month),'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}"
-                ng-click="setDate(month)"
+                ng-class="{'active':isSameMonth(month),'disabled':!isValid(month, 'month'), 'after':isAfter(month),'before':isBefore(month),'now':isNow(month)}"
+                ng-click="isValid(month, 'month') && setDate(month)"
                 ng-bind="month|date:'MMM'"></span>
         </td>
       </tr>
@@ -76,8 +76,8 @@
       <tr>
         <td colspan="7">
           <span ng-repeat="hour in hours"
-                ng-class="{'now':isNow(hour),'active':isSameHour(hour)}"
-                ng-click="setDate(hour)" ng-bind="hour|time"></span>
+                ng-class="{'now':isNow(hour),'active':isSameHour(hour),'disabled':!isValid(hour, 'hour') }"
+                ng-click="isValid(hour, 'hour') && setDate(hour)" ng-bind="hour|time"></span>
         </td>
       </tr>
       </tbody>
@@ -97,8 +97,8 @@
       <tr>
         <td colspan="7">
           <span ng-repeat="minute in minutes"
-                ng-class="{active:isSameMinutes(minute),'now':isNow(minute)}"
-                ng-click="setDate(minute)"
+                ng-class="{active:isSameMinutes(minute), 'disabled':!isValid(minute, 'minute'), 'now':isNow(minute)}"
+                ng-click="isValid(minute, 'minute') && setDate(minute)"
                 ng-bind="minute|time"></span>
         </td>
       </tr>

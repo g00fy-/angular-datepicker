@@ -144,6 +144,17 @@ function isSameMinutes(model, date) {
   return isSameHour(model, date) && model.getMinutes() === date.getMinutes();
 }
 
+function isSame(model, date, level) {
+  var methods = {
+    'minute': isSameMinutes,
+    'hour': isSameHour,
+    'day': isSameDay,
+    'month': isSameMonth,
+    'year': isSameYear
+  };
+
+  return methods[level] && methods[level](model, date);
+}
 
 
 Module.directive('datePicker', ['datePickerConfig', function datePickerDirective(datePickerConfig) {
@@ -155,10 +166,11 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
     scope: {
       model: '=datePicker',
       after: '=?',
-      before: '=?'
+      before: '=?',
+      minDate: '=?',
+      maxDate: '=?'
     },
     link: function (scope, element, attrs) {
-
       scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
@@ -250,6 +262,18 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
 
       scope.$watch(watch, update);
 
+      scope.$watch('minDate', function () {
+        if (scope.minDate && !(scope.minDate instanceof Date)) {
+          scope.minDate = new Date(scope.minDate);
+        }
+      });
+
+      scope.$watch('maxDate', function () {
+        if (scope.maxDate && !(scope.maxDate instanceof Date)) {
+          scope.maxDate = new Date(scope.maxDate);
+        }
+      });
+
       scope.next = function (delta) {
         var date = scope.date;
         delta = delta || 1;
@@ -271,6 +295,17 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
         update();
       };
 
+
+      scope.isValid = function (date, view) {
+        if (scope.minDate && date < scope.minDate && !isSame(date, scope.minDate, view)) {
+          return false;
+        }
+        if (scope.maxDate && date > scope.maxDate && !isSame(date, scope.maxDate, view)) {
+          return false;
+        }
+        return true;
+      };
+
       scope.prev = function (delta) {
         return scope.next(-delta || -1);
       };
@@ -284,23 +319,23 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
       };
 
       scope.isSameMonth = function (date) {
-        return isSameMonth(scope.model, date);
+        return isSameMonth(scope.date, date);
       };
 
       scope.isSameYear = function (date) {
-        return isSameYear(scope.model, date);
+        return isSameYear(scope.date, date);
       };
 
       scope.isSameDay = function (date) {
-        return isSameDay(scope.model, date);
+        return isSameDay(scope.date, date);
       };
 
       scope.isSameHour = function (date) {
-        return isSameHour(scope.model, date);
+        return isSameHour(scope.date, date);
       };
 
       scope.isSameMinutes = function (date) {
-        return isSameMinutes(scope.model, date);
+        return isSameMinutes(scope.date, date);
       };
 
       scope.isNow = function (date) {
