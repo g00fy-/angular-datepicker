@@ -106,7 +106,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
         scope.$on('setDate', function (event, date, view) {
           updateInput(event);
-          var emitID = 'pushDate' + (attrs.id ? ':' + attes.id : '');
+          var emitID = 'pushDate' + (attrs.id ? ':' + attrs.id : '');
           scope.$emit(emitID, date);
           if (dismiss && views[views.length - 1] === view) {
             clear();
