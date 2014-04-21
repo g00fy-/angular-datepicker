@@ -32,7 +32,7 @@
 
 [date-picker-wrapper] {
   position: relative !important;
-  display: block;
+  display: inline-block;
 }
 
 [date-time-append] [date-picker] {
