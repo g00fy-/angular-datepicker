@@ -187,6 +187,9 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
       };
 
       scope.setDate = function (date) {
+        if(attrs.disabled) {
+          return;
+        }
         scope.date = date;
         // change next view
         var nextView = scope.views[scope.views.indexOf(scope.view) + 1];
@@ -342,7 +345,10 @@ Module.directive('dateRange', function () {
       start: '=',
       end: '='
     },
-    link: function (scope) {
+    link: function (scope, element, attrs) {
+      attrs.$observe('disabled', function(isDisabled){
+          scope.disableDatePickers = !!isDisabled;
+        });
       scope.$watch('start.getTime()', function (value) {
         if (value && scope.end && value > scope.end.getTime()) {
           scope.end = new Date(value);
@@ -729,13 +735,13 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "\n" +
     "            <td valign=\"top\">\r" +
     "\n" +
-    "                <div date-picker=\"start\" class=\"date-picker\" date after=\"start\" before=\"end\" min-view=\"date\" max-view=\"date\"></div>\r" +
+    "                <div date-picker=\"start\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\" min-view=\"date\" max-view=\"date\"></div>\r" +
     "\n" +
     "            </td>\r" +
     "\n" +
     "            <td valign=\"top\">\r" +
     "\n" +
-    "                <div date-picker=\"end\" class=\"date-picker\" date after=\"start\" before=\"end\"  min-view=\"date\" max-view=\"date\"></div>\r" +
+    "                <div date-picker=\"end\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\"  min-view=\"date\" max-view=\"date\"></div>\r" +
     "\n" +
     "            </td>\r" +
     "\n" +
