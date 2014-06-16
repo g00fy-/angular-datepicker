@@ -186,7 +186,7 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
 
       scope.setDate = function (date) {
         if(attrs.disabled) {
-            return
+          return;
         }
         scope.date = date;
         // change next view
