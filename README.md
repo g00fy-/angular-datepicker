@@ -10,7 +10,7 @@
 #### Development version 
 
 Checkout, run `grunt install` and `bower install`.
-To build run `gunt build`
+To build run `grunt build`
 
 ## Examples
 
