@@ -121,7 +121,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           body.append(picker);
         } else {
           // relative
-          container = angular.element('<div date-picker-wrapper></div>');
+          container = angular.element('<div class="date-picker-wrapper" date-picker-wrapper></div>');
           element[0].parentElement.insertBefore(container[0], element[0]);
           container.append(picker);
 //          this approach doesn't work

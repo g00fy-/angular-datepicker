@@ -14,7 +14,7 @@
 </head>
 <body ng-app="sample">
 <div class="row-fluid">
-  <div class="span6">
+  <div class="col-md-6">
     <h2>Calendar</h2>
 
     <div>
@@ -108,25 +108,25 @@
   </div>
 
 
-  <div class="span6">
+  <div class="col-md-6">
     <h3>Input</h3>
     <h5>default</h5>
-    <input type="text" date-time ng-model="start" required="true" view="hours" partial="true">
+    <input type="text" class="form-control" date-time ng-model="start" required="true" view="hours" partial="true">
 
     <h3>Input with append</h3>
     <h5>default</h5>
 
-    <div class="input-append input-prepend" date-time-append>
-      <span class="add-on"><i class="icon-calendar"></i></span>
-      <input type="text" date-time ng-model="start" required="true" view="hours">
-      <span class="add-on"><i class="icon-calendar"></i></span>
+    <div class="input-group" date-time-append>
+      <span class="input-group-addon"><i class="icon-calendar"></i></span>
+      <input type="text" class="form-control" date-time ng-model="start" required="true" view="hours">
+      <span class="input-group-addon"><i class="icon-calendar"></i></span>
     </div>
     <h3>Input with prepend</h3>
     <h5>default</h5>
 
-    <div class="input-prepend" date-time-append>
-      <span class="add-on"><i class="icon-calendar"></i></span>
-      <input type="text" date-time ng-model="start" required="true" view="hours">
+    <div class="input-group" date-time-append>
+      <span class="input-group-addon"><i class="icon-calendar"></i></span>
+      <input type="text" class="form-control" date-time ng-model="start" required="true" view="hours">
     </div>
 
     <h5>Input format</h5>
