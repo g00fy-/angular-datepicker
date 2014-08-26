@@ -9,7 +9,7 @@
 
 #### Development version 
 
-Checkout, run `grunt install` and `bower install`.
+Checkout, run `npm install` and `bower install`.
 To build run `grunt build`
 
 ## Examples
