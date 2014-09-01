@@ -104,24 +104,14 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         picker = $compile(template)(scope);
         scope.$digest();
 
-        scope.$on('setDate', function (event, date, view) {
-          updateInput(event);
-          if (dismiss && views[views.length - 1] === view) {
-            clear();
-          }
-        });
-
-        scope.$on('$destroy', clear);
-
         // move picker below input element
-
         if (position === 'absolute') {
           var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
           picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position});
           body.append(picker);
         } else {
           // relative
-          container = angular.element('<div class="date-picker-wrapper" date-picker-wrapper></div>');
+          container = angular.element('<div date-picker-wrapper></div>');
           element[0].parentElement.insertBefore(container[0], element[0]);
           container.append(picker);
 //          this approach doesn't work
@@ -133,6 +123,15 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           evt.preventDefault();
         });
       }
+
+      scope.$on('setDate', function (event, date, view) {
+        updateInput(event);
+        if (dismiss && views[views.length - 1] === view) {
+          clear();
+        }
+      });
+
+      scope.$on('$destroy', clear);
 
       element.bind('focus', showPicker);
       element.bind('blur', clear);

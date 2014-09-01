@@ -25,7 +25,7 @@ Module.filter('time',function () {
   };
 });
 
-Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
+Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function (datePickerConfig, datePickerUtils) {
 
   //noinspection JSUnusedLocalSymbols
   return {
@@ -48,7 +48,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       var partial = !!attrs.partial;
 
       /** @namespace attrs.minView, attrs.maxView */
-      scope.views =scope.views.slice(
+      scope.views = scope.views.slice(
         scope.views.indexOf(attrs.maxView || 'year'),
         scope.views.indexOf(attrs.minView || 'minutes')+1
       );
