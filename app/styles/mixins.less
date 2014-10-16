@@ -558,13 +558,13 @@
   .core (@gridColumnWidth, @gridGutterWidth) {
 
     .spanX (@index) when (@index > 0) {
-      (~".span@{index}") { .span(@index); }
+      (.span@{index}) { .span(@index); }
       .spanX(@index - 1);
     }
     .spanX (0) {}
 
     .offsetX (@index) when (@index > 0) {
-      (~".offset@{index}") { .offset(@index); }
+      (.offset@{index}) { .offset(@index); }
       .offsetX(@index - 1);
     }
     .offsetX (0) {}
@@ -603,14 +603,14 @@
   .fluid (@fluidGridColumnWidth, @fluidGridGutterWidth) {
 
     .spanX (@index) when (@index > 0) {
-      (~".span@{index}") { .span(@index); }
+      (.span@{index}) { .span(@index); }
       .spanX(@index - 1);
     }
     .spanX (0) {}
 
     .offsetX (@index) when (@index > 0) {
-      (~'.offset@{index}') { .offset(@index); }
-      (~'.offset@{index}:first-child') { .offsetFirstChild(@index); }
+      (.offset@{index}) { .offset(@index); }
+      (.offset@{index}:first-child) { .offsetFirstChild(@index); }
       .offsetX(@index - 1);
     }
     .offsetX (0) {}
@@ -656,9 +656,15 @@
   }
 
   .input(@gridColumnWidth, @gridGutterWidth) {
-
     .spanX (@index) when (@index > 0) {
-      (~"input.span@{index}, textarea.span@{index}, .uneditable-input.span@{index}") { .span(@index); }
+      /* FIXME: thomas: this line provokes less compilation errors, so I
+      /*                broke it up in three lines
+      (input.span@{index}, textarea.span@{index}, .uneditable-input.span@{index}) { .span(@index); }
+       */
+      input.span@{index} { .span(@index); }
+      textarea.span@{index} { .span(@index); }
+      .uneditable-input.span@{index} { .span(@index); }
+
       .spanX(@index - 1);
     }
     .spanX (0) {}
