@@ -30,13 +30,14 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
   //noinspection JSUnusedLocalSymbols
   return {
     // this is a bug ?
+    require:'?ngModel',
     template: '<div ng-include="template"></div>',
     scope: {
       model: '=datePicker',
       after: '=?',
       before: '=?'
     },
-    link: function (scope, element, attrs) {
+    link: function (scope, element, attrs, ngModel) {
 
       scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
@@ -73,6 +74,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         if ((!nextView || partial) || scope.model) {
 
           scope.model = new Date(scope.model || date);
+          //if ngModel , setViewValue and trigger ng-change, etc...
+           if(ngModel)
+             ngModel.$setViewValue(scope.model);
+             
           var view = partial ? 'minutes' : scope.view;
           //noinspection FallThroughInSwitchStatementJS
           switch (view) {
