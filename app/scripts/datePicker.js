@@ -76,7 +76,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           scope.model = new Date(scope.model || date);
           //if ngModel , setViewValue and trigger ng-change, etc...
            if(ngModel)
-             ngModel.$setViewValue(scope.model);
+             ngModel.$setViewValue(scope.date);
              
           var view = partial ? 'minutes' : scope.view;
           //noinspection FallThroughInSwitchStatementJS
