@@ -9,7 +9,10 @@ Module.directive('dateRange', function () {
       start: '=',
       end: '='
     },
-    link: function (scope) {
+    link: function (scope, element, attrs) {
+      attrs.$observe('disabled', function(isDisabled){
+          scope.disableDatePickers = !!isDisabled;
+        });
       scope.$watch('start.getTime()', function (value) {
         if (value && scope.end && value > scope.end.getTime()) {
           scope.end = new Date(value);

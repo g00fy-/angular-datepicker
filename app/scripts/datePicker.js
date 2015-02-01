@@ -25,139 +25,19 @@ Module.filter('time',function () {
   };
 });
 
-function getVisibleMinutes(date, step) {
-  date = new Date(date || new Date());
-  date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
-  var minutes = [];
-  var stop = date.getTime() + 60 * 60 * 1000;
-  while (date.getTime() < stop) {
-    minutes.push(date);
-    date = new Date(date.getTime() + step * 60 * 1000);
-  }
-  return minutes;
-}
-
-function getVisibleWeeks(date) {
-  date = new Date(date || new Date());
-  var startMonth = date.getMonth(), startYear = date.getYear();
-  date.setDate(1);
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-
-  if (date.getDay() === 0) {
-    date.setDate(-5);
-  } else {
-    date.setDate(date.getDate() - (date.getDay() - 1));
-  }
-  if (date.getDate() === 1) {
-    date.setDate(-6);
-  }
-
-  var weeks = [];
-  while (weeks.length < 6) {
-    /*jshint -W116 */
-    if(date.getYear()=== startYear && date.getMonth() > startMonth) break;
-    var week = [];
-    for (var i = 0; i < 7; i++) {
-      week.push(new Date(date));
-      date.setDate(date.getDate() + 1);
-    }
-    weeks.push(week);
-  }
-  return weeks;
-}
-
-function getVisibleYears(date) {
-  var years = [];
-  date = new Date(date || new Date());
-  date.setFullYear(date.getFullYear() - (date.getFullYear() % 10));
-  for (var i = 0; i < 12; i++) {
-    years.push(new Date(date.getFullYear() + (i - 1), 0, 1));
-  }
-  return years;
-}
-
-function getDaysOfWeek(date) {
-  date = new Date(date || new Date());
-  date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  date.setDate(date.getDate() - (date.getDay() - 1));
-  var days = [];
-  for (var i = 0; i < 7; i++) {
-    days.push(new Date(date));
-    date.setDate(date.getDate() + 1);
-  }
-  return days;
-}
-
-function getVisibleMonths(date) {
-  date = new Date(date || new Date());
-  var year = date.getFullYear();
-  var months = [];
-  for (var month = 0; month < 12; month++) {
-    months.push(new Date(year, month, 1));
-  }
-  return months;
-}
-
-function getVisibleHours(date) {
-  date = new Date(date || new Date());
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
-  var hours = [];
-  for (var i = 0; i < 24; i++) {
-    hours.push(date);
-    date = new Date(date.getTime() + 60 * 60 * 1000);
-  }
-  return hours;
-}
-
-
-function isAfter(model, date) {
-  return model && model.getTime() <= date.getTime();
-}
-
-function isBefore(model, date) {
-  return model.getTime() >= date.getTime();
-}
-
-function isSameYear(model, date) {
-  return model && model.getFullYear() === date.getFullYear();
-}
-
-function isSameMonth(model, date) {
-  return isSameYear(model, date) && model.getMonth() === date.getMonth();
-}
-
-function isSameDay(model, date) {
-  return isSameMonth(model, date) && model.getDate() === date.getDate();
-}
-
-function isSameHour(model, date) {
-  return isSameDay(model, date) && model.getHours() === date.getHours();
-}
-
-function isSameMinutes(model, date) {
-  return isSameHour(model, date) && model.getMinutes() === date.getMinutes();
-}
-
-
-
-Module.directive('datePicker', ['datePickerConfig', function datePickerDirective(datePickerConfig) {
+Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
 
   //noinspection JSUnusedLocalSymbols
   return {
     // this is a bug ?
+    require:'?ngModel',
     template: '<div ng-include="template"></div>',
     scope: {
       model: '=datePicker',
       after: '=?',
       before: '=?'
     },
-    link: function (scope, element, attrs) {
+    link: function (scope, element, attrs, ngModel) {
 
       scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
@@ -185,12 +65,20 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
       };
 
       scope.setDate = function (date) {
+        if(attrs.disabled) {
+          return;
+        }
         scope.date = date;
         // change next view
         var nextView = scope.views[scope.views.indexOf(scope.view) + 1];
         if ((!nextView || partial) || scope.model) {
 
           scope.model = new Date(scope.model || date);
+          //if ngModel , setViewValue and trigger ng-change, etc...
+          if(ngModel) {
+            ngModel.$setViewValue(scope.date);
+          }
+
           var view = partial ? 'minutes' : scope.view;
           //noinspection FallThroughInSwitchStatementJS
           switch (view) {
@@ -222,20 +110,20 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
         var date = scope.date;
         switch (view) {
         case 'year':
-          scope.years = getVisibleYears(date);
+          scope.years = datePickerUtils.getVisibleYears(date);
           break;
         case 'month':
-          scope.months = getVisibleMonths(date);
+          scope.months = datePickerUtils.getVisibleMonths(date);
           break;
         case 'date':
-          scope.weekdays = scope.weekdays || getDaysOfWeek();
-          scope.weeks = getVisibleWeeks(date);
+          scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
+          scope.weeks = datePickerUtils.getVisibleWeeks(date);
           break;
         case 'hours':
-          scope.hours = getVisibleHours(date);
+          scope.hours = datePickerUtils.getVisibleHours(date);
           break;
         case 'minutes':
-          scope.minutes = getVisibleMinutes(date, step);
+          scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
           break;
         }
       }
@@ -276,31 +164,31 @@ Module.directive('datePicker', ['datePickerConfig', function datePickerDirective
       };
 
       scope.isAfter = function (date) {
-        return scope.after && isAfter(date, scope.after);
+        return scope.after && datePickerUtils.isAfter(date, scope.after);
       };
 
       scope.isBefore = function (date) {
-        return scope.before && isBefore(date, scope.before);
+        return scope.before && datePickerUtils.isBefore(date, scope.before);
       };
 
       scope.isSameMonth = function (date) {
-        return isSameMonth(scope.model, date);
+        return datePickerUtils.isSameMonth(scope.model, date);
       };
 
       scope.isSameYear = function (date) {
-        return isSameYear(scope.model, date);
+        return datePickerUtils.isSameYear(scope.model, date);
       };
 
       scope.isSameDay = function (date) {
-        return isSameDay(scope.model, date);
+        return datePickerUtils.isSameDay(scope.model, date);
       };
 
       scope.isSameHour = function (date) {
-        return isSameHour(scope.model, date);
+        return datePickerUtils.isSameHour(scope.model, date);
       };
 
       scope.isSameMinutes = function (date) {
-        return isSameMinutes(scope.model, date);
+        return datePickerUtils.isSameMinutes(scope.model, date);
       };
 
       scope.isNow = function (date) {
