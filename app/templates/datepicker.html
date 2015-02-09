@@ -3,9 +3,9 @@
     <table>
       <thead>
       <tr>
-        <th ng-click="prev()">‹</th>
+        <th ng-click="prev()">&lsaquo;</th>
         <th colspan="5" class="switch" ng-click="setView('month')">{{date|date:"yyyy MMMM"}}</th>
-        <th ng-click="next()">›</i></th>
+        <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       <tr>
         <th ng-repeat="day in weekdays" style="overflow: hidden">{{ day|date:"EEE" }}</th>
@@ -26,9 +26,9 @@
     <table>
       <thead>
       <tr>
-        <th ng-click="prev(10)">‹</th>
+        <th ng-click="prev(10)">&lsaquo;</th>
         <th colspan="5" class="switch">{{years[0].getFullYear()}}-{{years[years.length-1].getFullYear()}}</th>
-        <th ng-click="next(10)">›</i></th>
+        <th ng-click="next(10)">&rsaquo;</i></th>
       </tr>
       </thead>
       <tbody>
@@ -46,9 +46,9 @@
     <table>
       <thead>
       <tr>
-        <th ng-click="prev()">‹</th>
+        <th ng-click="prev()">&lsaquo;</th>
         <th colspan="5" class="switch" ng-click="setView('year')">{{ date|date:"yyyy" }}</th>
-        <th ng-click="next()">›</i></th>
+        <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       </thead>
       <tbody>
@@ -67,9 +67,9 @@
     <table>
       <thead>
       <tr>
-        <th ng-click="prev(24)">‹</th>
+        <th ng-click="prev(24)">&lsaquo;</th>
         <th colspan="5" class="switch" ng-click="setView('date')">{{ date|date:"dd MMMM yyyy" }}</th>
-        <th ng-click="next(24)">›</i></th>
+        <th ng-click="next(24)">&rsaquo;</i></th>
       </tr>
       </thead>
       <tbody>
@@ -87,10 +87,10 @@
     <table>
       <thead>
       <tr>
-        <th ng-click="prev()">‹</th>
+        <th ng-click="prev()">&lsaquo;</th>
         <th colspan="5" class="switch" ng-click="setView('hours')">{{ date|date:"dd MMMM yyyy" }}
         </th>
-        <th ng-click="next()">›</i></th>
+        <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       </thead>
       <tbody>
