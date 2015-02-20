@@ -39,6 +39,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
     },
     link: function (scope, element, attrs, ngModel) {
 
+      var arrowClick = false;
+
       scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
@@ -107,7 +109,13 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function update() {
         var view = scope.view;
+
+        if (scope.model && !arrowClick) {
+          scope.date = new Date(scope.model);
+          arrowClick = false;
+        }
         var date = scope.date;
+
         switch (view) {
         case 'year':
           scope.years = datePickerUtils.getVisibleYears(date);
@@ -156,6 +164,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           date.setHours(date.getHours() + delta);
           break;
         }
+        arrowClick = true;
         update();
       };
 
