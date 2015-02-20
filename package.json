@@ -25,7 +25,7 @@
     "grunt-google-cdn": "~0.1.1",
     "grunt-ngmin": "~0.0.2",
     "grunt-angular-templates": "~0.3.8",
-    "grunt-recess": "~0.4.0",
+    "grunt-contrib-less": "*",
     "grunt-concurrent": "~0.4.0",
     "load-grunt-tasks": "~0.2.0"
   },

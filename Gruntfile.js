@@ -43,7 +43,7 @@ module.exports = function (grunt) {
         ]
       }
     },
-    recess: {
+    less: {
       options: {
         compile: true
       },
@@ -221,7 +221,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'jshint',
     'clean:dist',
-    'recess',
+    'less',
     'ngtemplates',
     'concat',
     'cssmin',
