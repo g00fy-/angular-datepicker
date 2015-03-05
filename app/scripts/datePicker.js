@@ -44,6 +44,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
+      scope.custom = (attrs.custom || '').toLowerCase() === 'true';
       scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
 
@@ -116,23 +117,32 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
         var date = scope.date;
 
-        switch (view) {
-        case 'year':
+        if (scope.custom) {
           scope.years = datePickerUtils.getVisibleYears(date);
-          break;
-        case 'month':
           scope.months = datePickerUtils.getVisibleMonths(date);
-          break;
-        case 'date':
           scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
           scope.weeks = datePickerUtils.getVisibleWeeks(date);
-          break;
-        case 'hours':
           scope.hours = datePickerUtils.getVisibleHours(date);
-          break;
-        case 'minutes':
           scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
-          break;
+        } else {
+          switch (view) {
+          case 'year':
+            scope.years = datePickerUtils.getVisibleYears(date);
+            break;
+          case 'month':
+            scope.months = datePickerUtils.getVisibleMonths(date);
+            break;
+          case 'date':
+            scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
+            scope.weeks = datePickerUtils.getVisibleWeeks(date);
+            break;
+          case 'hours':
+            scope.hours = datePickerUtils.getVisibleHours(date);
+            break;
+          case 'minutes':
+            scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
+            break;
+          }
         }
       }
 
