@@ -64,6 +64,9 @@
 [date-range] [date-picker] .after.before.active {
   background-color: #24528c \9;
 }
+[date-picker].hidden {
+  display: none;
+}
 [date-picker] {
   -webkit-user-select: none;
   -moz-user-select: none;

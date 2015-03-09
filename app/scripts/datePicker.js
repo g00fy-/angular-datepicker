@@ -105,6 +105,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         if (nextView) {
           scope.setView(nextView);
         }
+
+        if(!nextView && attrs.autoClose === 'true'){
+          element.addClass('hidden');
+        }
       };
 
       function update() {
