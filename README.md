@@ -46,6 +46,12 @@ To build run `grunt build`
 <div date-picker="start" min-view="date"></div>
 ```
 
+##### Close the picker when min-view is reached
+
+```html
+<div date-picker="start" auto-close="true"></div>
+```
+
 ##### input as datepicker
 
 ```html
