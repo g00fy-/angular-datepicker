@@ -144,7 +144,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         if (scope.view !== 'date') {
           return scope.view;
         }
-        return scope.model ? scope.model.getMonth() : null;
+        return scope.date ? scope.date.getMonth() : null;
       }
 
 
