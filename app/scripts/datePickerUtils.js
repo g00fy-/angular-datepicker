@@ -88,30 +88,37 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     },
     isAfter : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return model && model.getTime() <= date.getTime();
     },
     isBefore : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return model.getTime() >= date.getTime();
     },
     isSameYear :   function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return model && model.getFullYear() === date.getFullYear();
     },
     isSameMonth : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return this.isSameYear(model, date) && model.getMonth() === date.getMonth();
     },
     isSameDay : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return this.isSameMonth(model, date) && model.getDate() === date.getDate();
     },
     isSameHour : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return this.isSameDay(model, date) && model.getHours() === date.getHours();
     },
     isSameMinutes : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
+      date = new Date(date);
       return this.isSameHour(model, date) && model.getMinutes() === date.getMinutes();
     }
   };
