@@ -37,7 +37,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
     scope: {
       model: '=datePicker',
       after: '=?',
-      before: '=?'
+      before: '=?',
+      disableBeforeNow: '@?'
     },
     link: function (scope, element, attrs, ngModel) {
 
@@ -70,6 +71,9 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       scope.setDate = function (date) {
         if(attrs.disabled) {
+          return;
+        }
+        if(scope.isPreviousDate(date) && scope.disableBeforeNow){
           return;
         }
         scope.date = date;
@@ -204,6 +208,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       scope.isSameMinutes = function (date) {
         return datePickerUtils.isSameMinutes(scope.model, date);
+      };
+
+      scope.isPreviousDate = function (date){
+        return scope.now >= date ? true : false;
       };
 
       scope.isNow = function (date) {
@@ -366,7 +374,8 @@ Module.directive('dateRange', function () {
     templateUrl: 'templates/daterange.html',
     scope: {
       start: '=',
-      end: '='
+      end: '=',
+      disableBeforeNow: '@?'
     },
     link: function (scope, element, attrs) {
       attrs.$observe('disabled', function(isDisabled){
@@ -567,7 +576,7 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "\n" +
     "          <span\r" +
     "\n" +
-    "            ng-class=\"{'now':isNow(day),'active':isSameDay(day),'disabled':(day.getMonth()!=date.getMonth()),'after':isAfter(day),'before':isBefore(day)}\"\r" +
+    "            ng-class=\"{'now':isNow(day),'active':isSameDay(day),'disabled':((day.getMonth()!=date.getMonth()) || isPreviousDate(day)),'after':isAfter(day),'before':isBefore(day)}\"\r" +
     "\n" +
     "            ng-click=\"setDate(day)\" ng-bind=\"day.getDate()\"></span>\r" +
     "\n" +
@@ -760,13 +769,13 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "\n" +
     "            <td valign=\"top\">\r" +
     "\n" +
-    "                <div date-picker=\"start\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\" min-view=\"date\" max-view=\"date\"></div>\r" +
+    "                <div date-picker=\"start\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\" min-view=\"date\" max-view=\"date\" disable-before-now=\"{{disableBeforeNow}}\"></div>\r" +
     "\n" +
     "            </td>\r" +
     "\n" +
     "            <td valign=\"top\">\r" +
     "\n" +
-    "                <div date-picker=\"end\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\"  min-view=\"date\" max-view=\"date\"></div>\r" +
+    "                <div date-picker=\"end\" ng-disabled=\"disableDatePickers\"  class=\"date-picker\" date after=\"start\" before=\"end\"  min-view=\"date\" max-view=\"date\" disable-before-now=\"{{disableBeforeNow}}\"></div>\r" +
     "\n" +
     "            </td>\r" +
     "\n" +
