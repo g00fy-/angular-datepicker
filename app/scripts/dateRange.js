@@ -10,6 +10,10 @@ Module.directive('dateRange', function () {
       end: '='
     },
     link: function (scope, element, attrs) {
+
+      scope.start = new Date(scope.start);
+      scope.end = new Date(scope.end);
+
       attrs.$observe('disabled', function(isDisabled){
           scope.disableDatePickers = !!isDisabled;
         });
