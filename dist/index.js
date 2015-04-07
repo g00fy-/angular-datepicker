@@ -110,6 +110,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
         if(!nextView && attrs.autoClose === 'true'){
           element.addClass('hidden');
+          scope.$emit('hidePicker');
         }
       };
 
@@ -503,6 +504,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           if (dismiss && views[views.length - 1] === view) {
             clear();
           }
+        });
+
+        scope.$on('hidePicker', function () {
+          element.triggerHandler('blur');
         });
 
         scope.$on('$destroy', clear);
