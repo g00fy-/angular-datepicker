@@ -1,6 +1,6 @@
 {
   "name": "angular-datepicker",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

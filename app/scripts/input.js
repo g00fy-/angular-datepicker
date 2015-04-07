@@ -113,6 +113,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           }
         });
 
+        scope.$on('hidePicker', function (event) {
+          element.triggerHandler('blur');
+        });
+
         scope.$on('$destroy', clear);
 
         // move picker below input element
