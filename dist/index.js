@@ -371,8 +371,11 @@ Module.directive('dateRange', function () {
     },
     link: function (scope, element, attrs) {
 
-      scope.start = new Date(scope.start);
-      scope.end = new Date(scope.end);
+      /*
+       * If no date is set on scope, set current date from user system
+       */
+      scope.start = new Date(scope.start || new Date());
+      scope.end = new Date(scope.end || new Date());
 
       attrs.$observe('disabled', function(isDisabled){
           scope.disableDatePickers = !!isDisabled;
