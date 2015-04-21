@@ -52,6 +52,32 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;
 
+      //if ngModel, we can add min and max validators
+      if(ngModel)
+      {
+        if (angular.isDefined(attrs.min) || attrs.ngMin) {
+          var minVal;
+          ngModel.$validators.min = function (value) {
+            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
+          };
+          attrs.$observe('min', function (val) {
+            minVal = new Date(val);
+            ngModel.$validate();
+          });
+        }
+
+        if (angular.isDefined(attrs.max) || attrs.ngMax) {
+          var maxVal;
+          ngModel.$validators.max = function (value) {
+            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
+          };
+          attrs.$observe('max', function (val) {
+            maxVal = new Date(val);
+            ngModel.$validate();
+          });
+        }
+      }
+
       /** @namespace attrs.minView, attrs.maxView */
       scope.views =scope.views.slice(
         scope.views.indexOf(attrs.maxView || 'year'),
@@ -355,6 +381,10 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       model = (model !== undefined) ? new Date(model) : model;
       date = new Date(date);
       return this.isSameHour(model, date) && model.getMinutes() === date.getMinutes();
+    },
+    isValidDate : function(value) {
+      // Invalid Date: getTime() returns NaN
+      return value && !(value.getTime && value.getTime() !== value.getTime());
     }
   };
 });
@@ -470,27 +500,27 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       function isValidDate(value) {
           // Invalid Date: getTime() returns NaN
           return value && !(value.getTime && value.getTime() !== value.getTime());
-      }
+        }
 
       if (angular.isDefined(attrs.min) || attrs.ngMin) {
-          var minVal;
-          ngModel.$validators.min = function (value) {
-              return !isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
+        var minVal;
+        ngModel.$validators.min = function (value) {
+            return !isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
           };
-          attrs.$observe('min', function (val) {
-              minVal = new Date(val);
-              ngModel.$validate();
+        attrs.$observe('min', function (val) {
+            minVal = new Date(val);
+            ngModel.$validate();
           });
       }
 
       if (angular.isDefined(attrs.max) || attrs.ngMax) {
-          var maxVal;
-          ngModel.$validators.max = function (value) {
-              return !isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
+        var maxVal;
+        ngModel.$validators.max = function (value) {
+            return !isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
           };
-          attrs.$observe('max', function (val) {
-              maxVal = new Date(val);
-              ngModel.$validate();
+        attrs.$observe('max', function (val) {
+            maxVal = new Date(val);
+            ngModel.$validate();
           });
       }
 

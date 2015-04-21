@@ -52,28 +52,28 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       //if ngModel, we can add min and max validators
       if(ngModel)
-      {                
-          if (angular.isDefined(attrs.min) || attrs.ngMin) {
-              var minVal;
-              ngModel.$validators.min = function (value) {
-                  return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
-              };
-              attrs.$observe('min', function (val) {
-                  minVal = new Date(val);
-                  ngModel.$validate();
-              });
-          }
-    
-          if (angular.isDefined(attrs.max) || attrs.ngMax) {
-              var maxVal;
-              ngModel.$validators.max = function (value) {
-                  return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
-              };
-              attrs.$observe('max', function (val) {
-                  maxVal = new Date(val);
-                  ngModel.$validate();
-              });
-          }
+      {
+        if (angular.isDefined(attrs.min) || attrs.ngMin) {
+          var minVal;
+          ngModel.$validators.min = function (value) {
+            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
+          };
+          attrs.$observe('min', function (val) {
+            minVal = new Date(val);
+            ngModel.$validate();
+          });
+        }
+
+        if (angular.isDefined(attrs.max) || attrs.ngMax) {
+          var maxVal;
+          ngModel.$validators.max = function (value) {
+            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
+          };
+          attrs.$observe('max', function (val) {
+            maxVal = new Date(val);
+            ngModel.$validate();
+          });
+        }
       }
 
       /** @namespace attrs.minView, attrs.maxView */
