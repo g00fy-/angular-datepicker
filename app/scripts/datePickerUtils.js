@@ -120,6 +120,10 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       model = (model !== undefined) ? new Date(model) : model;
       date = new Date(date);
       return this.isSameHour(model, date) && model.getMinutes() === date.getMinutes();
+    },
+    isValidDate : function(value) {
+      // Invalid Date: getTime() returns NaN
+      return value && !(value.getTime && value.getTime() !== value.getTime());
     }
   };
 });
