@@ -54,7 +54,7 @@ To build run `grunt build`
 
 ##### Min and Max Date
 
-<p>Only adds validation to ngModel, must be provided a valid date object or valid date string.</p>
+<p>Only add's validation to ngModel, must be provided a valid date object or valid date string.</p>
 
 ```html
 <div date-picker="start" min-date="Date string | Expression" max-date="Date string | Expression"></div>
