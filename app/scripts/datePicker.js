@@ -75,6 +75,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           });
         }
       }
+      //end min, max date validator
 
       /** @namespace attrs.minView, attrs.maxView */
       scope.views =scope.views.slice(

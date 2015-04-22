@@ -35,7 +35,8 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', function ($compile, $document, $filter, dateTimeConfig, $parse) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils',
+                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
   var body = $document.find('body');
   var dateFilter = $filter('date');
 
@@ -71,15 +72,12 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       ngModel.$formatters.push(formatter);
       ngModel.$parsers.unshift(parser);
 
-      function isValidDate(value) {
-          // Invalid Date: getTime() returns NaN
-          return value && !(value.getTime && value.getTime() !== value.getTime());
-        }
 
+      //min. max date validators
       if (angular.isDefined(attrs.min) || attrs.ngMin) {
         var minVal;
         ngModel.$validators.min = function (value) {
-            return !isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
+            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
           };
         attrs.$observe('min', function (val) {
             minVal = new Date(val);
@@ -90,13 +88,14 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       if (angular.isDefined(attrs.max) || attrs.ngMax) {
         var maxVal;
         ngModel.$validators.max = function (value) {
-            return !isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
+            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
           };
         attrs.$observe('max', function (val) {
             maxVal = new Date(val);
             ngModel.$validate();
           });
       }
+      //end min, max date validator
 
       var template = dateTimeConfig.template(attrs);
 
