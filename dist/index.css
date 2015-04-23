@@ -30,6 +30,7 @@
 }
 [date-picker-wrapper] {
   position: relative !important;
+  z-index: 10;
   display: block;
 }
 [date-time-append] [date-picker] {
@@ -79,6 +80,7 @@
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  background-color: #fff;
   /* GENERAL */
   padding: 4px;
   /* SPECIFIC */
