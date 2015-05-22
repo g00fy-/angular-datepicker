@@ -4,10 +4,15 @@
 .date-picker-date-time {
   position: absolute;
 }
-[date-picker-wrapper]{
-  position: relative !important;
+[date-picker-wrapper] {
+  position: absolute;
+  min-width: 220px;
   z-index: 10;
-  display:block;
+  display: block;
+  font-size: 14px;
+}
+[date-time-append] [date-picker-wrapper] [date-picker] {
+  margin-top: -30px;
 }
 
 [date-time-append] [date-picker]{

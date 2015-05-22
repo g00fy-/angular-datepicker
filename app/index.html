@@ -9,6 +9,7 @@
   <!-- build:css styles/main.css -->
   <link rel="stylesheet" href="styles/bootstrap.css">
   <link rel="stylesheet" href="styles/style.css"/>
+
   <!-- endbuild -->
   <link rel="stylesheet" href="../dist/index.css"/>
 </head>
@@ -127,6 +128,15 @@
     <div class="input-prepend" date-time-append>
       <span class="add-on"><i class="icon-calendar"></i></span>
       <input type="text" date-time ng-model="start" required="true" view="hours">
+    </div>
+
+    <h3>Input with Auto close</h3>
+    <h5>default</h5>
+
+    <div class="" date-time-append>
+      <span class="add-on"><i class="icon-calendar"></i></span>
+      <input type="text" date-time auto-close="true" ng-model="start" required="true" view="hours">
+      <span class="add-on"><i class="icon-calendar"></i></span>
     </div>
 
     <h5>Input format</h5>
