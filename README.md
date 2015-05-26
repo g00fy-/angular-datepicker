@@ -2,6 +2,9 @@
 
 ## WIP
 
+<a href="https://travis-ci.org/eralha/angular-datepicker" target="_blank">
+<img src="https://travis-ci.org/eralha/angular-datepicker.svg" /></a>
+
 #### Requirements
 
 -  Angular v1.2+
