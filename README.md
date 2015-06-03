@@ -3,7 +3,8 @@
 ## WIP
 
 <a href="https://travis-ci.org/eralha/angular-datepicker" target="_blank">
-<img src="https://travis-ci.org/eralha/angular-datepicker.svg" /></a>
+<img src="https://travis-ci.org/eralha/angular-datepicker.svg" /></a> 
+<a href="http://gruntjs.com/" target="_blank"><img src="https://cdn.gruntjs.com/builtwith.png" alt="" /></a>
 
 #### Requirements
 
