@@ -1,0 +1,8 @@
+dependencies:
+  pre:
+    - npm install -g grunt-cli bower
+    - bower install
+
+test:
+  pre:
+    - grunt test
