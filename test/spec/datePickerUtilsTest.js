@@ -100,8 +100,8 @@ describe('Test date Picker Utils', function(){
   });
 
   it('get default hours provided date', function(){
-    var start = new Date('2014-06-29T07:00:00.000Z'); // sunday
-    var end = new Date('2014-06-30T06:00:00.000Z'); // monday
+    var start = new Date('2014-06-29T00:00:00.000Z'); // sunday
+    var end = new Date('2014-06-29T23:00:00.000Z'); // sunday
     var chosen = new Date('2014-06-29T19:00:00.000Z'); // sunday
     var hours = utils.getVisibleHours(chosen);
 

@@ -1,11 +1,8 @@
 'use strict';
 
 angular.module('datePicker').factory('datePickerUtils', function(){
-  var getMidnightHour = function(date){
-    return 0 - date.getTimezoneOffset() / 60;
-  };
   var truncateToDay = function(date){
-    return date.setHours(getMidnightHour(date), 0, 0, 0)
+    date.setHours(0 - date.getTimezoneOffset() / 60, 0, 0, 0);
   };
   return {
     getVisibleMinutes : function(date, step) {
@@ -93,10 +90,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     },
     getVisibleHours : function(date) {
       date = new Date(date || new Date());
-      date.setHours(0);
-      date.setMinutes(0);
-      date.setSeconds(0);
-      date.setMilliseconds(0);
+      truncateToDay(date);
       var hours = [];
       for (var i = 0; i < 24; i++) {
         hours.push(date);
