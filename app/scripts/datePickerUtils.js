@@ -16,18 +16,20 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     getVisibleWeeks : function(date) {
       date = new Date(date || new Date());
       var startMonth = date.getMonth(), startYear = date.getYear();
+      // set date to start of the week
       date.setDate(1);
-      date.setHours(0);
-      date.setMinutes(0);
-      date.setSeconds(0);
-      date.setMilliseconds(0);
+      // truncate date to get rid of time informations
+      date.setHours(0 - date.getTimezoneOffset() / 60, 0, 0, 0);
 
       if (date.getDay() === 0) {
+        // day is sunday, let's get back to the previous week
         date.setDate(-5);
       } else {
+        // day is not sunday, let's get back to the start of the week
         date.setDate(date.getDate() - (date.getDay() - 1));
       }
       if (date.getDate() === 1) {
+        // day is monday, let's get back to the previous week
         date.setDate(-6);
       }
 
