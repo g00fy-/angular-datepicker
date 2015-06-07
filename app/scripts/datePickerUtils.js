@@ -89,12 +89,12 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     isAfter : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
       date = new Date(date);
-      return model && model.getTime() <= date.getTime();
+      return model && model.getTime() >= date.getTime();
     },
     isBefore : function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;
       date = new Date(date);
-      return model.getTime() >= date.getTime();
+      return model.getTime() <= date.getTime();
     },
     isSameYear :   function(model, date) {
       model = (model !== undefined) ? new Date(model) : model;

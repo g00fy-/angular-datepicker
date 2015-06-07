@@ -111,17 +111,19 @@ describe('Test date Picker Utils', function(){
   });
 
   it('model is after date', function(){
+    // model is 19h, dateAfter is 20h, so model should be before and not after
     var dateAfter =  new Date('2014-06-29T20:00:00.000Z');
-
-    expect(utils.isAfter(model, dateAfter)).toBe(true);
-    expect(utils.isBefore(model, dateAfter)).toBe(false);
-  });
-
-  it('model is before date', function(){
-    var dateAfter =  new Date('2014-06-29T18:00:00.000Z');
 
     expect(utils.isAfter(model, dateAfter)).toBe(false);
     expect(utils.isBefore(model, dateAfter)).toBe(true);
+  });
+
+  it('model is before date', function(){
+    // model is 19h, dateAfter is 18h, so model should be after and not before
+    var dateAfter =  new Date('2014-06-29T18:00:00.000Z');
+
+    expect(utils.isAfter(model, dateAfter)).toBe(true);
+    expect(utils.isBefore(model, dateAfter)).toBe(false);
   });
 
   it('model is almost same', function(){
