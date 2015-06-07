@@ -54,7 +54,6 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     },
     getVisibleYears : function(date) {
       var years = [];
-      console.log('init', date);
       date = new Date(date || new Date());
       date.setFullYear(date.getFullYear() - (date.getFullYear() % 10));
       date.setMonth(0);
@@ -72,6 +71,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       date = new Date(date || new Date());
       date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
       date.setDate(date.getDate() - (date.getDay() - 1));
+      truncateToDay(date);
       var days = [];
       for (var i = 0; i < 7; i++) {
         days.push(new Date(date));
@@ -83,8 +83,11 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       date = new Date(date || new Date());
       var year = date.getFullYear();
       var months = [];
+      var pushedDate;
       for (var month = 0; month < 12; month++) {
-        months.push(new Date(year, month, 1));
+        pushedDate = new Date(year, month, 1)
+        truncateToDay(pushedDate);
+        months.push(pushedDate);
       }
       return months;
     },
