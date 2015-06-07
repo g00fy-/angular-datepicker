@@ -1,6 +1,12 @@
 'use strict';
 
 angular.module('datePicker').factory('datePickerUtils', function(){
+  var getMidnightHour = function(date){
+    return 0 - date.getTimezoneOffset() / 60;
+  };
+  var truncateToDay = function(date){
+    return date.setHours(getMidnightHour(date), 0, 0, 0)
+  };
   return {
     getVisibleMinutes : function(date, step) {
       date = new Date(date || new Date());
@@ -19,7 +25,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       // set date to start of the week
       date.setDate(1);
       // truncate date to get rid of time informations
-      date.setHours(0 - date.getTimezoneOffset() / 60, 0, 0, 0);
+      truncateToDay(date);
 
       if (date.getDay() === 0) {
         // day is sunday, let's get back to the previous week
@@ -48,10 +54,17 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     },
     getVisibleYears : function(date) {
       var years = [];
+      console.log('init', date);
       date = new Date(date || new Date());
       date.setFullYear(date.getFullYear() - (date.getFullYear() % 10));
+      date.setMonth(0);
+      date.setDate(1);
+      truncateToDay(date);
+      var pushedDate;
       for (var i = 0; i < 12; i++) {
-        years.push(new Date(date.getFullYear() + (i - 1), 0, 1));
+        pushedDate = new Date(date);
+        pushedDate.setFullYear(date.getFullYear() + (i - 1));
+        years.push(pushedDate);
       }
       return years;
     },
