@@ -82,7 +82,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       var months = [];
       var pushedDate;
       for (var month = 0; month < 12; month++) {
-        pushedDate = new Date(year, month, 1)
+        pushedDate = new Date(year, month, 1);
         truncateToDay(pushedDate);
         months.push(pushedDate);
       }
