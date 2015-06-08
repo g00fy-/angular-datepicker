@@ -1,0 +1,11 @@
+dependencies:
+  pre:
+    - npm install -g grunt-cli bower
+    - bower install
+  cache_directories:
+    - "node_modules"
+    - "app/components"
+
+test:
+  pre:
+    - grunt test
