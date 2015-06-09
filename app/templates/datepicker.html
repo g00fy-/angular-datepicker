@@ -4,11 +4,11 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('month')">{{date|date:"yyyy MMMM"}}</th>
+        <th colspan="5" class="switch" ng-click="setView('month')" ng-bind="date|date:'yyyy MMMM'"></th>
         <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       <tr>
-        <th ng-repeat="day in weekdays" style="overflow: hidden">{{ day|date:"EEE" }}</th>
+        <th ng-repeat="day in weekdays" style="overflow: hidden" ng-bind="day|date:'EEE'"></th>
       </tr>
       </thead>
       <tbody>
@@ -27,7 +27,7 @@
       <thead>
       <tr>
         <th ng-click="prev(10)">&lsaquo;</th>
-        <th colspan="5" class="switch">{{years[0].getFullYear()}}-{{years[years.length-1].getFullYear()}}</th>
+        <th colspan="5" class="switch"ng-bind="years[0].getFullYear()+' - '+years[years.length-1].getFullYear()"></th>
         <th ng-click="next(10)">&rsaquo;</i></th>
       </tr>
       </thead>
@@ -47,7 +47,7 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('year')">{{ date|date:"yyyy" }}</th>
+        <th colspan="5" class="switch" ng-click="setView('year')" ng-bind="date|date:'yyyy'"></th>
         <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       </thead>
@@ -68,7 +68,7 @@
       <thead>
       <tr>
         <th ng-click="prev(24)">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('date')">{{ date|date:"dd MMMM yyyy" }}</th>
+        <th colspan="5" class="switch" ng-click="setView('date')" ng-bind="date|date:'dd MMMM yyyy'"></th>
         <th ng-click="next(24)">&rsaquo;</i></th>
       </tr>
       </thead>
@@ -88,8 +88,7 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('hours')">{{ date|date:"dd MMMM yyyy" }}
-        </th>
+        <th colspan="5" class="switch" ng-click="setView('hours')" ng-bind="date|date:'dd MMMM yyyy'"></th>
         <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       </thead>
