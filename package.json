@@ -1,6 +1,6 @@
 {
   "name": "angular-datepicker",
-  "version": "1.0.11",
+  "version": "1.0.7",
   "main": "dist/index.js",
   "repository": {
     "url": "https://github.com/g00fy-/angular-datepicker.git"
@@ -31,8 +31,7 @@
     "grunt-angular-templates": "~0.3.8",
     "grunt-contrib-less": "*",
     "grunt-concurrent": "~0.4.0",
-    "load-grunt-tasks": "~0.2.0",
-    "grunt-release": "*"
+    "load-grunt-tasks": "~0.2.0"
   },
   "engines": {
     "node": ">=0.8.0"
