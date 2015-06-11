@@ -188,7 +188,11 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           date.setFullYear(date.getFullYear() + delta);
           break;
         case 'date':
+          var dt = new Date(date);
           date.setMonth(date.getMonth() + delta);
+          if (date.getDate() < dt.getDate()) {
+            date.setDate(0);
+          }
           break;
         case 'hours':
         /*falls through*/
