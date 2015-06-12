@@ -190,6 +190,13 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           date.setFullYear(date.getFullYear() + delta);
           break;
         case 'date':
+          /* Reverting from ISSUE #113
+          var dt = new Date(date);
+          date.setMonth(date.getMonth() + delta);
+          if (date.getDate() < dt.getDate()) {
+            date.setDate(0);
+          }
+          */
           date.setMonth(date.getMonth() + delta);
           break;
         case 'hours':
