@@ -82,3 +82,19 @@ To build run `grunt build`
 ```html
 <div date-range start="start" end="end"></div>
 ```
+
+
+
+### How to release
+
+After a new distribution package has been pushed, a new release can be triggered with [grunt-bump](https://github.com/vojtajina/grunt-bump) :
+
+```
+grunt bump
+```
+
+You can see what the release process will do by doing a dry run :
+
+```
+grunt bump --dry-run
+```
