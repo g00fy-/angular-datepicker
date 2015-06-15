@@ -19,7 +19,8 @@ describe('Test date Picker Utils', function(){
   it('get visible mins provided date', function(){
     var start = new Date('2014-06-29T19:00:00.000Z'); // sunday
     var end = new Date('2014-06-29T19:55:00.000Z'); // sunday
-    var mins = utils.getVisibleMinutes(start, constants.step);
+    var chosen = new Date('2014-06-29T19:00:00.000Z'); // sunday
+    var mins = utils.getVisibleMinutes(chosen, constants.step);
 
     expect(mins).toBeDefined();
     expect(mins[0]).toEqual(start);
@@ -50,8 +51,8 @@ describe('Test date Picker Utils', function(){
   });
 
   it('get visible years provided date', function(){
-    var start = new Date('2009-01-01T00:00:00.000Z'); // thursday
-    var end = new Date('2020-01-01T00:00:00.000Z'); // wednesday
+    var start = new Date('2009-12-31T00:00:00.000Z'); // thursday
+    var end = new Date('2020-12-31T00:00:00.000Z'); // wednesday
     var chosen = new Date('2014-06-29T19:00:00.000Z'); // sunday
     var years = utils.getVisibleYears(chosen, constants.step);
 
