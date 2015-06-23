@@ -3,7 +3,7 @@
 var Module = angular.module('datePicker', []);
 
 Module.constant('datePickerConfig', {
-  template: 'templates/datepicker.html',
+  template: 'app/templates/datepicker.html',
   view: 'month',
   views: ['year', 'month', 'date', 'hours', 'minutes'],
   step: 5
@@ -413,7 +413,7 @@ var Module = angular.module('datePicker');
 
 Module.directive('dateRange', function () {
   return {
-    templateUrl: 'templates/daterange.html',
+    templateUrl: 'app/templates/daterange.html',
     scope: {
       start: '=',
       end: '='
