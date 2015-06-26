@@ -7,7 +7,18 @@
     "./dist/index.css"
   ],
   "ignore": [
-    ".gitignore","README.md"
+    ".gitignore",
+    "README.md",
+    "app",
+    "circle.yml",
+    ".travis.yml",
+    "test",
+    ".editorconfig",
+    ".jshintrc",
+    "Gruntfile.js",
+    "karma-e2e.conf.js",
+    "karma.conf.js",
+    "package.json",
   ],
   "dependencies": {},
   "devDependencies": {
