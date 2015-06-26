@@ -18,7 +18,7 @@
     "Gruntfile.js",
     "karma-e2e.conf.js",
     "karma.conf.js",
-    "package.json",
+    "package.json"
   ],
   "dependencies": {},
   "devDependencies": {
