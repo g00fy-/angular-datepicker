@@ -49,7 +49,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       var views = $parse(attrs.views)(scope) || dateTimeConfig.views.concat();
       var view = attrs.view || views[0];
       var index = views.indexOf(view);
-      var dismiss = attrs.dismiss ? $parse(attrs.dismiss)(scope) : dateTimeConfig.dismiss;
+      var dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose;
       var picker = null;
       var position = attrs.position || dateTimeConfig.position;
       var container = null;

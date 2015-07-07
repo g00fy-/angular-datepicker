@@ -73,7 +73,7 @@ To build run `grunt build`
 ##### input with formatted value
 
 ```html
-<input type="datetime" date-time ng-model="end" hours format="short">
+<input type="datetime" date-time ng-model="end" format="short">
 ```
 
 
