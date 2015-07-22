@@ -20,6 +20,10 @@ To build run `grunt build`
 
 [Live demo](https://rawgithub.com/g00fy-/angular-datepicker/master/app/index.html)
 
+## Installation
+
+Install with bower `bower install --save angular-datepicker`
+Inject the dependency `angular.module('testApp', ['datePicker'])`
 
 ##### defaults
 
