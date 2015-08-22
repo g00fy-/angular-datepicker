@@ -21,7 +21,7 @@ Module.constant('dateTimeConfig', {
   },
   format: 'yyyy-MM-dd HH:mm',
   views: ['date', 'year', 'month', 'hours', 'minutes'],
-  dismiss: false,
+  autoClose: false,
   position: 'relative'
 });
 
