@@ -136,4 +136,12 @@ describe('Test date Picker Utils', function(){
     expect(utils.isSameHour(model, dateSimilar)).toBe(true);
     expect(utils.isSameMinutes(model, dateSimilar)).toBe(true);
   });
+
+  it('angular date format is a moment format', function () {
+    //Angular formats: https://docs.angularjs.org/api/ng/filter/date
+    //Moment formats: http://momentjs.com/docs/#/parsing/string-format/
+    expect(utils.toMomentFormat('dd-MM-yyyy')).toBe('DD-MM-YYYY');
+    expect(utils.toMomentFormat('EEEE MM/yy')).toBe('dddd MM/YY');
+    expect(utils.toMomentFormat('dd MMMM yyyy HH:mm:ss.sss')).toBe('DD MMMM YYYY HH:mm:ss.SSS');
+  });
 });
