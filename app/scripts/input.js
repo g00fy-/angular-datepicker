@@ -35,8 +35,8 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils',
-                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', 'amMoment',
+                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, amMoment) {
   var body = $document.find('body');
   var dateFilter = $filter('date');
 
@@ -66,7 +66,15 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       }
 
       function parser() {
-        return ngModel.$modelValue;
+        if(viewValue.length === format.length) {
+          var date = moment(viewValue, datePickerUtils.toMomentFormat(format));
+          if(date.isValid()) {
+            clear();
+            return date.toDate();
+          }
+          return undefined;
+        }
+        return undefined;
       }
 
       ngModel.$formatters.push(formatter);
