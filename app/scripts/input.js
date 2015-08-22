@@ -35,8 +35,8 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', 'amMoment',
-                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, amMoment) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', 'moment',
+                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, moment) {
   var body = $document.find('body');
   var dateFilter = $filter('date');
 
@@ -65,7 +65,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         return dateFilter(value, format);
       }
 
-      function parser() {
+      function parser(viewValue) {
         if(viewValue.length === format.length) {
           var date = moment(viewValue, datePickerUtils.toMomentFormat(format));
           if(date.isValid()) {

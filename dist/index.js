@@ -1,8 +1,6 @@
 'use strict';
 (function(angular){
-'use strict';
-
-var Module = angular.module('datePicker', []);
+var Module = angular.module('datePicker', ['angularMoment']);
 
 Module.constant('datePickerConfig', {
   template: 'templates/datepicker.html',
@@ -267,8 +265,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
   };
 }]);
 
-'use strict';
-
 angular.module('datePicker').factory('datePickerUtils', function(){
   var createNewDate = function(year, month, day, hour, minute) {
     // without any arguments, the default date will be 1899-12-31T00:00:00.000Z
@@ -410,11 +406,22 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     isValidDate : function(value) {
       // Invalid Date: getTime() returns NaN
       return value && !(value.getTime && value.getTime() !== value.getTime());
+    },
+    toMomentFormat : function(angularFormat) {
+        function replaceAll(find, replace, string) {
+          return string.replace(new RegExp(find, 'g'), replace);
+        }
+
+        var momentFormat = angularFormat;
+        momentFormat = replaceAll('y', 'Y', momentFormat);
+        momentFormat = replaceAll('d', 'D', momentFormat);
+        momentFormat = replaceAll('E', 'd', momentFormat);
+        momentFormat = replaceAll('sss', 'SSS', momentFormat);
+        momentFormat = replaceAll('w', 'W', momentFormat);
+        return momentFormat;
     }
   };
 });
-'use strict';
-
 var Module = angular.module('datePicker');
 
 Module.directive('dateRange', function () {
@@ -448,8 +455,6 @@ Module.directive('dateRange', function () {
     }
   };
 });
-
-'use strict';
 
 var PRISTINE_CLASS = 'ng-pristine',
     DIRTY_CLASS = 'ng-dirty';
@@ -486,8 +491,8 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils',
-                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', 'moment',
+                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, moment) {
   var body = $document.find('body');
   var dateFilter = $filter('date');
 
@@ -516,8 +521,16 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         return dateFilter(value, format);
       }
 
-      function parser() {
-        return ngModel.$modelValue;
+      function parser(viewValue) {
+        if(viewValue.length === format.length) {
+          var date = moment(viewValue, datePickerUtils.toMomentFormat(format));
+          if(date.isValid()) {
+            clear();
+            return date.toDate();
+          }
+          return undefined;
+        }
+        return undefined;
       }
 
       ngModel.$formatters.push(formatter);
@@ -622,9 +635,8 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
   };
 }]);
 
-angular.module("datePicker").run(["$templateCache", function($templateCache) {
-
-  $templateCache.put("templates/datepicker.html",
+angular.module('datePicker').run(['$templateCache', function($templateCache) {
+$templateCache.put('app/templates/datepicker.html',
     "<div ng-switch=\"view\">\r" +
     "\n" +
     "  <div ng-switch-when=\"date\">\r" +
@@ -841,7 +853,8 @@ angular.module("datePicker").run(["$templateCache", function($templateCache) {
     "\n"
   );
 
-  $templateCache.put("templates/daterange.html",
+
+  $templateCache.put('app/templates/daterange.html',
     "<div>\r" +
     "\n" +
     "    <table>\r" +

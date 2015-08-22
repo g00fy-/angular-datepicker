@@ -142,7 +142,11 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       // Invalid Date: getTime() returns NaN
       return value && !(value.getTime && value.getTime() !== value.getTime());
     },
-    toMomentFormat : function (angularFormat) {
+    toMomentFormat : function(angularFormat) {
+        function replaceAll(find, replace, string) {
+          return string.replace(new RegExp(find, 'g'), replace);
+        }
+
         var momentFormat = angularFormat;
         momentFormat = replaceAll('y', 'Y', momentFormat);
         momentFormat = replaceAll('d', 'D', momentFormat);
@@ -150,10 +154,6 @@ angular.module('datePicker').factory('datePickerUtils', function(){
         momentFormat = replaceAll('sss', 'SSS', momentFormat);
         momentFormat = replaceAll('w', 'W', momentFormat);
         return momentFormat;
-
-        function replaceAll(find, replace, string) {
-          return string.replace(new RegExp(find, 'g'), replace);
-        }
     }
   };
 });
