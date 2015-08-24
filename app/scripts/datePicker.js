@@ -1,6 +1,6 @@
 'use strict';
 
-var Module = angular.module('datePicker', []);
+var Module = angular.module('datePicker', ['angularMoment']);
 
 Module.constant('datePickerConfig', {
   template: 'templates/datepicker.html',
