@@ -154,6 +154,6 @@ angular.module('datePicker').factory('datePickerUtils', function(){
         momentFormat = replaceAll('sss', 'SSS', momentFormat);
         momentFormat = replaceAll('w', 'W', momentFormat);
         return momentFormat;
-    }
+      }
   };
 });
