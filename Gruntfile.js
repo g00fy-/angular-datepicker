@@ -184,7 +184,7 @@ module.exports = function (grunt) {
       },
       js: {
         src: ['<%= yeoman.app %>/scripts/{datePicker,input,dateRange,datePickerUtils}.js', '<%= yeoman.tmp %>/templates.js'],
-        dest: '<%= yeoman.dist %>/index.js',
+        dest: '<%= yeoman.dist %>/angular-datepicker.js',
         options: {
           banner:'\'use strict\';\n(function(angular){\n',
           footer:'})(angular);',
@@ -196,7 +196,7 @@ module.exports = function (grunt) {
       },
       css: {
         src: ['<%= yeoman.tmp %>/{,*/}*.css'],
-        dest: '<%= yeoman.dist %>/index.css'
+        dest: '<%= yeoman.dist %>/angular-datepicker.css'
       }
     },
 
