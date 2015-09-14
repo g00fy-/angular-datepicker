@@ -3,8 +3,8 @@
   "license": "MIT",
   "version": "1.0.15",
   "main": [
-    "./dist/index.js",
-    "./dist/index.css"
+    "./dist/angular-datepicker.js",
+    "./dist/angular-datepicker.css"
   ],
   "ignore": [
     ".gitignore",
