@@ -141,7 +141,8 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     isValidDate : function(value) {
       // Invalid Date: getTime() returns NaN
       return value && !(value.getTime && value.getTime() !== value.getTime());
-    },
+    }
+    /*
     toMomentFormat : function(angularFormat) {
         function replaceAll(find, replace, string) {
           return string.replace(new RegExp(find, 'g'), replace);
@@ -155,5 +156,6 @@ angular.module('datePicker').factory('datePickerUtils', function(){
         momentFormat = replaceAll('w', 'W', momentFormat);
         return momentFormat;
       }
+      */
   };
 });

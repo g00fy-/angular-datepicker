@@ -21,8 +21,7 @@
     "package.json"
   ],
   "dependencies": {
-    "angular": "1.2.14",
-    "angular-moment": "~0.10.2"
+    "angular": "1.2.14"
   },
   "devDependencies": {
     "angular": "1.2.14",
