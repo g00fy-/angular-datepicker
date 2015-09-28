@@ -2,7 +2,7 @@
 (function(angular){
 'use strict';
 
-var Module = angular.module('datePicker', ['angularMoment']);
+var Module = angular.module('datePicker', []);
 
 Module.constant('datePickerConfig', {
   template: 'templates/datepicker.html',
@@ -410,7 +410,8 @@ angular.module('datePicker').factory('datePickerUtils', function(){
     isValidDate : function(value) {
       // Invalid Date: getTime() returns NaN
       return value && !(value.getTime && value.getTime() !== value.getTime());
-    },
+    }
+    /*
     toMomentFormat : function(angularFormat) {
         function replaceAll(find, replace, string) {
           return string.replace(new RegExp(find, 'g'), replace);
@@ -424,6 +425,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
         momentFormat = replaceAll('w', 'W', momentFormat);
         return momentFormat;
       }
+      */
   };
 });
 'use strict';
@@ -499,8 +501,8 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', 'moment',
-                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, moment) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils',
+                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
   var body = $document.find('body');
   var dateFilter = $filter('date');
 
@@ -529,6 +531,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         return dateFilter(value, format);
       }
 
+      /*
       function parser(viewValue) {
         if(viewValue.length === format.length) {
           var date = moment(viewValue, datePickerUtils.toMomentFormat(format));
@@ -536,7 +539,14 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
             clear();
             return date.toDate();
           }
-          return undefined;
+          return viewValue;
+        }
+        return undefined;
+      }
+      */
+      function parser(viewValue) {
+        if(viewValue.length === format.length) {
+          return viewValue;
         }
         return undefined;
       }
