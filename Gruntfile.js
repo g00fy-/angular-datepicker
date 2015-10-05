@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     watch: {
       less: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
-        tasks: ['recess', 'copy:styles'],
+        tasks: ['less', 'copy:styles'],
         options: {
           nospawn: true
         }
@@ -160,15 +160,20 @@ module.exports = function (grunt) {
       dist: {
         options: {
           base: '<%= yeoman.app %>',
-          module: 'datePicker'
+          module: 'datePicker',
+          url: function(templateUrl) {
+            // on production it should be the same path as the one defined on datePicker.js
+            return templateUrl.replace('app/', '');
+          }
         },
         src: '<%= yeoman.app %>/templates/*.html',
         dest: '<%= yeoman.tmp %>/templates.js'
+
       }
     },
     concurrent: {
       server: [
-        'recess',
+        'less',
         'copy:styles'
       ],
       test: [
@@ -211,7 +216,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     'clean:server',
-    'recess',
+    'less',
     'concurrent:server',
     'connect:livereload',
     'open',
