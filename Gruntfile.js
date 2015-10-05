@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     watch: {
       less: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
-        tasks: ['recess', 'copy:styles'],
+        tasks: ['less', 'copy:styles'],
         options: {
           nospawn: true
         }
@@ -168,7 +168,7 @@ module.exports = function (grunt) {
     },
     concurrent: {
       server: [
-        'recess',
+        'less',
         'copy:styles'
       ],
       test: [
@@ -211,7 +211,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('server', [
     'clean:server',
-    'recess',
+    'less',
     'concurrent:server',
     'connect:livereload',
     'open',
