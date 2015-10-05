@@ -647,7 +647,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 }]);
 
 angular.module('datePicker').run(['$templateCache', function($templateCache) {
-$templateCache.put('app/templates/datepicker.html',
+$templateCache.put('templates/datepicker.html',
     "<div ng-switch=\"view\">\n" +
     "  <div ng-switch-when=\"date\">\n" +
     "    <table>\n" +
@@ -758,7 +758,7 @@ $templateCache.put('app/templates/datepicker.html',
   );
 
 
-  $templateCache.put('app/templates/daterange.html',
+  $templateCache.put('templates/daterange.html',
     "<div>\n" +
     "    <table>\n" +
     "        <tr>\n" +

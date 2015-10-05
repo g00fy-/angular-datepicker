@@ -160,10 +160,15 @@ module.exports = function (grunt) {
       dist: {
         options: {
           base: '<%= yeoman.app %>',
-          module: 'datePicker'
+          module: 'datePicker',
+          url: function(templateUrl) {
+            // on production it should be the same path as the one defined on datePicker.js
+            return templateUrl.replace('app/', '');
+          }
         },
         src: '<%= yeoman.app %>/templates/*.html',
         dest: '<%= yeoman.tmp %>/templates.js'
+
       }
     },
     concurrent: {
