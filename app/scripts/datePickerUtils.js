@@ -3,7 +3,7 @@
 angular.module('datePicker').factory('datePickerUtils', function(){
   var createNewDate = function(year, month, day, hour, minute) {
     // without any arguments, the default date will be 1899-12-31T00:00:00.000Z
-    return new Date(Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0));
+    return new Date(year | 0, month | 0, day | 0, hour | 0, minute | 0);
   };
   return {
     getVisibleMinutes : function(date, step) {
@@ -11,7 +11,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       var year = date.getFullYear();
       var month = date.getMonth();
       var day = date.getDate();
-      var hour = date.getUTCHours();
+      var hour = date.getHours();
       var minutes = [];
       var minute, pushedDate;
       for (minute = 0 ; minute < 60 ; minute += step) {
