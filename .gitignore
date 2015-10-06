@@ -4,3 +4,4 @@ node_modules
 app/components
 .idea
 *.iml
+.DS_Store

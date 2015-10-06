@@ -4,7 +4,7 @@ module.exports = function (config) {
     basePath : '',
 
     // list of files / patterns to load in the browser
-    files : [ 'app/components/angular/angular.js', 'app/components/angular-mocks/angular-mocks.js', 'app/components/angular-moment/angular-moment.js', 'app/scripts/*.js', 'app/scripts/**/*.js', 'test/mock/**/*.js', 'test/spec/**/*.js' ],
+    files : [ 'app/components/angular/angular.js', 'app/components/angular-mocks/angular-mocks.js', 'app/scripts/*.js', 'app/scripts/**/*.js', 'test/mock/**/*.js', 'test/spec/**/*.js' ],
 
     // list of files to exclude
     exclude : [
@@ -47,7 +47,7 @@ module.exports = function (config) {
     // - Safari (only Mac)
     // - PhantomJS
     // - IE (only Windows)
-    browsers : [ 'PhantomJS' ],
+    browsers : [ 'Chrome' ],
 
     plugins : [ 'karma-chrome-launcher', 'karma-firefox-launcher', 'karma-script-launcher', 'karma-phantomjs-launcher', 'karma-jasmine' ],
 
