@@ -46,6 +46,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.view = attrs.view || datePickerConfig.view;
       scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
+      scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;
@@ -177,6 +178,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
 
       scope.$watch(watch, update);
+
+      if (scope.watchDirectChanges) {
+        scope.$watch('model', update);
+      }
 
       scope.next = function (delta) {
         var date = scope.date;
