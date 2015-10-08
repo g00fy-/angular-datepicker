@@ -70,6 +70,8 @@ Inject the dependency `angular.module('testApp', ['datePicker'])`
 
 ##### Watch direct date changes within the parent scope and update the view accordingly
 
+<p>Without this attribute the date picker stays on the same view page when you update the date within the parent scope manually even if the picked date happens to be on another one. For example, you pick September 18 2015, then you manually change it to October 25 2014, nonetheless the picked date updates accordingly, the date picker still displays the pick screen for September 2015 and you have to swipe pages manually.</p>
+
 ```html
 <div date-picker="start" watch-direct-changes></div>
 ```
