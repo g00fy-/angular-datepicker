@@ -68,6 +68,12 @@ Inject the dependency `angular.module('testApp', ['datePicker'])`
 <div date-picker="start" min-date="Date string | Expression" max-date="Date string | Expression"></div>
 ```
 
+##### Watch direct date changes within the parent scope and update the view accordingly
+
+```html
+<div date-picker="start" watch-direct-changes></div>
+```
+
 ##### input as datepicker
 
 ```html
