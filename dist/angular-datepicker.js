@@ -25,7 +25,7 @@ Module.filter('time',function () {
   };
 });
 
-Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
+Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash', function datePickerDirective(datePickerConfig, datePickerUtils, _) {
 
   //noinspection JSUnusedLocalSymbols
   return {
@@ -47,6 +47,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
+      scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;
@@ -127,6 +128,16 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           case 'year':
             scope.model.setFullYear(date.getFullYear());
           }
+
+          if (!nextView && scope.model) {
+            scope.$emit('setMaxDate', attrs.datePicker, scope.model, scope.view);
+
+            if (scope.callbackOnSetDate) {
+              scope.callbackOnSetDate();
+            }
+
+          }
+
           scope.$emit('setDate', scope.model, scope.view);
         }
 

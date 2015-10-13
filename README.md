@@ -76,6 +76,21 @@ Inject the dependency `angular.module('testApp', ['datePicker'])`
 <div date-picker="start" watch-direct-changes></div>
 ```
 
+##### Execute callback upon date set
+
+<p>Execute callback when a new date set in a highest resolution available, e.g. if you specify min-view="hour" the callback will be executed only when the user picks an hour, not just date, month or year. Alternatively, you can bind to a new event 'setMaxDate'.</p>
+
+<p>Within your controller</p>
+```js
+function callback() {
+  doStuff();
+}
+```
+<p>In your html</p>
+```html
+<div date-picker="start" on-set-date="callback"></div>
+```
+
 ##### input as datepicker
 
 ```html
