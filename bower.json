@@ -21,12 +21,14 @@
     "package.json"
   ],
   "dependencies": {
-    "angular": "1.2.14"
+    "angular": "1.2.14",
+    "lodash": "~3.10.1"
   },
   "devDependencies": {
     "angular": "1.2.14",
     "angular-mocks": "1.2.14",
     "angular-scenario": "1.2.14",
-    "angular-bootstrap": "~0.3.0"
+    "angular-bootstrap": "~0.3.0",
+    "lodash": "~3.10.1"
   }
 }
