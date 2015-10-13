@@ -78,7 +78,7 @@ Inject the dependency `angular.module('testApp', ['datePicker'])`
 
 ##### Execute callback upon date set
 
-<p>Execute callback when a new date set in a highest resolution available, e.g. if you specify min-view="hour" the callback will be executed only when the user picks an hour, not just date, month or year. Alternatively, you can bind yo a new even 'setMaxDate'.</p>
+<p>Execute callback when a new date set in a highest resolution available, e.g. if you specify min-view="hour" the callback will be executed only when the user picks an hour, not just date, month or year. Alternatively, you can bind to a new event 'setMaxDate'.</p>
 
 <p>Within your controller</p>
 ```js
