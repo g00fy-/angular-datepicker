@@ -1,3 +1,4 @@
+/* global _ */
 'use strict';
 
 var Module = angular.module('datePicker', []);
@@ -25,7 +26,7 @@ Module.filter('time',function () {
   };
 });
 
-Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash', function datePickerDirective(datePickerConfig, datePickerUtils, _) {
+Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
 
   //noinspection JSUnusedLocalSymbols
   return {
