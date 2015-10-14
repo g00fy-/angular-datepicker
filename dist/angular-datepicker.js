@@ -191,7 +191,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
       scope.$watch(watch, update);
 
       if (scope.watchDirectChanges) {
-        scope.$watch('model', update);
+        scope.$watch('model', function() {
+          arrowClick = false;
+          update();
+        });
       }
 
       scope.next = function (delta) {
