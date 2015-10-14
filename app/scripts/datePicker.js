@@ -25,7 +25,7 @@ Module.filter('time',function () {
   };
 });
 
-Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash', function datePickerDirective(datePickerConfig, datePickerUtils, _) {
+Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
 
   //noinspection JSUnusedLocalSymbols
   return {
@@ -47,7 +47,11 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
       scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
-      scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
+      if(attrs.onSetDate){
+        scope.callbackOnSetDate = scope.$parent[attrs.onSetDate]
+      }else{
+        scope.callbackOnSetDate = undefined;
+      }
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;
