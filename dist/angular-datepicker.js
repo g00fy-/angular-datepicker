@@ -48,7 +48,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
-      scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
+      if(scope.callbackOnSetDate){
+        element.attr('onSetDate', undefined);
+      }
+      
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;
