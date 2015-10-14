@@ -1,5 +1,6 @@
 'use strict';
 (function(angular){
+/* global _ */
 var Module = angular.module('datePicker', []);
 
 Module.constant('datePickerConfig', {
@@ -9,8 +10,8 @@ Module.constant('datePickerConfig', {
   step: 5
 });
 
-Module.filter('time',function () {
-  function format(date){
+Module.filter('time', function () {
+  function format(date) {
     return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
   }
 
@@ -25,12 +26,12 @@ Module.filter('time',function () {
   };
 });
 
-Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash', function datePickerDirective(datePickerConfig, datePickerUtils, _) {
+Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function datePickerDirective(datePickerConfig, datePickerUtils) {
 
   //noinspection JSUnusedLocalSymbols
   return {
     // this is a bug ?
-    require:'?ngModel',
+    require: '?ngModel',
     template: '<div ng-include="template"></div>',
     scope: {
       model: '=datePicker',
@@ -53,8 +54,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
       var partial = !!attrs.partial;
 
       //if ngModel, we can add min and max validators
-      if(ngModel)
-      {
+      if (ngModel) {
         if (angular.isDefined(attrs.minDate)) {
           var minVal;
           ngModel.$validators.min = function (value) {
@@ -80,12 +80,12 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
       //end min, max date validator
 
       /** @namespace attrs.minView, attrs.maxView */
-      scope.views =scope.views.slice(
+      scope.views = scope.views.slice(
         scope.views.indexOf(attrs.maxView || 'year'),
-        scope.views.indexOf(attrs.minView || 'minutes')+1
+        scope.views.indexOf(attrs.minView || 'minutes') + 1
       );
 
-      if (scope.views.length === 1 || scope.views.indexOf(scope.view)===-1) {
+      if (scope.views.length === 1 || scope.views.indexOf(scope.view) === -1) {
         scope.view = scope.views[0];
       }
 
@@ -96,7 +96,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
       };
 
       scope.setDate = function (date) {
-        if(attrs.disabled) {
+        if (attrs.disabled) {
           return;
         }
         scope.date = date;
@@ -106,27 +106,30 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
 
           scope.model = new Date(scope.model || date);
           //if ngModel , setViewValue and trigger ng-change, etc...
-          if(ngModel) {
+          if (ngModel) {
             ngModel.$setViewValue(scope.date);
           }
 
           var view = partial ? 'minutes' : scope.view;
           //noinspection FallThroughInSwitchStatementJS
           switch (view) {
-          case 'minutes':
-            scope.model.setMinutes(date.getMinutes());
-          /*falls through*/
-          case 'hours':
-            scope.model.setHours(date.getHours());
-          /*falls through*/
-          case 'date':
-            scope.model.setDate(date.getDate());
-          /*falls through*/
-          case 'month':
-            scope.model.setMonth(date.getMonth());
-          /*falls through*/
-          case 'year':
-            scope.model.setFullYear(date.getFullYear());
+            case 'minutes':
+              scope.model.setMinutes(date.getMinutes());
+            /*falls through*/
+            case 'hours':
+              scope.model.setHours(date.getHours());
+            /*falls through*/
+            case 'date':
+              scope.model.setFullYear(date.getFullYear());
+              scope.model.setMonth(date.getMonth());
+              scope.model.setDate(date.getDate());
+              break;
+            /*break cause it can switch the date to incorrect date e.g. set 31 for September */
+            case 'month':
+              scope.model.setMonth(date.getMonth());
+            /*falls through*/
+            case 'year':
+              scope.model.setFullYear(date.getFullYear());
           }
 
           if (!nextView && scope.model) {
@@ -145,7 +148,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
           scope.setView(nextView);
         }
 
-        if(!nextView && attrs.autoClose === 'true'){
+        if (!nextView && attrs.autoClose === 'true') {
           element.addClass('hidden');
           scope.$emit('hidePicker');
         }
@@ -161,22 +164,22 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
         var date = scope.date;
 
         switch (view) {
-        case 'year':
-          scope.years = datePickerUtils.getVisibleYears(date);
-          break;
-        case 'month':
-          scope.months = datePickerUtils.getVisibleMonths(date);
-          break;
-        case 'date':
-          scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
-          scope.weeks = datePickerUtils.getVisibleWeeks(date);
-          break;
-        case 'hours':
-          scope.hours = datePickerUtils.getVisibleHours(date);
-          break;
-        case 'minutes':
-          scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
-          break;
+          case 'year':
+            scope.years = datePickerUtils.getVisibleYears(date);
+            break;
+          case 'month':
+            scope.months = datePickerUtils.getVisibleMonths(date);
+            break;
+          case 'date':
+            scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
+            scope.weeks = datePickerUtils.getVisibleWeeks(date);
+            break;
+          case 'hours':
+            scope.hours = datePickerUtils.getVisibleHours(date);
+            break;
+          case 'minutes':
+            scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
+            break;
         }
       }
 
@@ -191,33 +194,36 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
       scope.$watch(watch, update);
 
       if (scope.watchDirectChanges) {
-        scope.$watch('model', update);
+        scope.$watch('model', function () {
+          arrowClick = false;
+          update();
+        });
       }
 
       scope.next = function (delta) {
         var date = scope.date;
         delta = delta || 1;
         switch (scope.view) {
-        case 'year':
-        /*falls through*/
-        case 'month':
-          date.setFullYear(date.getFullYear() + delta);
-          break;
-        case 'date':
-          /* Reverting from ISSUE #113
-          var dt = new Date(date);
-          date.setMonth(date.getMonth() + delta);
-          if (date.getDate() < dt.getDate()) {
-            date.setDate(0);
-          }
-          */
-          date.setMonth(date.getMonth() + delta);
-          break;
-        case 'hours':
-        /*falls through*/
-        case 'minutes':
-          date.setHours(date.getHours() + delta);
-          break;
+          case 'year':
+          /*falls through*/
+          case 'month':
+            date.setFullYear(date.getFullYear() + delta);
+            break;
+          case 'date':
+            /* Reverting from ISSUE #113
+             var dt = new Date(date);
+             date.setMonth(date.getMonth() + delta);
+             if (date.getDate() < dt.getDate()) {
+             date.setDate(0);
+             }
+             */
+            date.setMonth(date.getMonth() + delta);
+            break;
+          case 'hours':
+          /*falls through*/
+          case 'minutes':
+            date.setHours(date.getHours() + delta);
+            break;
         }
         arrowClick = true;
         update();
@@ -260,20 +266,20 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', 'lodash',
         var now = scope.now;
         //noinspection FallThroughInSwitchStatementJS
         switch (scope.view) {
-        case 'minutes':
-          is &= ~~(date.getMinutes()/step) === ~~(now.getMinutes()/step);
-        /*falls through*/
-        case 'hours':
-          is &= date.getHours() === now.getHours();
-        /*falls through*/
-        case 'date':
-          is &= date.getDate() === now.getDate();
-        /*falls through*/
-        case 'month':
-          is &= date.getMonth() === now.getMonth();
-        /*falls through*/
-        case 'year':
-          is &= date.getFullYear() === now.getFullYear();
+          case 'minutes':
+            is &= ~~(date.getMinutes() / step) === ~~(now.getMinutes() / step);
+          /*falls through*/
+          case 'hours':
+            is &= date.getHours() === now.getHours();
+          /*falls through*/
+          case 'date':
+            is &= date.getDate() === now.getDate();
+          /*falls through*/
+          case 'month':
+            is &= date.getMonth() === now.getMonth();
+          /*falls through*/
+          case 'year':
+            is &= date.getFullYear() === now.getFullYear();
         }
         return is;
       };
