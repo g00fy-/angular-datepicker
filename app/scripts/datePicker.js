@@ -136,7 +136,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             scope.$emit('setMaxDate', attrs.datePicker, scope.model, scope.view);
 
             if (scope.callbackOnSetDate) {
-              scope.callbackOnSetDate();
+              scope.callbackOnSetDate(scope.model);
             }
 
           }
