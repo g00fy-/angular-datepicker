@@ -166,6 +166,15 @@
       </div>
     </div>
   </div>
+
+  <div class="span6" ng-controller="onSetDateCtrl">
+    <h3>Callback on set date</h3>
+
+    <h5>Execute callback on month set</h5>
+
+    <div date-picker="callbackStart" min-view="month" view="year" on-set-date="a.b.callback"></div>
+
+  </div>
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
@@ -175,7 +184,23 @@
 <script src="scripts/dateRange.js"></script>
 <script src="scripts/input.js"></script>
 <script>
-  angular.module('sample', ['datePicker', 'ui.bootstrap']);
+  var module = angular.module('sample', ['datePicker', 'ui.bootstrap']);
+
+  module.controller('onSetDateCtrl', onSetDateCtrl);
+
+  function onSetDateCtrl($scope) {
+    var now = new Date(Date.now());
+    $scope.callbackStart = now.toISOString();
+    $scope.a = {
+      b: {
+        callback: callback
+      }
+    };
+
+    function callback() {
+      alert('callback executed!');
+    }
+  }
 </script>
 </body>
 </html>
