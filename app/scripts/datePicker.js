@@ -1,4 +1,3 @@
-/* global _ */
 'use strict';
 
 var Module = angular.module('datePicker', []);
@@ -40,6 +39,23 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
     },
     link: function (scope, element, attrs, ngModel) {
 
+      function getField(obj, field) {
+        if (!obj) {
+          return;
+        }
+        if (!field) {
+          return obj;
+        }
+
+        var subFields = field.split('.');
+
+        if (!obj[subFields[0]]) {
+          return;
+        }
+
+        return getField(obj[subFields[0]], field.substr(subFields[0].length+1));
+      }
+
       var arrowClick = false;
 
       scope.date = new Date(scope.model || new Date());
@@ -48,7 +64,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
-      scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
+      scope.callbackOnSetDate = attrs.onSetDate ? getField(scope.$parent, attrs.onSetDate) : undefined;
 
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;

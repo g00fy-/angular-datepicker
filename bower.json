@@ -1,7 +1,7 @@
 {
   "name": "angular-datepicker",
   "license": "MIT",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "main": [
     "./dist/angular-datepicker.js",
     "./dist/angular-datepicker.css"
@@ -21,14 +21,12 @@
     "package.json"
   ],
   "dependencies": {
-    "angular": "1.2.14",
-    "lodash": "~3.10.1"
+    "angular": "1.2.14"
   },
   "devDependencies": {
     "angular": "1.2.14",
     "angular-mocks": "1.2.14",
     "angular-scenario": "1.2.14",
-    "angular-bootstrap": "~0.3.0",
-    "lodash": "~3.10.1"
+    "angular-bootstrap": "~0.3.0"
   }
 }
