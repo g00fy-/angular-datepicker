@@ -498,6 +498,8 @@ Module.constant('dateTimeConfig', {
         (attrs.minView ? 'min-view="' + attrs.minView + '" ' : '') +
         (attrs.partial ? 'partial="' + attrs.partial + '" ' : '') +
         (attrs.step ? 'step="' + attrs.step + '" ' : '') +
+        (attrs.onSetDate ? 'on-set-date="' + attrs.onSetDate + '" ' : '') +
+        (attrs.ngModel ? 'ng-model="' + attrs.ngModel + '" ' : '') +
         'class="date-picker-date-time"></div>';
   },
   format: 'yyyy-MM-dd HH:mm',
