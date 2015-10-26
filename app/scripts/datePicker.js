@@ -1,4 +1,5 @@
 /* global _ */
+/* global moment */
 'use strict';
 
 var Module = angular.module('datePicker', []);
@@ -10,19 +11,13 @@ Module.constant('datePickerConfig', {
   step: 5
 });
 
-Module.filter('time', function () {
-  function format(date) {
-    return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-  }
-
-  return function (date) {
-    if (!(date instanceof Date)) {
-      date = new Date(date);
-      if (isNaN(date.getTime())) {
-        return undefined;
-      }
+//Moment format filter.
+Module.filter('mFormat', function() {
+  return function(m, format, tz) {
+    if (!(moment.isMoment(m))) {
+      return 'No date';
     }
-    return format(date);
+    return tz ? moment.tz(m, tz).format(format) : moment(m).format(format);
   };
 });
 
@@ -39,45 +34,30 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       before: '=?'
     },
     link: function (scope, element, attrs, ngModel) {
+      function createMoment(input) {
+        return tz ? moment.tz(input, tz) : moment(input);
+      }
+    
+      var arrowClick = false,
+        tz = scope.tz = attrs.timezone,
+        step = parseInt(attrs.step || datePickerConfig.step, 10),
+        partial = !!attrs.partial,
+        minDate = attrs.minDate ? createMoment(attrs.minDate) : false,
+        maxDate = attrs.maxDate ? createMoment(attrs.maxDate) : false,
+        now = scope.now = createMoment(),
+        selected = scope.date = createMoment(scope.model || now);
 
-      var arrowClick = false;
+      if (!scope.model) {
+        selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
+      }
 
-      scope.date = new Date(scope.model || new Date());
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
-      scope.now = new Date();
       scope.template = attrs.template || datePickerConfig.template;
+      datePickerUtils.setParams(tz);
+
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
       scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
-
-      var step = parseInt(attrs.step || datePickerConfig.step, 10);
-      var partial = !!attrs.partial;
-
-      //if ngModel, we can add min and max validators
-      if (ngModel) {
-        if (angular.isDefined(attrs.minDate)) {
-          var minVal;
-          ngModel.$validators.min = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
-          };
-          attrs.$observe('minDate', function (val) {
-            minVal = new Date(val);
-            ngModel.$validate();
-          });
-        }
-
-        if (angular.isDefined(attrs.maxDate)) {
-          var maxVal;
-          ngModel.$validators.max = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
-          };
-          attrs.$observe('maxDate', function (val) {
-            maxVal = new Date(val);
-            ngModel.$validate();
-          });
-        }
-      }
-      //end min, max date validator
 
       /** @namespace attrs.minView, attrs.maxView */
       scope.views = scope.views.slice(
@@ -95,72 +75,57 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
       };
 
-      scope.setDate = function (date) {
+      scope.selectDate = function(date) {
         if (attrs.disabled) {
-          return;
+          return false;
+        }
+        if (isSame(scope.date, date)) {
+          date = scope.date;
+        }
+        date = clipDate(date);
+        if (!date) {
+          return false;
         }
         scope.date = date;
-        // change next view
+
         var nextView = scope.views[scope.views.indexOf(scope.view) + 1];
         if ((!nextView || partial) || scope.model) {
-
-          scope.model = new Date(scope.model || date);
-          //if ngModel , setViewValue and trigger ng-change, etc...
-          if (ngModel) {
-            ngModel.$setViewValue(scope.date);
-          }
-
-          var view = partial ? 'minutes' : scope.view;
-          //noinspection FallThroughInSwitchStatementJS
-          switch (view) {
-            case 'minutes':
-              scope.model.setMinutes(date.getMinutes());
-            /*falls through*/
-            case 'hours':
-              scope.model.setHours(date.getHours());
-            /*falls through*/
-            case 'date':
-              scope.model.setFullYear(date.getFullYear());
-              scope.model.setMonth(date.getMonth());
-              scope.model.setDate(date.getDate());
-              break;
-            /*break cause it can switch the date to incorrect date e.g. set 31 for September */
-            case 'month':
-              scope.model.setMonth(date.getMonth());
-            /*falls through*/
-            case 'year':
-              scope.model.setFullYear(date.getFullYear());
-          }
-
-          if (!nextView && scope.model) {
-            scope.$emit('setMaxDate', attrs.datePicker, scope.model, scope.view);
-
-            if (scope.callbackOnSetDate) {
-              scope.callbackOnSetDate();
-            }
-
-          }
-
-          scope.$emit('setDate', scope.model, scope.view);
+          setDate(date);
         }
 
         if (nextView) {
           scope.setView(nextView);
-        }
-
-        if (!nextView && attrs.autoClose === 'true') {
+        } else if (attrs.autoClose === 'true') {
           element.addClass('hidden');
           scope.$emit('hidePicker');
+        } else {
+          prepareViewData();
         }
       };
+
+      function setDate(date) {
+        if (date) {
+          scope.model = date;
+          if (ngModel) {
+            ngModel.$setViewValue(date);
+          }
+        }
+        scope.$emit('setDate', scope.model, scope.view);
+
+        //This is duplicated in the new functionality.
+        if (scope.callbackOnSetDate) {
+          scope.callbackOnSetDate();
+        }
+      }
 
       function update() {
         var view = scope.view;
 
         if (scope.model && !arrowClick) {
-          scope.date = new Date(scope.model);
+          scope.date = createMoment(scope.model);
           arrowClick = false;
         }
+
         var date = scope.date;
 
         switch (view) {
@@ -181,15 +146,16 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
             break;
         }
+
+        prepareViewData();
       }
 
       function watch() {
         if (scope.view !== 'date') {
           return scope.view;
         }
-        return scope.date ? scope.date.getMonth() : null;
+        return scope.date ? scope.date.month() : null;
       }
-
 
       scope.$watch(watch, update);
 
@@ -200,89 +166,149 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         });
       }
 
-      scope.next = function (delta) {
-        var date = scope.date;
+      function prepareViewData() {
+        var view = scope.view,
+            date = scope.date,
+            classes = [], classList = '',
+            i, j;
+
+        if (view === 'date') {
+          var weeks = scope.weeks, week;
+          for (i = 0; i < weeks.length; i++) {
+            week = weeks[i];
+            classes.push([]);
+            for (j = 0; j < week.length; j++) {
+              classList = '';
+              if (datePickerUtils.isSameDay(date, week[j])) {
+                classList += 'active';
+              }
+              if (isNow(week[j], view)) {
+                classList += ' now';
+              }
+              //if (week[j].month() !== date.month()) classList += ' disabled';
+              if (week[j].month() !== date.month() || !inValidRange(week[j])) {
+                classList += ' disabled';
+              }
+              classes[i].push(classList);
+            }
+          }
+        } else {
+          var params = {
+              'year': ['years', 'isSameYear'],
+              'month': ['months', 'isSameMonth'],
+              'hours': ['hours', 'isSameHour'],
+              'minutes': ['minutes', 'isSameMinutes'],
+            }[view],
+            dates = scope[params[0]];
+
+          for (i = 0; i < dates.length; i++) {
+            classList = '';
+            if (datePickerUtils[params[1]](date, dates[i])) {
+              classList += 'active';
+            }
+            if (isNow(dates[i], view)) {
+              classList += ' now';
+            }
+            if (!inValidRange(dates[i])) {
+              classList += ' disabled';
+            }
+            classes.push(classList);
+          }
+        }
+        scope.classes = classes;
+      }
+
+
+      scope.next = function(delta) {
+        var date = moment(scope.date);
         delta = delta || 1;
         switch (scope.view) {
           case 'year':
           /*falls through*/
           case 'month':
-            date.setFullYear(date.getFullYear() + delta);
+            date.year(date.year() + delta);
             break;
           case 'date':
-            /* Reverting from ISSUE #113
-             var dt = new Date(date);
-             date.setMonth(date.getMonth() + delta);
-             if (date.getDate() < dt.getDate()) {
-             date.setDate(0);
-             }
-             */
-            date.setMonth(date.getMonth() + delta);
+            date.month(date.month() + delta);
             break;
           case 'hours':
           /*falls through*/
           case 'minutes':
-            date.setHours(date.getHours() + delta);
+            date.hours(date.hours() + delta);
             break;
         }
-        arrowClick = true;
-        update();
+        date = clipDate(date);
+        if (date) {
+          scope.date = date;
+          setDate(date);
+          arrowClick = true;
+          update();
+        }
       };
 
-      scope.prev = function (delta) {
+      function inValidRange(date) {
+        var valid = true;
+        if (minDate && minDate.isAfter(date)) {
+          valid = isSame(minDate, date);
+        }
+        if (maxDate && maxDate.isBefore(date)) {
+          valid &= isSame(maxDate, date);
+        }
+        return valid;
+      }
+
+      var objNames = {
+        year: 'year',
+        month: 'month',
+        date: 'day',
+        hours: 'hours',
+        minutes: 'minutes',
+      };
+
+      function isSame(date1, date2) {
+        return date1.isSame(date2, objNames[scope.view]) ? true : false;
+      }
+
+      function clipDate(date) {
+        if (minDate && minDate.isAfter(date)) {
+          return minDate;
+        } else if (maxDate && maxDate.isBefore(date)) {
+          return maxDate;
+        } else {
+          return date;
+        }
+      }
+
+      function isNow(date, view) {
+        var is = true;
+
+        switch (view) {
+          case 'minutes':
+            is &= ~~(now.minutes() / step) === ~~(date.minutes() / step);
+            /* falls through */
+          case 'hours':
+            is &= now.hours() === date.hours();
+            /* falls through */
+          case 'date':
+            is &= now.date() === date.date();
+            /* falls through */
+          case 'month':
+            is &= now.month() === date.month();
+            /* falls through */
+          case 'year':
+            is &= now.year() === date.year();
+        }
+        return is;
+      }
+      
+      scope.prev = function(delta) {
         return scope.next(-delta || -1);
       };
 
-      scope.isAfter = function (date) {
-        return scope.after && datePickerUtils.isAfter(date, scope.after);
-      };
-
-      scope.isBefore = function (date) {
-        return scope.before && datePickerUtils.isBefore(date, scope.before);
-      };
-
-      scope.isSameMonth = function (date) {
-        return datePickerUtils.isSameMonth(scope.model, date);
-      };
-
-      scope.isSameYear = function (date) {
-        return datePickerUtils.isSameYear(scope.model, date);
-      };
-
-      scope.isSameDay = function (date) {
-        return datePickerUtils.isSameDay(scope.model, date);
-      };
-
-      scope.isSameHour = function (date) {
-        return datePickerUtils.isSameHour(scope.model, date);
-      };
-
-      scope.isSameMinutes = function (date) {
-        return datePickerUtils.isSameMinutes(scope.model, date);
-      };
-
-      scope.isNow = function (date) {
-        var is = true;
-        var now = scope.now;
-        //noinspection FallThroughInSwitchStatementJS
-        switch (scope.view) {
-          case 'minutes':
-            is &= ~~(date.getMinutes() / step) === ~~(now.getMinutes() / step);
-          /*falls through*/
-          case 'hours':
-            is &= date.getHours() === now.getHours();
-          /*falls through*/
-          case 'date':
-            is &= date.getDate() === now.getDate();
-          /*falls through*/
-          case 'month':
-            is &= date.getMonth() === now.getMonth();
-          /*falls through*/
-          case 'year':
-            is &= date.getFullYear() === now.getFullYear();
-        }
-        return is;
-      };
+      //scope.$on('pickerInnerUpdate', function(event, data) {
+      //  //Need to handle situation where the data changed but the picker is currently open.
+      //  console.log(data);
+      //});
     }
   };
 }]);
