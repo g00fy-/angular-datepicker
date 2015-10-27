@@ -567,7 +567,6 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           index = views.indexOf(view),
           dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose,
           picker = null,
-          pickerID = element[0].id,
           position = attrs.position || dateTimeConfig.position,
           container = null,
           minDate = null,
@@ -666,44 +665,42 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         }
       }
 
-      if (pickerID) {
-        scope.$on('pickerUpdate', function(event, pickerIDs, data) {
-          if ((angular.isArray(pickerIDs) && pickerIDs.indexOf(pickerID) > -1) || pickerID === pickerIDs) {
-            if (picker) {
-              //Need to handle situation where the data changed but the picker is currently open.
-              //However, this directive is not guaranteed to be present, as the date-picker directive can be used by itself.
-              //Therefore, we need to somehow catch this situation and update the inner picker. Perhaps we can use the same event
-              //for inner updates. If this directive exists, it will be caught here first, and then we can eat the event. Otherwise, 
-              //the inner directive can catch the pickerUpdate event and update appropriately. We just need to pass the name
-              //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
-              //which picker is being updated.
+      scope.$on('pickerUpdate', function(event, model, data) {
+        if ((angular.isArray(model) && model.indexOf(attrs.ngModel) > -1) || attrs.ngModel === model) {
+          if (picker) {
+            //Need to handle situation where the data changed but the picker is currently open.
+            //However, this directive is not guaranteed to be present, as the date-picker directive can be used by itself.
+            //Therefore, we need to somehow catch this situation and update the inner picker. Perhaps we can use the same event
+            //for inner updates. If this directive exists, it will be caught here first, and then we can eat the event. Otherwise, 
+            //the inner directive can catch the pickerUpdate event and update appropriately. We just need to pass the name
+            //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
+            //which picker is being updated.
 
-              //scope.$broadcast('pickerInnerUpdate', data);
-            } else {
-              if (angular.isDefined(data.minDate)) {
-                attrs.minDate = data.minDate ? data.minDate.format() : false;
-              }
-              if (angular.isDefined(data.maxDate)) {
-                attrs.maxDate = data.maxDate ? data.maxDate.format() : false;
-              }
-
-              if (angular.isDefined(data.minView)) {
-                attrs.minView = data.minView;
-              }
-              if (angular.isDefined(data.maxView)) {
-                attrs.maxView = data.maxView;
-              }
-              attrs.view = data.view || attrs.view;
-
-              if (angular.isDefined(data.format)) {
-                format = attrs.format = data.format || dateTimeConfig.format;
-                ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
-              }
-              getTemplate();
+            //scope.$broadcast('pickerInnerUpdate', data);
+          } else {
+            if (angular.isDefined(data.minDate)) {
+              attrs.minDate = data.minDate ? data.minDate.format() : false;
             }
+            if (angular.isDefined(data.maxDate)) {
+              attrs.maxDate = data.maxDate ? data.maxDate.format() : false;
+            }
+
+            if (angular.isDefined(data.minView)) {
+              attrs.minView = data.minView;
+            }
+            if (angular.isDefined(data.maxView)) {
+              attrs.maxView = data.maxView;
+            }
+            attrs.view = data.view || attrs.view;
+
+            if (angular.isDefined(data.format)) {
+              format = attrs.format = data.format || dateTimeConfig.format;
+              ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
+            }
+            getTemplate();
           }
-        });
-      }
+        }
+      });
 
       function showPicker() {
         if (picker) {
