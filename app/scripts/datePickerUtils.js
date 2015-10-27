@@ -161,6 +161,31 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     },
     setParams: function (zone) {
       tz = zone;
+    },
+    findFunction: function (scope, name) {
+      //Can probably combine these into a single search function and two comparison functions
+      //Search scope ancestors for a matching function.
+      var parentScope = scope;
+      do {
+        parentScope = parentScope.$parent;
+        if (angular.isFunction(parentScope[name])) {
+          return parentScope[name];
+        }
+      } while (parentScope.$parent);
+
+      return false;
+    },
+    findParam: function (scope, name) {
+      //Search scope ancestors for a matching parameter.
+      var parentScope = scope;
+      do {
+        parentScope = parentScope.$parent;
+        if (parentScope[name]) {
+          return parentScope[name];
+        }
+      } while (parentScope.$parent);
+
+      return false;
     }
   };
 });

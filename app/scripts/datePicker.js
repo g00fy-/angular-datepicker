@@ -51,12 +51,42 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return tz ? moment.tz(input, tz) : moment(input);
       }
 
+      function getDate(name) {
+        var result = false;
+        if (attrs[name]) {
+          result = createMoment(attrs[name]);
+          if (!result.isValid()) {
+            result = datePickerUtils.findParam(scope, attrs[name]);
+            if (result) {
+              result = createMoment(result);
+            }
+          }
+        }
+
+        return result;
+      }
+
+      function prepareViews() {
+        scope.views = datePickerConfig.views.concat();
+        scope.view = attrs.view || datePickerConfig.view;
+
+        scope.views = scope.views.slice(
+          scope.views.indexOf(attrs.maxView || 'year'),
+          scope.views.indexOf(attrs.minView || 'minutes') + 1
+        );
+
+        if (scope.views.length === 1 || scope.views.indexOf(scope.view) === -1) {
+          scope.view = scope.views[0];
+        }
+      }
+
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
         step = parseInt(attrs.step || datePickerConfig.step, 10),
         partial = !!attrs.partial,
-        minDate = attrs.minDate ? createMoment(attrs.minDate) : false,
-        maxDate = attrs.maxDate ? createMoment(attrs.maxDate) : false,
+        minDate = getDate('minDate'),
+        maxDate = getDate('maxDate'),
+        pickerID = element[0].id,
         now = scope.now = createMoment(),
         selected = scope.date = createMoment(scope.model || now);
 
@@ -64,22 +94,12 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
       }
 
-      scope.views = datePickerConfig.views.concat();
-      scope.view = attrs.view || datePickerConfig.view;
       scope.template = attrs.template || datePickerConfig.template;
 
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
       scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
 
-      /** @namespace attrs.minView, attrs.maxView */
-      scope.views = scope.views.slice(
-        scope.views.indexOf(attrs.maxView || 'year'),
-        scope.views.indexOf(attrs.minView || 'minutes') + 1
-      );
-
-      if (scope.views.length === 1 || scope.views.indexOf(scope.view) === -1) {
-        scope.view = scope.views[0];
-      }
+      prepareViews();
 
       scope.setView = function (nextView) {
         if (scope.views.indexOf(nextView) !== -1) {
@@ -306,9 +326,40 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return scope.next(-delta || -1);
       };
 
-      //scope.$on('pickerInnerUpdate', function(event, data) {
-      //  //Need to handle situation where the data changed but the picker is currently open.
-      //});
+      if (pickerID) {
+        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+          if ((angular.isArray(pickerIDs) && pickerIDs.indexOf(pickerID) > -1) || pickerID === pickerIDs) {
+            var updateViews = false, updateViewData = false;
+
+            if (angular.isDefined(data.minDate)) {
+              minDate = data.minDate ? data.minDate : false;
+              updateViewData = true;
+            }
+            if (angular.isDefined(data.maxDate)) {
+              maxDate = data.maxDate ? data.maxDate : false;
+              updateViewData = true;
+            }
+
+            if (angular.isDefined(data.minView)) {
+              attrs.minView = data.minView;
+              updateViews = true;
+            }
+            if (angular.isDefined(data.maxView)) {
+              attrs.maxView = data.maxView;
+              updateViews = true;
+            }
+            attrs.view = data.view || attrs.view;
+
+            if (updateViews) {
+              prepareViews();
+            }
+
+            if (updateViewData) {
+              update();
+            }
+          }
+        });
+      }
     }
   };
 }]);

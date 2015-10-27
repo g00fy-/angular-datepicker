@@ -40,14 +40,13 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse',
-                function ($compile, $document, $filter, dateTimeConfig, $parse) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
   var body = $document.find('body');
   var dateFilter = $filter('mFormat');
 
   return {
     require: 'ngModel',
-    scope:true,
+    scope: true,
     link: function (scope, element, attrs, ngModel) {
       var format = attrs.format || dateTimeConfig.format,
         parentForm = element.inheritedData('$formController'),
@@ -78,53 +77,26 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
       function parser(viewValue) {
         if (viewValue.length === format.length) {
-        return viewValue;
+          return viewValue;
         }
         return undefined;
-      }
-      
-      //Can probably combine these to a single search function and two comparison functions
-      function findFunction(scope, name) {
-        //Search scope ancestors for a matching function.
-        var parentScope = scope;
-        do {
-          parentScope = parentScope.$parent;
-          if (angular.isFunction(parentScope[name])) {
-            return parentScope[name];
-          }
-        } while (parentScope.$parent);
-
-        return false;
-      }
-
-      function findParam(scope, name) {
-        //Search scope ancestors for a matching parameter.
-        var parentScope = scope;
-        do {
-          parentScope = parentScope.$parent;
-          if (parentScope[name]) {
-            return parentScope[name];
-          }
-        } while (parentScope.$parent);
-
-        return false;
       }
 
       ngModel.$formatters.push(formatter);
       ngModel.$parsers.unshift(parser);
 
       if (angular.isDefined(attrs.minDate)) {
-        minDate = findParam(scope, attrs.minDate);
+        minDate = datePickerUtils.findParam(scope, attrs.minDate);
         attrs.minDate = minDate ? minDate.format() : minDate;
       }
 
       if (angular.isDefined(attrs.maxDate)) {
-        maxDate = findParam(scope, attrs.maxDate);
+        maxDate = datePickerUtils.findParam(scope, attrs.maxDate);
         attrs.maxDate = maxDate ? maxDate.format() : maxDate;
       }
 
       if (angular.isDefined(attrs.dateChange)) {
-        dateChange = findFunction(scope, attrs.dateChange);
+        dateChange = datePickerUtils.findFunction(scope, attrs.dateChange);
       }
 
       function getTemplate() {
@@ -156,7 +128,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       }
 
       if (pickerID) {
-        scope.$on('pickerUpdate', function(event, pickerIDs, data) {
+        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
           if ((angular.isArray(pickerIDs) && pickerIDs.indexOf(pickerID) > -1) || pickerID === pickerIDs) {
             if (picker) {
               //Need to handle situation where the data changed but the picker is currently open.
@@ -166,8 +138,6 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
               //the inner directive can catch the pickerUpdate event and update appropriately. We just need to pass the name
               //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
               //which picker is being updated.
-
-              //scope.$broadcast('pickerInnerUpdate', data);
             } else {
               if (angular.isDefined(data.minDate)) {
                 attrs.minDate = data.minDate ? data.minDate.format() : false;
@@ -204,7 +174,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
         //If the picker has already been shown before then we shouldn't be binding to events, as these events are already bound to in this scope.
         if (!shownOnce) {
-          scope.$on('setDate', function(event, date, view) {
+          scope.$on('setDate', function (event, date, view) {
             updateInput(event);
             if (dateChange) {
               dateChange(attrs.ngModel, date);
@@ -214,7 +184,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
             }
           });
 
-          scope.$on('hidePicker', function() {
+          scope.$on('hidePicker', function () {
             element.triggerHandler('blur');
           });
 
@@ -228,16 +198,16 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
         if (position === 'absolute') {
           var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
-          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position});
+          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position });
           body.append(picker);
         } else {
           // relative
           container = angular.element('<div date-picker-wrapper></div>');
           element[0].parentElement.insertBefore(container[0], element[0]);
           container.append(picker);
-//          this approach doesn't work
-//          element.before(picker);
-          picker.css({top: element[0].offsetHeight + 'px', display: 'block'});
+          //          this approach doesn't work
+          //          element.before(picker);
+          picker.css({ top: element[0].offsetHeight + 'px', display: 'block' });
         }
         picker.bind('mousedown', function (evt) {
           evt.preventDefault();
@@ -247,6 +217,6 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       element.bind('focus', showPicker);
       element.bind('blur', clear);
       getTemplate();
-  }
+    }
   };
 }]);
