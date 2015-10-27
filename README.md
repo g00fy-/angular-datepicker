@@ -1,127 +1,68 @@
 # AngularJS datepicker directives
 
-## WIP
-
-<a href="https://travis-ci.org/eralha/angular-datepicker" target="_blank">
-<img src="https://travis-ci.org/eralha/angular-datepicker.svg" /></a> 
-<a href="http://gruntjs.com/" target="_blank"><img src="https://cdn.gruntjs.com/builtwith.png" alt="" /></a>
-
 #### Requirements
 
 -  Angular v1.2+
+-  MomentJS
+-  Moment Timezone (If timezones are being used)
 
+## Usage Example
 
-#### Development version 
+[Live demo](https://rawgithub.com/DanTalash/angular-datepicker/master/app/index.html)
 
-Checkout, run `npm install` and `bower install`.
-To build run `grunt build`
+## New features
 
-## Examples
+This fork of angular-datepicker contains several features.
 
-[Live demo](https://rawgithub.com/g00fy-/angular-datepicker/master/app/index.html)
+#### Timezone Support
 
-## Installation
+* The directive will work with or without a specified timezone. 
+* If the timezone is known, it can be assigned to the datepicker via the timezone attribute. 
+* If no timezone is provided, then the local time will be used.
 
-Install with bower `bower install --save angular-datepicker`
-Inject the dependency `angular.module('testApp', ['datePicker'])`
-
-##### defaults
-
-```html
-<div date-picker="start"></div>
-```
-
-
-##### views:
-
-(initial) view
+##### No timezone information
 
 ```html
-<div date-picker="start" view="year"></div>
+<div date-picker></div>
 ```
 
-(max) view
+##### Specific timezone (London, UK)
 
 ```html
-<div date-picker="start" max-view="month"></div>
+<div date-picker timezone="Europe/London"></div>
 ```
 
-(min) view 
 
-##### only date view
+##### Specific timezone (Hong Kong, CN)
 
 ```html
-<div date-picker="start" min-view="date"></div>
+<div date-picker timezone="Asia/Hong_Kong"></div>
 ```
 
-##### Close the picker when min-view is reached
+
+#### Maximum / minimum dates:
+
+* These attributes restrict the dates that can be selected. 
+* These work differently from the original min-date and max-date attributes, which they replace. 
+* The original attributes allow selecting any dates and just mark the input as invalid. 
+* With these attributes, if a date in the picker is outside of the valid range, then it will not be selectable.
+
+
+##### Maximum date:
 
 ```html
-<div date-picker="start" auto-close="true"></div>
+<div date-picker max-date="maxDate"></div>
 ```
 
-##### Min and Max Date
-
-<p>Only add's validation to ngModel, must be provided a valid date object or valid date string.</p>
+##### Minimum date:
 
 ```html
-<div date-picker="start" min-date="Date string | Expression" max-date="Date string | Expression"></div>
+<div date-picker min-date="maxDate"></div>
 ```
 
-##### Watch direct date changes within the parent scope and update the view accordingly
 
-<p>Without this attribute the date picker stays on the same view page when you update the date within the parent scope manually even if the picked date happens to be on another one. For example, you pick September 18 2015, then you manually change it to October 25 2014, nonetheless the picked date updates accordingly, the date picker still displays the pick screen for September 2015 and you have to swipe pages manually.</p>
+#### Callback on date change
 
 ```html
-<div date-picker="start" watch-direct-changes></div>
-```
-
-##### Execute callback upon date set
-
-<p>Execute callback when a new date set in a highest resolution available, e.g. if you specify min-view="hour" the callback will be executed only when the user picks an hour, not just date, month or year. Alternatively, you can bind to a new event 'setMaxDate'.</p>
-
-<p>Within your controller</p>
-```js
-function callback() {
-  doStuff();
-}
-```
-<p>In your html</p>
-```html
-<div date-picker="start" on-set-date="callback"></div>
-```
-
-##### input as datepicker
-
-```html
-<input type="datetime" date-time ng-model="start">
-```
-
-##### input with formatted value
-
-```html
-<input type="datetime" date-time ng-model="end" format="short">
-```
-
-
-##### date-range picker
-
-```html
-<div date-range start="start" end="end"></div>
-```
-
-
-
-### How to release
-
-After a new distribution package has been pushed, a new release can be triggered with [grunt-bump](https://github.com/vojtajina/grunt-bump) :
-
-```
-grunt bump
-```
-
-You can see what the release process will do by doing a dry run :
-
-```
-grunt bump --dry-run
+<div date-picker date-change="changeDate"></div>
 ```
