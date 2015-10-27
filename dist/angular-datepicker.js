@@ -8,16 +8,29 @@ Module.constant('datePickerConfig', {
   template: 'templates/datepicker.html',
   view: 'month',
   views: ['year', 'month', 'date', 'hours', 'minutes'],
+  momentNames: {
+    year: 'year',
+    month: 'month',
+    date: 'day',
+    hours: 'hours',
+    minutes: 'minutes',
+  },
+  viewConfig: {
+    year: ['years', 'isSameYear'],
+    month: ['months', 'isSameMonth'],
+    hours: ['hours', 'isSameHour'],
+    minutes: ['minutes', 'isSameMinutes'],
+  },
   step: 5
 });
 
 //Moment format filter.
-Module.filter('mFormat', function() {
-  return function(m, format, tz) {
+Module.filter('mFormat', function () {
+  return function (m, format, tz) {
     if (!(moment.isMoment(m))) {
       return 'No date';
     }
-    return tz ? moment.tz(m, tz).format(format) : moment(m).format(format);
+    return tz ? moment.tz(m, tz).format(format) : m.format(format);
   };
 });
 
@@ -37,7 +50,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       function createMoment(input) {
         return tz ? moment.tz(input, tz) : moment(input);
       }
-    
+
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
         step = parseInt(attrs.step || datePickerConfig.step, 10),
@@ -50,11 +63,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
       }
-
+      
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
       scope.template = attrs.template || datePickerConfig.template;
-      datePickerUtils.setParams(tz);
 
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
       scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
@@ -75,7 +87,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
       };
 
-      scope.selectDate = function(date) {
+      scope.selectDate = function (date) {
         if (attrs.disabled) {
           return false;
         }
@@ -127,6 +139,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
 
         var date = scope.date;
+        datePickerUtils.setParams(tz);
 
         switch (view) {
           case 'year':
@@ -168,9 +181,11 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function prepareViewData() {
         var view = scope.view,
-            date = scope.date,
-            classes = [], classList = '',
-            i, j;
+          date = scope.date,
+          classes = [], classList = '',
+          i, j;
+
+        datePickerUtils.setParams(tz);
 
         if (view === 'date') {
           var weeks = scope.weeks, week;
@@ -193,13 +208,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             }
           }
         } else {
-          var params = {
-              'year': ['years', 'isSameYear'],
-              'month': ['months', 'isSameMonth'],
-              'hours': ['hours', 'isSameHour'],
-              'minutes': ['minutes', 'isSameMinutes'],
-            }[view],
-            dates = scope[params[0]];
+          var params = datePickerConfig.viewConfig[view],
+              dates = scope[params[0]];
 
           for (i = 0; i < dates.length; i++) {
             classList = '';
@@ -218,13 +228,12 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         scope.classes = classes;
       }
 
-
-      scope.next = function(delta) {
+      scope.next = function (delta) {
         var date = moment(scope.date);
         delta = delta || 1;
         switch (scope.view) {
           case 'year':
-          /*falls through*/
+            /*falls through*/
           case 'month':
             date.year(date.year() + delta);
             break;
@@ -232,7 +241,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             date.month(date.month() + delta);
             break;
           case 'hours':
-          /*falls through*/
+            /*falls through*/
           case 'minutes':
             date.hours(date.hours() + delta);
             break;
@@ -257,16 +266,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return valid;
       }
 
-      var objNames = {
-        year: 'year',
-        month: 'month',
-        date: 'day',
-        hours: 'hours',
-        minutes: 'minutes',
-      };
-
       function isSame(date1, date2) {
-        return date1.isSame(date2, objNames[scope.view]) ? true : false;
+        return date1.isSame(date2, datePickerConfig.momentNames[scope.view]) ? true : false;
       }
 
       function clipDate(date) {
@@ -300,14 +301,13 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
         return is;
       }
-      
-      scope.prev = function(delta) {
+
+      scope.prev = function (delta) {
         return scope.next(-delta || -1);
       };
 
       //scope.$on('pickerInnerUpdate', function(event, data) {
       //  //Need to handle situation where the data changed but the picker is currently open.
-      //  console.log(data);
       //});
     }
   };
@@ -962,9 +962,7 @@ $templateCache.put('templates/datepicker.html',
     "\n" +
     "  </div>\r" +
     "\n" +
-    "</div>\r" +
-    "\n" +
-    "\""
+    "</div>"
   );
 
 

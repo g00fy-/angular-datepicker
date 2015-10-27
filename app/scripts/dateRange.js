@@ -17,9 +17,9 @@ Module.directive('dateRange', function () {
       scope.start = new Date(scope.start || new Date());
       scope.end = new Date(scope.end || new Date());
 
-      attrs.$observe('disabled', function(isDisabled){
-          scope.disableDatePickers = !!isDisabled;
-        });
+      attrs.$observe('disabled', function (isDisabled) {
+        scope.disableDatePickers = !!isDisabled;
+      });
       scope.$watch('start.getTime()', function (value) {
         if (value && scope.end && value > scope.end.getTime()) {
           scope.end = new Date(value);

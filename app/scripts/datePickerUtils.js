@@ -1,15 +1,15 @@
 /* global moment */
 
-angular.module('datePicker').factory('datePickerUtils', function(){
+angular.module('datePicker').factory('datePickerUtils', function () {
   'use strict';
   var tz;
-  var createNewDate = function(year, month, day, hour, minute) {
+  var createNewDate = function (year, month, day, hour, minute) {
     var utc = Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0);
     return tz ? moment.tz(utc, tz) : moment(utc);
   };
 
   return {
-    getVisibleMinutes: function(m, step) {
+    getVisibleMinutes: function (m, step) {
       var year = m.year(),
         month = m.month(),
         day = m.date(),
@@ -23,7 +23,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       }
       return minutes;
     },
-    getVisibleWeeks: function(m) {
+    getVisibleWeeks: function (m) {
       m = moment(m);
       var startYear = m.year(),
           startMonth = m.month();
@@ -56,7 +56,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       }
       return weeks;
     },
-    getVisibleYears: function(d) {
+    getVisibleYears: function (d) {
       var m = moment(d),
         year = m.year();
 
@@ -80,7 +80,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       }
       return years;
     },
-    getDaysOfWeek: function(m) {
+    getDaysOfWeek: function (m) {
       m = m ? m : (tz ? moment.tz(tz).day(0) : moment().day(0));
 
       var year = m.year(),
@@ -102,7 +102,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       }
       return days;
     },
-    getVisibleMonths: function(m) {
+    getVisibleMonths: function (m) {
       var year = m.year(),
         offset = m.utcOffset() / 60,
         months = [],
@@ -119,7 +119,7 @@ angular.module('datePicker').factory('datePickerUtils', function(){
       }
       return months;
     },
-    getVisibleHours: function(m) {
+    getVisibleHours: function (m) {
       var year = m.year(),
         month = m.month(),
         day = m.date(),
@@ -138,28 +138,28 @@ angular.module('datePicker').factory('datePickerUtils', function(){
 
       return hours;
     },
-    isAfter: function(model, date) {
+    isAfter: function (model, date) {
       return model && model.unix() >= date.unix();
     },
-    isBefore: function(model, date) {
+    isBefore: function (model, date) {
       return model.unix() <= date.unix();
     },
-    isSameYear: function(model, date) {
+    isSameYear: function (model, date) {
       return model && model.year() === date.year();
     },
-    isSameMonth: function(model, date) {
+    isSameMonth: function (model, date) {
       return this.isSameYear(model, date) && model.month() === date.month();
     },
-    isSameDay: function(model, date) {
+    isSameDay: function (model, date) {
       return this.isSameMonth(model, date) && model.date() === date.date();
     },
-    isSameHour: function(model, date) {
+    isSameHour: function (model, date) {
       return this.isSameDay(model, date) && model.hours() === date.hours();
     },
-    isSameMinutes: function(model, date) {
+    isSameMinutes: function (model, date) {
       return this.isSameHour(model, date) && model.minutes() === date.minutes();
     },
-    setParams: function(zone) {
+    setParams: function (zone) {
       tz = zone;
     }
   };
