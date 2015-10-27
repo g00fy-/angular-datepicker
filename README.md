@@ -14,7 +14,7 @@
 
 This fork of angular-datepicker contains several features.
 
-#### Timezone Support
+### Timezone Support
 
 * The directive will work with or without a specified timezone. 
 * If the timezone is known, it can be assigned to the datepicker via the timezone attribute. 
@@ -40,7 +40,7 @@ This fork of angular-datepicker contains several features.
 ```
 
 
-#### Maximum / minimum dates:
+### Maximum / minimum dates:
 
 * These attributes restrict the dates that can be selected. 
 * These work differently from the original min-date and max-date attributes, which they replace. 
@@ -57,7 +57,17 @@ This fork of angular-datepicker contains several features.
 ##### Minimum date:
 
 ```html
-<div date-picker min-date="maxDate"></div>
+<div date-picker min-date="minDate"></div>
+```
+
+### Date format (for input fields):
+
+* A custom format for a date can be assigned via the `format` atribute.
+  * This format will be used to display the date on an input field.
+  * If not provided, a default format will be used.
+
+```html
+<div date-picker format="yyyy-MM-dd HH:mm"></div>
 ```
 
 

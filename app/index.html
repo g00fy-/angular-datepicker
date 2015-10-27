@@ -11,133 +11,92 @@
   <link rel="stylesheet" href="../dist/angular-datepicker.css" />
 </head>
 <body ng-app="sample">
-  <div class="row-fluid">
+  <div class="row-fluid" ng-controller="DemoController">
     <div class="span6">
-      <h2>New features</h2>
-
       <div>
         <h3>Timezone support</h3>
 
-        <h5>London, UK</h5>
+        <div ng-repeat="timezone in timezones">
 
-        <div date-picker="start" timezone="Europe/London" view="hours" min-view="hours"></div>
+          <h4>{{timezone[0]}}</h4>
 
-        <h5>Hong Kong, China</h5>
+          <div date-picker="dates.today" timezone="{{timezone[1]}}" view="hours" min-view="hours" watch-direct-changes="true"></div>
 
-        <div date-picker="start" timezone="Asia/Hong_Kong" view="hours" min-view="hours"></div>
+        </div>
 
-        <h5>Vancouver, Canada</h5>
+        <h4>No timezone (Uses local. Buggy, needs work)</h4>
 
-        <div date-picker="start" timezone="America/Vancouver" view="hours" min-view="hours"></div>
+        <div date-picker="dates.today" view="hours" min-view="hours" watch-direct-changes="true"></div>
 
-        <h5>Local time zone</h5>
-
-        <div date-picker="start" view="hours"></div>
       </div>
 
+      <hr />
+      <div>
+        <h3>Minimum date</h3>
+
+        <input date-time ng-model="dates.today" min-date="lastWeek" view="date" min-view="hours" timezone="UTC" format="lll">
+
+      </div>
 
       <div>
         <h3>Maximum date</h3>
 
-        <h5>year</h5>
+        <input date-time ng-model="dates.today" max-date="nextWeek" view="date" min-view="hours" timezone="UTC" format="lll">
 
-        <div date-picker="start" min-view="year"></div>
       </div>
 
-
-      <div>
-        <h3>Minimum date</h3>
-
-        <h5>year</h5>
-
-        <div date-picker="start" max-view="year"></div>
-      </div>
 
       <div>
         <h3>Maximum and minimum dates</h3>
 
-        <h5>time</h5>
-
-        <div date-picker="start" max-view="hours" min-view="minutes"></div>
+        <input date-time ng-model="dates.today" min-date="lastWeek" max-date="nextWeek" view="date" min-view="hours" timezone="UTC" format="lll">
 
       </div>
-
-
     </div>
 
-
     <div class="span6">
-      <h3>Input</h3>
-      <h5>default</h5>
-      <input type="text" date-time ng-model="start" required="true" view="hours" partial="true">
-
-      <h3>Input with append</h3>
-      <h5>default</h5>
-
-      <div class="input-append input-prepend" date-time-append>
-        <span class="add-on"><i class="icon-calendar"></i></span>
-        <input type="text" date-time ng-model="start" required="true" view="hours">
-        <span class="add-on"><i class="icon-calendar"></i></span>
-      </div>
-      <h3>Input with prepend</h3>
-      <h5>default</h5>
-
-      <div class="input-prepend" date-time-append>
-        <span class="add-on"><i class="icon-calendar"></i></span>
-        <input type="text" date-time ng-model="start" required="true" view="hours">
-      </div>
-
-      <h3>Input with Auto close</h3>
-      <h5>default</h5>
-
-      <div class="" date-time-append>
-        <span class="add-on"><i class="icon-calendar"></i></span>
-        <input type="text" date-time auto-close="true" ng-model="start" required="true" view="hours">
-        <span class="add-on"><i class="icon-calendar"></i></span>
-      </div>
-
-      <h5>Input format</h5>
-      <!--<input type="datetime" date-time ng-model="end" hours format="short">-->
-      <h5>A button</h5>
-
-      <div class="dropdown">
-        <a class="dropdown-toggle btn btn-danger">
-          pick a date: {{(date|date)}}
-        </a>
-
-        <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
-          <div date-picker="date"></div>
-        </div>
-      </div>
-
-
-      <h5>Date range</h5>
-
-      <div date-range start="a" end="b" style="position: relative; z-index:0"></div>
-      <h5>Date range button</h5>
-
-      <div class="dropdown">
-        <a class="dropdown-toggle btn btn-danger">
-          {{(a|date)||"pick start"}} - {{(b|date)||"pick end"}}
-        </a>
-
-        <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
-          <div date-range start="a" end="b"></div>
-        </div>
+      <h3>Custom formats</h3>
+      <div ng-repeat="format in formats">
+        <h5>{{format}}</h5>
+        <input type="text" date-time ng-model="dates.today" required="true" view="hours" partial="true" format="{{format}}">
       </div>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.1/moment-timezone-with-data.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
   <script src="scripts/datePicker.js"></script>
   <script src="scripts/datePickerUtils.js"></script>
   <script src="scripts/dateRange.js"></script>
   <script src="scripts/input.js"></script>
   <script>
-    angular.module('sample', ['datePicker', 'ui.bootstrap']);
+    var demoApp = angular.module('sample', ['datePicker', 'ui.bootstrap']);
+    demoApp.controller('DemoController', function ($scope) {
+      $scope.dates = {
+        today: moment.tz('UTC').hour(12).startOf('h'), //12:00 UTC, today.
+        lastWeek: moment.tz('UTC').add(-1, 'w').startOf('w'), //12:00 UTC, last sunday.
+        nextWeek: moment.tz('UTC').add(1, 'w').endOf('w'), //12:00 UTC, next saturday.
+      };
+
+      $scope.lastWeek = $scope.dates.lastWeek;
+      $scope.nextWeek = $scope.dates.nextWeek;
+
+      $scope.formats = [
+         "MMMM YYYY",
+         "DD MMM YYYY",
+         "ddd MMM DD YYYY",
+         "D MMM YYYY HH:mm",
+         "lll",
+      ];
+
+      $scope.timezones = [
+        ['London, UK', 'Europe/London'],
+        ['Hong Kong, China', 'Asia/Hong_Kong'],
+        ['Vancouver, Canada', 'America/Vancouver'],
+      ];
+    });
   </script>
 </body>
 </html>
