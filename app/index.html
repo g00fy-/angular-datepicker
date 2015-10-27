@@ -41,21 +41,21 @@
       <div>
         <h4>Minimum date</h4>
 
-        <input date-time ng-model="dates.todayMin" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        <input date-time ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
 
       </div>
 
       <div>
         <h4>Maximum date</h4>
 
-        <input date-time ng-model="dates.todayMax" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        <input date-time ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
 
       </div>
 
       <div>
         <h4>Maximum and minimum dates</h4>
 
-        <input date-time ng-model="dates.todayBoth" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        <input date-time ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
 
       </div>
 
@@ -149,10 +149,6 @@
       $scope.minDate = $scope.dates.minDate;
       $scope.maxDate = $scope.dates.maxDate;
 
-      $scope.dates.todayMax = $scope.dates.today;
-      $scope.dates.todayMin = $scope.dates.today;
-      $scope.dates.todayBoth = $scope.dates.today;
-
       $scope.formats = [
          "MMMM YYYY",
          "DD MMM YYYY",
@@ -185,16 +181,16 @@
 
         if (modelName === 'minDate') {
           values.minDate = newValue;
-          $scope.$broadcast('pickerUpdate', 'dates.todayMin', values);
+          $scope.$broadcast('pickerUpdate', 'pickerMinDate', values);
           values.maxDate = $scope.maxDate;
         } else if (modelName === 'maxDate') {
           values.maxDate = newValue;
-          $scope.$broadcast('pickerUpdate', 'dates.todayMax', values);
+          $scope.$broadcast('pickerUpdate', 'pickerMaxDate', values);
           values.minDate = $scope.minDate;
         }
 
         //For either min/max update, update the picker which uses both.
-        $scope.$broadcast('pickerUpdate', 'dates.todayBoth', values);
+        $scope.$broadcast('pickerUpdate', 'pickerBothDates', values);
       }
 
       $scope.changeData = function (type) {
@@ -216,7 +212,7 @@
         }
 
         if (values) {
-          $scope.$broadcast('pickerUpdate', ['dates.todayMin', 'dates.todayMax', 'dates.todayBoth'], values);
+          $scope.$broadcast('pickerUpdate', ['pickerMinDate', 'pickerMaxDate', 'pickerBothDates'], values);
         }
       }
     });
