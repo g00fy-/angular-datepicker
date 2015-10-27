@@ -14,13 +14,15 @@
   <div class="row-fluid" ng-controller="DemoController">
     <div class="span6">
       <div>
-        <h3>Timezone support</h3>
+        <h3>Timezones</h3>
 
         <div ng-repeat="timezone in timezones">
 
           <h4>{{timezone[0]}}</h4>
 
           <div date-picker="dates.today" timezone="{{timezone[1]}}" view="hours" min-view="hours" watch-direct-changes="true"></div>
+
+          <hr />
 
         </div>
 
@@ -29,15 +31,18 @@
         <div date-picker="dates.today" view="hours" min-view="hours" watch-direct-changes="true"></div>
 
       </div>
+      <hr />
+      <div date-picker="dates.today" id="pickerMinDateOpen" timezone="UTC" view="hours" min-date="minDate" watch-direct-changes="true"></div>
 
       <h3>Custom formats</h3>
       <div ng-repeat="format in formats">
         <h5>{{format}}</h5>
         <input type="text" date-time ng-model="dates.today" required="true" view="hours" partial="true" format="{{format}}">
       </div>
+
     </div>
     <div class="span6">
-      <h3>Minimum / Maximum dates</h3>
+      <h3>Minimum / Maximum dates (input - date-time directive)</h3>
       <div>
         <h4>Minimum date</h4>
 
@@ -59,17 +64,40 @@
 
       </div>
 
+      <h3>Minimum / Maximum dates (div - date-picker directive)</h3>
+
+      <div>
+        <h4>Minimum date</h4>
+
+        <div date-picker="dates.today" id="pickerMinDateDiv" min-date="minDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
+
+      </div>
+
+      <div>
+        <h4>Maximum date</h4>
+
+        <div date-picker="dates.today" id="pickerMaxDateDiv" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
+      </div>
+
+      <div>
+        <h4>Maximum and minimum dates</h4>
+
+        <div date-picker="dates.today" id="pickerBothDatesDiv" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
+
+      </div>
+
+
       <h3>Update events</h3>
       <div>
         <h4>Minimum date</h4>
 
-        <input date-time ng-model="minDate" date-change="changeMinMax" view="date" timezone="UTC" format="lll">
+        <input date-time ng-model="minDate" id="pickerMinSelector" date-change="changeMinMax" max-date="maxDate" view="date" timezone="UTC" format="lll">
 
       </div>
       <div>
         <h4>Maximum date</h4>
 
-        <input date-time ng-model="maxDate" date-change="changeMinMax" view="date" timezone="UTC" format="lll">
+        <input date-time ng-model="maxDate" id="pickerMaxSelector" date-change="changeMinMax" min-date="minDate" view="date" timezone="UTC" format="lll">
 
       </div>
 
@@ -181,20 +209,21 @@
 
         if (modelName === 'minDate') {
           values.minDate = newValue;
-          $scope.$broadcast('pickerUpdate', 'pickerMinDate', values);
+          $scope.$broadcast('pickerUpdate', ['pickerMinDate', 'pickerMinDateDiv', 'pickerMaxSelector'], values);
           values.maxDate = $scope.maxDate;
         } else if (modelName === 'maxDate') {
           values.maxDate = newValue;
-          $scope.$broadcast('pickerUpdate', 'pickerMaxDate', values);
+          $scope.$broadcast('pickerUpdate', ['pickerMaxDate', 'pickerMaxDateDiv', 'pickerMinSelector'], values);
           values.minDate = $scope.minDate;
         }
 
-        //For either min/max update, update the picker which uses both.
-        $scope.$broadcast('pickerUpdate', 'pickerBothDates', values);
+        //For either min/max update, update the pickers which use both.
+        $scope.$broadcast('pickerUpdate', ['pickerBothDates', 'pickerBothDatesDiv'], values);
       }
 
       $scope.changeData = function (type) {
-        var values = {};
+        var values = {},
+            pickersToUpdate = ['pickerMinDate', 'pickerMaxDate', 'pickerBothDates', 'pickerMinDateDiv', 'pickerMaxDateDiv', 'pickerBothDatesDiv'];
 
         switch (type) {
           case 'view':
@@ -212,7 +241,7 @@
         }
 
         if (values) {
-          $scope.$broadcast('pickerUpdate', ['pickerMinDate', 'pickerMaxDate', 'pickerBothDates'], values);
+          $scope.$broadcast('pickerUpdate', pickersToUpdate, values);
         }
       }
     });
