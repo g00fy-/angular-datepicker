@@ -17,7 +17,7 @@ This fork of angular-datepicker contains several features.
 ### Timezone Support
 
 * The directive will work with or without a specified timezone. 
-* If the timezone is known, it can be assigned to the datepicker via the timezone attribute. 
+* If the timezone is known, it can be assigned to the datepicker via the `timezone` attribute. 
 * If no timezone is provided, then the local time will be used.
 
 ##### No timezone information
@@ -43,21 +43,26 @@ This fork of angular-datepicker contains several features.
 ### Maximum / minimum dates:
 
 * These attributes restrict the dates that can be selected. 
-* These work differently from the original min-date and max-date attributes, which they replace. 
+* These work differently from the original `min-date` and `max-date` attributes, which they replace. 
 * The original attributes allow selecting any dates and just mark the input as invalid. 
 * With these attributes, if a date in the picker is outside of the valid range, then it will not be selectable.
-
-
-##### Maximum date:
-
-```html
-<div date-picker max-date="maxDate"></div>
-```
 
 ##### Minimum date:
 
 ```html
-<div date-picker min-date="minDate"></div>
+<input date-time min-date="minDate">
+```
+
+##### Maximum date:
+
+```html
+<input date-time max-date="maxDate">
+```
+
+##### Minimum and maximum date:
+
+```html
+<input date-time min-date="minDate" max-date="maxDate">
 ```
 
 ### Date format (for input fields):
@@ -67,12 +72,24 @@ This fork of angular-datepicker contains several features.
   * If not provided, a default format will be used.
 
 ```html
-<div date-picker format="yyyy-MM-dd HH:mm"></div>
+<input date-time format="yyyy-MM-dd HH:mm">
 ```
 
 
 #### Callback on date change
 
+* Adding a `date-change` attribute containing a function name will cause this function to be called when the date changes in the picker.
+
 ```html
 <div date-picker date-change="changeDate"></div>
 ```
+
+#### Update events
+
+* An event can be broadcast from the parent scope which will update specific pickers with new settings. The settings which can be changed are:
+  * `minDate`: Earliest selectable date for this picker. Disabled if this value is falsy.
+  * `maxDate`: Latest selectable date for this picker. Disabled if this value is falsy.
+  * `minView`: Minimum zoom level for date/time selection. Disabled if this value is falsy.
+  * `maxView`: Maximum zoom level for date/time selection. Disabled if this value is falsy.
+  * `view`: Default zoom level for date/time selection. Set to default value if this value is falsy.
+  * `format`: Format string used to display dates on the input field. Set to default value if this value is falsy.

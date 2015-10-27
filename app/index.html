@@ -30,36 +30,95 @@
 
       </div>
 
-      <hr />
-      <div>
-        <h3>Minimum date</h3>
-
-        <input date-time ng-model="dates.today" min-date="lastWeek" view="date" min-view="hours" timezone="UTC" format="lll">
-
-      </div>
-
-      <div>
-        <h3>Maximum date</h3>
-
-        <input date-time ng-model="dates.today" max-date="nextWeek" view="date" min-view="hours" timezone="UTC" format="lll">
-
-      </div>
-
-
-      <div>
-        <h3>Maximum and minimum dates</h3>
-
-        <input date-time ng-model="dates.today" min-date="lastWeek" max-date="nextWeek" view="date" min-view="hours" timezone="UTC" format="lll">
-
-      </div>
-    </div>
-
-    <div class="span6">
       <h3>Custom formats</h3>
       <div ng-repeat="format in formats">
         <h5>{{format}}</h5>
         <input type="text" date-time ng-model="dates.today" required="true" view="hours" partial="true" format="{{format}}">
       </div>
+    </div>
+    <div class="span6">
+      <h3>Minimum / Maximum dates</h3>
+      <div>
+        <h4>Minimum date</h4>
+
+        <input date-time ng-model="dates.todayMin" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
+
+      </div>
+
+      <div>
+        <h4>Maximum date</h4>
+
+        <input date-time ng-model="dates.todayMax" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+
+      </div>
+
+      <div>
+        <h4>Maximum and minimum dates</h4>
+
+        <input date-time ng-model="dates.todayBoth" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+
+      </div>
+
+      <h3>Update events</h3>
+      <div>
+        <h4>Minimum date</h4>
+
+        <input date-time ng-model="minDate" date-change="changeMinMax" view="date" timezone="UTC" format="lll">
+
+      </div>
+      <div>
+        <h4>Maximum date</h4>
+
+        <input date-time ng-model="maxDate" date-change="changeMinMax" view="date" timezone="UTC" format="lll">
+
+      </div>
+
+      <div>
+        <h4>Default view</h4>
+
+        <select ng-change="changeData('view')"
+                ng-options="view for view in views"
+                ng-model="options.view"></select>
+
+      </div>
+
+      <div>
+        <h4>Min view</h4>
+
+        <select ng-change="changeData('minView')"
+                ng-options="view for view in views"
+                ng-model="options.minView">
+          <option value="">Disabled</option>
+        </select>
+
+      </div>
+
+      <div>
+        <h4>Max view</h4>
+
+        <select ng-change="changeData('maxView')"
+                ng-options="view for view in views"
+                ng-model="options.maxView">
+          <option value="">Disabled</option>
+        </select>
+
+      </div>
+
+      <div>
+        <h4>Format</h4>
+
+        <select ng-change="changeData('format')"
+                ng-options="format for format in formats"
+                ng-model="options.format">
+          <option value="">Disabled</option>
+        </select>
+
+      </div>
+
+      <h3>Callback (select a date)</h3>
+      <h5>{{format}}</h5>
+      <input type="text" date-time ng-model="dates.today" required="true" view="hours" partial="true" date-change="changeDate">
+      <span ng-bind="callbackState"></span>
     </div>
   </div>
 
@@ -76,12 +135,23 @@
     demoApp.controller('DemoController', function ($scope) {
       $scope.dates = {
         today: moment.tz('UTC').hour(12).startOf('h'), //12:00 UTC, today.
-        lastWeek: moment.tz('UTC').add(-1, 'w').startOf('w'), //12:00 UTC, last sunday.
-        nextWeek: moment.tz('UTC').add(1, 'w').endOf('w'), //12:00 UTC, next saturday.
+        minDate: moment.tz('UTC').add(-4, 'd').hour(12).startOf('h'), //12:00 UTC, four days ago.
+        maxDate: moment.tz('UTC').add(4, 'd').hour(12).startOf('h'), //12:00 UTC, in four days.
       };
 
-      $scope.lastWeek = $scope.dates.lastWeek;
-      $scope.nextWeek = $scope.dates.nextWeek;
+      $scope.options = {
+        view: 'date',
+        format: 'lll',
+        maxView: false,
+        minView: 'hours',
+      };
+
+      $scope.minDate = $scope.dates.minDate;
+      $scope.maxDate = $scope.dates.maxDate;
+
+      $scope.dates.todayMax = $scope.dates.today;
+      $scope.dates.todayMin = $scope.dates.today;
+      $scope.dates.todayBoth = $scope.dates.today;
 
       $scope.formats = [
          "MMMM YYYY",
@@ -96,6 +166,59 @@
         ['Hong Kong, China', 'Asia/Hong_Kong'],
         ['Vancouver, Canada', 'America/Vancouver'],
       ];
+
+      $scope.views = ['year', 'month', 'date', 'hours', 'minutes'];
+
+      $scope.callbackState = 'Callback: Not fired';
+
+      $scope.changeDate = function () {
+        $scope.callbackState = 'Callback: Fired';
+      }
+
+      $scope.changeMinMax = function (modelName, newValue) {
+        //minDate or maxDate updated. Generate events to update relevant pickers
+
+        var values = {
+          minDate: false,
+          maxDate: false,
+        }
+
+        if (modelName === 'minDate') {
+          values.minDate = newValue;
+          $scope.$broadcast('pickerUpdate', 'dates.todayMin', values);
+          values.maxDate = $scope.maxDate;
+        } else if (modelName === 'maxDate') {
+          values.maxDate = newValue;
+          $scope.$broadcast('pickerUpdate', 'dates.todayMax', values);
+          values.minDate = $scope.minDate;
+        }
+
+        //For either min/max update, update the picker which uses both.
+        $scope.$broadcast('pickerUpdate', 'dates.todayBoth', values);
+      }
+
+      $scope.changeData = function (type) {
+        var values = {};
+
+        switch (type) {
+          case 'view':
+            values.view = $scope.options.view;
+            break;
+          case 'minView':
+            values.minView = $scope.options.minView;
+            break;
+          case 'maxView':
+            values.maxView = $scope.options.maxView;
+            break;
+          case 'format':
+            values.format = $scope.options.format;
+            break;
+        }
+
+        if (values) {
+          $scope.$broadcast('pickerUpdate', ['dates.todayMin', 'dates.todayMax', 'dates.todayBoth'], values);
+        }
+      }
     });
   </script>
 </body>
