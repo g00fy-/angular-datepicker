@@ -63,7 +63,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
       }
-      
+
       scope.views = datePickerConfig.views.concat();
       scope.view = attrs.view || datePickerConfig.view;
       scope.template = attrs.template || datePickerConfig.template;
@@ -314,15 +314,15 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 }]);
 /* global moment */
 
-angular.module('datePicker').factory('datePickerUtils', function(){
+angular.module('datePicker').factory('datePickerUtils', function () {
 var tz;
-  var createNewDate = function(year, month, day, hour, minute) {
+  var createNewDate = function (year, month, day, hour, minute) {
     var utc = Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0);
     return tz ? moment.tz(utc, tz) : moment(utc);
   };
 
   return {
-    getVisibleMinutes: function(m, step) {
+    getVisibleMinutes: function (m, step) {
       var year = m.year(),
         month = m.month(),
         day = m.date(),
@@ -336,7 +336,7 @@ var tz;
       }
       return minutes;
     },
-    getVisibleWeeks: function(m) {
+    getVisibleWeeks: function (m) {
       m = moment(m);
       var startYear = m.year(),
           startMonth = m.month();
@@ -369,7 +369,7 @@ var tz;
       }
       return weeks;
     },
-    getVisibleYears: function(d) {
+    getVisibleYears: function (d) {
       var m = moment(d),
         year = m.year();
 
@@ -393,7 +393,7 @@ var tz;
       }
       return years;
     },
-    getDaysOfWeek: function(m) {
+    getDaysOfWeek: function (m) {
       m = m ? m : (tz ? moment.tz(tz).day(0) : moment().day(0));
 
       var year = m.year(),
@@ -415,7 +415,7 @@ var tz;
       }
       return days;
     },
-    getVisibleMonths: function(m) {
+    getVisibleMonths: function (m) {
       var year = m.year(),
         offset = m.utcOffset() / 60,
         months = [],
@@ -432,7 +432,7 @@ var tz;
       }
       return months;
     },
-    getVisibleHours: function(m) {
+    getVisibleHours: function (m) {
       var year = m.year(),
         month = m.month(),
         day = m.date(),
@@ -451,28 +451,28 @@ var tz;
 
       return hours;
     },
-    isAfter: function(model, date) {
+    isAfter: function (model, date) {
       return model && model.unix() >= date.unix();
     },
-    isBefore: function(model, date) {
+    isBefore: function (model, date) {
       return model.unix() <= date.unix();
     },
-    isSameYear: function(model, date) {
+    isSameYear: function (model, date) {
       return model && model.year() === date.year();
     },
-    isSameMonth: function(model, date) {
+    isSameMonth: function (model, date) {
       return this.isSameYear(model, date) && model.month() === date.month();
     },
-    isSameDay: function(model, date) {
+    isSameDay: function (model, date) {
       return this.isSameMonth(model, date) && model.date() === date.date();
     },
-    isSameHour: function(model, date) {
+    isSameHour: function (model, date) {
       return this.isSameDay(model, date) && model.hours() === date.hours();
     },
-    isSameMinutes: function(model, date) {
+    isSameMinutes: function (model, date) {
       return this.isSameHour(model, date) && model.minutes() === date.minutes();
     },
-    setParams: function(zone) {
+    setParams: function (zone) {
       tz = zone;
     }
   };
@@ -494,9 +494,9 @@ Module.directive('dateRange', function () {
       scope.start = new Date(scope.start || new Date());
       scope.end = new Date(scope.end || new Date());
 
-      attrs.$observe('disabled', function(isDisabled){
-          scope.disableDatePickers = !!isDisabled;
-        });
+      attrs.$observe('disabled', function (isDisabled) {
+        scope.disableDatePickers = !!isDisabled;
+      });
       scope.$watch('start.getTime()', function (value) {
         if (value && scope.end && value > scope.end.getTime()) {
           scope.end = new Date(value);
@@ -669,6 +669,13 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         if ((angular.isArray(model) && model.indexOf(attrs.ngModel) > -1) || attrs.ngModel === model) {
           if (picker) {
             //Need to handle situation where the data changed but the picker is currently open.
+            //However, this directive is not guaranteed to be present, as the date-picker directive can be used by itself.
+            //Therefore, we need to somehow catch this situation and update the inner picker. Perhaps we can use the same event
+            //for inner updates. If this directive exists, it will be caught here first, and then we can eat the event. Otherwise, 
+            //the inner directive can catch the pickerUpdate event and update appropriately. We just need to pass the name
+            //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
+            //which picker is being updated.
+
             //scope.$broadcast('pickerInnerUpdate', data);
           } else {
             if (angular.isDefined(data.minDate)) {
@@ -678,12 +685,16 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
               attrs.maxDate = data.maxDate ? data.maxDate.format() : false;
             }
 
-            attrs.minView = data.minView || attrs.minView;
-            attrs.maxView = data.maxView || attrs.maxView;
+            if (angular.isDefined(data.minView)) {
+              attrs.minView = data.minView;
+            }
+            if (angular.isDefined(data.maxView)) {
+              attrs.maxView = data.maxView;
+            }
             attrs.view = data.view || attrs.view;
 
             if (angular.isDefined(data.format)) {
-              format = attrs.format = data.format;
+              format = attrs.format = data.format || dateTimeConfig.format;
               ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
             }
             getTemplate();
