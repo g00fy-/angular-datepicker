@@ -535,7 +535,7 @@ Module.constant('dateTimeConfig', {
         (attrs.timezone ? 'timezone="' + attrs.timezone + '" ' : '') +
         'class="date-picker-date-time"></div>';
   },
-  format: 'yyyy-MM-dd HH:mm',
+  format: 'YYYY-MM-DD HH:mm',
   views: ['date', 'year', 'month', 'hours', 'minutes'],
   autoClose: false,
   position: 'relative'
