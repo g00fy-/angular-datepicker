@@ -12,9 +12,9 @@
 </head>
 <body ng-app="sample">
   <div class="row-fluid" ng-controller="DemoController">
-    <div class="span6">
+    <div class="span4">
       <div>
-        <h3>Timezones</h3>
+        <h2>Timezones</h2>
 
         <div ng-repeat="timezone in timezones">
 
@@ -33,60 +33,57 @@
       </div>
       <hr />
 
-      <h3>Custom formats</h3>
+      <h2>Custom formats</h2>
       <div ng-repeat="format in formats">
         <h5>{{format}}</h5>
-        <input type="text" date-time ng-model="dates.today" required="true" view="hours" partial="true" format="{{format}}">
+        <input type="text" date-time ng-model="dates.today" view="hours" format="{{format}}">
       </div>
 
     </div>
-    <div class="span6">
-      <h3>Minimum / Maximum dates (input - date-time directive)</h3>
+    <div class="span4">
+      <h2>Minimum / Maximum dates</h2>
+
       <div>
-        <h4>Minimum date</h4>
+        <h4>Always open div (date-picker directive)</h4>
 
-        <input date-time ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        <div>
+          <h5>Minimum</h5>
+          <div date-picker="dates.today" id="pickerMinDateDiv" min-date="minDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
+        </div>
 
+        <div>
+          <h5>Maximum</h5>
+          <div date-picker="dates.today" id="pickerMaxDateDiv" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
+        </div>
+
+        <div>
+          <h5>Minimum + maximum</h5>
+          <div date-picker="dates.today" id="pickerBothDatesDiv" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
+        </div>
       </div>
 
       <div>
-        <h4>Maximum date</h4>
+        <h4>Input with popup (date-time directive)</h4>
 
-        <input date-time ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        <div>
+          <h5>Minimum</h5>
+          <input date-time ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        </div>
 
+        <div>
+          <h5>Maximum</h5>
+          <input date-time ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        </div>
+
+        <div>
+          <h5>Minimum + maximum</h5>
+          <input date-time ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+        </div>
       </div>
 
-      <div>
-        <h4>Maximum and minimum dates</h4>
-
-        <input date-time ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-
-      </div>
-
-      <h3>Minimum / Maximum dates (div - date-picker directive)</h3>
-
-      <div>
-        <h4>Minimum date</h4>
-
-        <div date-picker="dates.today" id="pickerMinDateDiv" min-date="minDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
-
-      </div>
-
-      <div>
-        <h4>Maximum date</h4>
-
-        <div date-picker="dates.today" id="pickerMaxDateDiv" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
-      </div>
-
-      <div>
-        <h4>Maximum and minimum dates</h4>
-
-        <div date-picker="dates.today" id="pickerBothDatesDiv" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
-
-      </div>
-
-
-      <h3>Update events</h3>
+    </div>
+    <div class="span4">
+      <h2>Update events</h2>
       <div>
         <h4>Minimum date</h4>
 
@@ -106,7 +103,6 @@
         <select ng-change="changeData('view')"
                 ng-options="view for view in views"
                 ng-model="options.view"></select>
-
       </div>
 
       <div>
@@ -117,7 +113,6 @@
                 ng-model="options.minView">
           <option value="">Disabled</option>
         </select>
-
       </div>
 
       <div>
@@ -128,7 +123,6 @@
                 ng-model="options.maxView">
           <option value="">Disabled</option>
         </select>
-
       </div>
 
       <div>
@@ -139,13 +133,16 @@
                 ng-model="options.format">
           <option value="">Disabled</option>
         </select>
-
       </div>
 
-      <h3>Callback (select a date)</h3>
-      <h5>{{format}}</h5>
-      <input type="text" date-time ng-model="dates.today" required="true" view="hours" partial="true" date-change="changeDate">
-      <span ng-bind="callbackState"></span>
+      <h2>Callback</h2>
+      <div>
+        <h4>Select a date from either picker</h4>
+        <div ng-bind="callbackState"></div>
+        <button ng-click="callbackState = 'Callback: Not fired'">Reset state</button>
+      </div>
+      <input type="text" date-time ng-model="dates.today"  view="hours" date-change="changeDate">
+      <div date-picker="dates.today" view="date" date-change="changeDate" timezone="UTC" watch-direct-changes="true"></div>
     </div>
   </div>
 
