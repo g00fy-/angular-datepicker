@@ -70,6 +70,7 @@ This fork of angular-datepicker contains several features.
 * A custom format for a date can be assigned via the `format` atribute.
   * This format will be used to display the date on an input field.
   * If not provided, a default format will be used.
+  * See: [format options](http://momentjs.com/docs/#/displaying/format/)
 
 ```html
 <input date-time format="yyyy-MM-dd HH:mm">
@@ -94,6 +95,7 @@ This fork of angular-datepicker contains several features.
   * `view`: Default zoom level for date/time selection. Set to default value if this value is falsy.
   * `format`: Format string used to display dates on the input field. Set to default value if this value is falsy. 
     * See: [format options](http://momentjs.com/docs/#/displaying/format/)
+	* This option cannot be used on the `date-picker` directive directly, it must be used on a `date-time` input field.
 * The possible for the `view`, `minView` and `maxView` fields are:
   * `year`, `month`, `date`, `hours`, `minutes`.
 * The event is targeted at specific pickers using their `ID` attributes.
