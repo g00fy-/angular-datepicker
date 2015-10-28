@@ -1,4 +1,3 @@
-/* global _ */
 /* global moment */
 'use strict';
 
@@ -97,7 +96,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.template = attrs.template || datePickerConfig.template;
 
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
-      scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
+      scope.callbackOnSetDate = attrs.dateChange ? datePickerUtils.findFunction(scope, attrs.dateChange) : undefined;
 
       prepareViews();
 
