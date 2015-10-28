@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -7,240 +7,175 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="styles/bootstrap.css">
-  <link rel="stylesheet" href="styles/style.css" />
-  <link rel="stylesheet" href="../dist/angular-datepicker.css" />
+  <link rel="stylesheet" href="styles/style.css"/>
+  <link rel="stylesheet" href="../dist/angular-datepicker.css"/>
 </head>
 <body ng-app="sample">
-  <div class="row-fluid" ng-controller="DemoController">
-    <div class="span4">
-      <div>
-        <h2>Timezones</h2>
+<div class="row-fluid">
+  <div class="span6">
+    <h2>Calendar</h2>
 
-        <div ng-repeat="timezone in timezones">
+    <div>
+      <h3>default views</h3>
 
-          <h4>{{timezone[0]}}</h4>
+      <h5>year</h5>
 
-          <div date-picker="dates.today" timezone="{{timezone[1]}}" view="hours" min-view="hours" watch-direct-changes="true"></div>
+      <div date-picker="start" view="year"></div>
 
-          <hr />
+      <h5>month</h5>
 
-        </div>
+      <div date-picker="start" view="month"></div>
 
-        <h4>No timezone (Uses local. Buggy, needs work)</h4>
+      <h5>date</h5>
 
-        <div date-picker="dates.today" view="hours" min-view="hours" watch-direct-changes="true"></div>
+      <div date-picker="start" view="date"></div>
 
-      </div>
-      <hr />
+      <h5>hours</h5>
 
-      <h2>Custom formats</h2>
-      <div ng-repeat="format in formats">
-        <h5>{{format}}</h5>
-        <input type="text" date-time ng-model="dates.today" view="hours" format="{{format}}">
-      </div>
+      <div date-picker="start" view="hours"></div>
+
+      <h5>minutes</h5>
+
+      <div date-picker="start" view="minutes"></div>
+    </div>
+
+
+    <div>
+      <h3>min views</h3>
+
+      <h5>year</h5>
+
+      <div date-picker="start" min-view="year"></div>
+
+      <h5>month</h5>
+
+      <div date-picker="start" min-view="month"></div>
+
+      <h5>date</h5>
+
+      <div date-picker="start" min-view="date"></div>
+
+      <h5>hours</h5>
+
+      <div date-picker="start" min-view="hours"></div>
+
+      <h5>minutes</h5>
+
+      <div date-picker="start" min-view="minutes"></div>
+    </div>
+
+
+    <div>
+      <h3>max views</h3>
+
+      <h5>year</h5>
+
+      <div date-picker="start" max-view="year"></div>
+
+      <h5>month</h5>
+
+      <div date-picker="start" max-view="month"></div>
+
+      <h5>date</h5>
+
+      <div date-picker="start" max-view="date"></div>
+
+      <h5>hours</h5>
+
+      <div date-picker="start" max-view="hours"></div>
+
+      <h5>maxutes</h5>
+
+      <div date-picker="start" max-view="minutes"></div>
+    </div>
+
+    <div>
+      <h3>max & min views</h3>
+
+      <h5>time</h5>
+
+      <div date-picker="start" max-view="hours" min-view="minutes"></div>
+
+      <h5>date</h5>
+
+      <div date-picker="start" max-view="year" min-view="date"></div>
 
     </div>
-    <div class="span4">
-      <h2>Minimum / Maximum dates</h2>
 
-      <div>
-        <h4>Always open div (date-picker directive)</h4>
 
-        <div>
-          <h5>Minimum</h5>
-          <div date-picker="dates.today" id="pickerMinDateDiv" min-date="minDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
-        </div>
-
-        <div>
-          <h5>Maximum</h5>
-          <div date-picker="dates.today" id="pickerMaxDateDiv" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
-        </div>
-
-        <div>
-          <h5>Minimum + maximum</h5>
-          <div date-picker="dates.today" id="pickerBothDatesDiv" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" watch-direct-changes="true"></div>
-        </div>
-      </div>
-
-      <div>
-        <h4>Input with popup (date-time directive)</h4>
-
-        <div>
-          <h5>Minimum</h5>
-          <input date-time ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
-        </div>
-
-        <div>
-          <h5>Maximum</h5>
-          <input date-time ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-        </div>
-
-        <div>
-          <h5>Minimum + maximum</h5>
-          <input date-time ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-        </div>
-      </div>
-
-    </div>
-    <div class="span4">
-      <h2>Update events</h2>
-      <div>
-        <h4>Minimum date</h4>
-
-        <input date-time ng-model="minDate" id="pickerMinSelector" date-change="changeMinMax" max-date="maxDate" view="date" timezone="UTC" format="lll">
-
-      </div>
-      <div>
-        <h4>Maximum date</h4>
-
-        <input date-time ng-model="maxDate" id="pickerMaxSelector" date-change="changeMinMax" min-date="minDate" view="date" timezone="UTC" format="lll">
-
-      </div>
-
-      <div>
-        <h4>Default view</h4>
-
-        <select ng-change="changeData('view')"
-                ng-options="view for view in views"
-                ng-model="options.view"></select>
-      </div>
-
-      <div>
-        <h4>Min view</h4>
-
-        <select ng-change="changeData('minView')"
-                ng-options="view for view in views"
-                ng-model="options.minView">
-          <option value="">Disabled</option>
-        </select>
-      </div>
-
-      <div>
-        <h4>Max view</h4>
-
-        <select ng-change="changeData('maxView')"
-                ng-options="view for view in views"
-                ng-model="options.maxView">
-          <option value="">Disabled</option>
-        </select>
-      </div>
-
-      <div>
-        <h4>Format</h4>
-
-        <select ng-change="changeData('format')"
-                ng-options="format for format in formats"
-                ng-model="options.format">
-          <option value="">Disabled</option>
-        </select>
-      </div>
-
-      <h2>Callback</h2>
-      <div>
-        <h4>Select a date from either picker</h4>
-        <div ng-bind="callbackState"></div>
-        <button ng-click="callbackState = 'Callback: Not fired'">Reset state</button>
-      </div>
-      <input type="text" date-time ng-model="dates.today"  view="hours" date-change="changeDate">
-      <div date-picker="dates.today" view="date" date-change="changeDate" timezone="UTC" watch-direct-changes="true"></div>
-    </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.1/moment-timezone-with-data.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
-  <script src="scripts/datePicker.js"></script>
-  <script src="scripts/datePickerUtils.js"></script>
-  <script src="scripts/dateRange.js"></script>
-  <script src="scripts/input.js"></script>
-  <script>
-    var demoApp = angular.module('sample', ['datePicker', 'ui.bootstrap']);
-    demoApp.controller('DemoController', function ($scope) {
-      $scope.dates = {
-        today: moment.tz('UTC').hour(12).startOf('h'), //12:00 UTC, today.
-        minDate: moment.tz('UTC').add(-4, 'd').hour(12).startOf('h'), //12:00 UTC, four days ago.
-        maxDate: moment.tz('UTC').add(4, 'd').hour(12).startOf('h'), //12:00 UTC, in four days.
-      };
 
-      $scope.options = {
-        view: 'date',
-        format: 'lll',
-        maxView: false,
-        minView: 'hours',
-      };
+  <div class="span6">
+    <h3>Input</h3>
+    <h5>default</h5>
+    <input type="text" date-time ng-model="start" required="true" view="hours" partial="true">
 
-      $scope.minDate = $scope.dates.minDate;
-      $scope.maxDate = $scope.dates.maxDate;
+    <h3>Input with append</h3>
+    <h5>default</h5>
 
-      $scope.formats = [
-         "MMMM YYYY",
-         "DD MMM YYYY",
-         "ddd MMM DD YYYY",
-         "D MMM YYYY HH:mm",
-         "lll",
-      ];
+    <div class="input-append input-prepend" date-time-append>
+      <span class="add-on"><i class="icon-calendar"></i></span>
+      <input type="text" date-time ng-model="start" required="true" view="hours">
+      <span class="add-on"><i class="icon-calendar"></i></span>
+    </div>
+    <h3>Input with prepend</h3>
+    <h5>default</h5>
 
-      $scope.timezones = [
-        ['London, UK', 'Europe/London'],
-        ['Hong Kong, China', 'Asia/Hong_Kong'],
-        ['Vancouver, Canada', 'America/Vancouver'],
-      ];
+    <div class="input-prepend" date-time-append>
+      <span class="add-on"><i class="icon-calendar"></i></span>
+      <input type="text" date-time ng-model="start" required="true" view="hours">
+    </div>
 
-      $scope.views = ['year', 'month', 'date', 'hours', 'minutes'];
+    <h3>Input with Auto close</h3>
+    <h5>default</h5>
 
-      $scope.callbackState = 'Callback: Not fired';
+    <div class="" date-time-append>
+      <span class="add-on"><i class="icon-calendar"></i></span>
+      <input type="text" date-time auto-close="true" ng-model="start" required="true" view="hours">
+      <span class="add-on"><i class="icon-calendar"></i></span>
+    </div>
 
-      $scope.changeDate = function () {
-        $scope.callbackState = 'Callback: Fired';
-      }
+    <h5>Input format</h5>
+    <!--<input type="datetime" date-time ng-model="end" hours format="short">-->
+    <h5>A button</h5>
 
-      $scope.changeMinMax = function (modelName, newValue) {
-        //minDate or maxDate updated. Generate events to update relevant pickers
+    <div class="dropdown">
+      <a class="dropdown-toggle btn btn-danger">
+        pick a date: {{(date|date)}}
+      </a>
 
-        var values = {
-          minDate: false,
-          maxDate: false,
-        }
+      <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
+        <div date-picker="date"></div>
+      </div>
+    </div>
 
-        if (modelName === 'minDate') {
-          values.minDate = newValue;
-          $scope.$broadcast('pickerUpdate', ['pickerMinDate', 'pickerMinDateDiv', 'pickerMaxSelector'], values);
-          values.maxDate = $scope.maxDate;
-        } else if (modelName === 'maxDate') {
-          values.maxDate = newValue;
-          $scope.$broadcast('pickerUpdate', ['pickerMaxDate', 'pickerMaxDateDiv', 'pickerMinSelector'], values);
-          values.minDate = $scope.minDate;
-        }
 
-        //For either min/max update, update the pickers which use both.
-        $scope.$broadcast('pickerUpdate', ['pickerBothDates', 'pickerBothDatesDiv'], values);
-      }
+    <h5>Date range</h5>
 
-      $scope.changeData = function (type) {
-        var values = {},
-            pickersToUpdate = ['pickerMinDate', 'pickerMaxDate', 'pickerBothDates', 'pickerMinDateDiv', 'pickerMaxDateDiv', 'pickerBothDatesDiv'];
+    <div date-range start="a" end="b" style="position: relative; z-index:0"></div>
+    <h5>Date range button</h5>
 
-        switch (type) {
-          case 'view':
-            values.view = $scope.options.view;
-            break;
-          case 'minView':
-            values.minView = $scope.options.minView;
-            break;
-          case 'maxView':
-            values.maxView = $scope.options.maxView;
-            break;
-          case 'format':
-            values.format = $scope.options.format;
-            break;
-        }
+    <div class="dropdown">
+      <a class="dropdown-toggle btn btn-danger">
+        {{(a|date)||"pick start"}} - {{(b|date)||"pick end"}}
+      </a>
 
-        if (values) {
-          $scope.$broadcast('pickerUpdate', pickersToUpdate, values);
-        }
-      }
-    });
-  </script>
+      <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
+        <div date-range start="a" end="b"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
+<script src="scripts/datePicker.js"></script>
+<script src="scripts/datePickerUtils.js"></script>
+<script src="scripts/dateRange.js"></script>
+<script src="scripts/input.js"></script>
+<script>
+  angular.module('sample', ['datePicker', 'ui.bootstrap']);
+</script>
 </body>
 </html>

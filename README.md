@@ -1,128 +1,127 @@
 # AngularJS datepicker directives
 
+## WIP
+
+<a href="https://travis-ci.org/eralha/angular-datepicker" target="_blank">
+<img src="https://travis-ci.org/eralha/angular-datepicker.svg" /></a> 
+<a href="http://gruntjs.com/" target="_blank"><img src="https://cdn.gruntjs.com/builtwith.png" alt="" /></a>
+
 #### Requirements
 
 -  Angular v1.2+
--  MomentJS
--  Moment Timezone (If timezones are being used)
 
-## Usage Example
 
-[Live demo](https://rawgithub.com/DanTalash/angular-datepicker/master/app/index.html)
+#### Development version 
 
-## New features
+Checkout, run `npm install` and `bower install`.
+To build run `grunt build`
 
-This fork of angular-datepicker contains several features.
+## Examples
 
-### Timezone Support
+[Live demo](https://rawgithub.com/g00fy-/angular-datepicker/master/app/index.html)
 
-* The directive will work with or without a specified timezone. 
-* If the timezone is known, it can be assigned to the datepicker via the `timezone` attribute. 
-* If no timezone is provided, then the local time will be used.
+## Installation
 
-##### No timezone information
+Install with bower `bower install --save angular-datepicker`
+Inject the dependency `angular.module('testApp', ['datePicker'])`
 
-```html
-<div date-picker></div>
-```
-
-##### Specific timezone (London, UK)
+##### defaults
 
 ```html
-<div date-picker timezone="Europe/London"></div>
+<div date-picker="start"></div>
 ```
 
 
-##### Specific timezone (Hong Kong, CN)
+##### views:
+
+(initial) view
 
 ```html
-<div date-picker timezone="Asia/Hong_Kong"></div>
+<div date-picker="start" view="year"></div>
 ```
 
-
-### Maximum / minimum dates:
-
-* These attributes restrict the dates that can be selected. 
-* These work differently from the original `min-date` and `max-date` attributes, which they replace. 
-* The original attributes allow selecting any dates and just mark the input as invalid. 
-* With these attributes, if a date in the picker is outside of the valid range, then it will not be selectable.
-
-##### Minimum date:
+(max) view
 
 ```html
-<input date-time min-date="minDate">
+<div date-picker="start" max-view="month"></div>
 ```
 
-##### Maximum date:
+(min) view 
+
+##### only date view
 
 ```html
-<input date-time max-date="maxDate">
+<div date-picker="start" min-view="date"></div>
 ```
 
-##### Minimum and maximum date:
+##### Close the picker when min-view is reached
 
 ```html
-<input date-time min-date="minDate" max-date="maxDate">
+<div date-picker="start" auto-close="true"></div>
 ```
 
-### Date format (for input fields):
+##### Min and Max Date
 
-* A custom format for a date can be assigned via the `format` atribute.
-  * This format will be used to display the date on an input field.
-  * If not provided, a default format will be used.
-  * See: [format options](http://momentjs.com/docs/#/displaying/format/)
+<p>Only add's validation to ngModel, must be provided a valid date object or valid date string.</p>
 
 ```html
-<input date-time format="yyyy-MM-dd HH:mm">
+<div date-picker="start" min-date="Date string | Expression" max-date="Date string | Expression"></div>
 ```
 
+##### Watch direct date changes within the parent scope and update the view accordingly
 
-### Callback on date change
-
-* Adding a `date-change` attribute containing a function name will cause this function to be called when the date changes in the picker.
+<p>Without this attribute the date picker stays on the same view page when you update the date within the parent scope manually even if the picked date happens to be on another one. For example, you pick September 18 2015, then you manually change it to October 25 2014, nonetheless the picked date updates accordingly, the date picker still displays the pick screen for September 2015 and you have to swipe pages manually.</p>
 
 ```html
-<input date-time date-change="changeDate">
+<div date-picker="start" watch-direct-changes></div>
 ```
 
-### Update events
+##### Execute callback upon date set
 
-* An event can be broadcast from the parent scope which will update specific pickers with new settings. The settings which can be changed are:
-  * `minDate`: Earliest selectable date for this picker. Disabled if this value is falsy.
-  * `maxDate`: Latest selectable date for this picker. Disabled if this value is falsy.
-  * `minView`: Minimum zoom level for date/time selection. Disabled if this value is falsy.
-  * `maxView`: Maximum zoom level for date/time selection. Disabled if this value is falsy.
-  * `view`: Default zoom level for date/time selection. Set to default value if this value is falsy.
-  * `format`: Format string used to display dates on the input field. Set to default value if this value is falsy. 
-    * See: [format options](http://momentjs.com/docs/#/displaying/format/)
-	* This option cannot be used on the `date-picker` directive directly, it must be used on a `date-time` input field.
-* The possible for the `view`, `minView` and `maxView` fields are:
-  * `year`, `month`, `date`, `hours`, `minutes`.
-* The event is targeted at specific pickers using their `ID` attributes.
-  * If a picker exists with the same `ID` then the information in this picker will be updated.
-  * A single `ID` can be used, or an array of `ID`s
+<p>Execute callback when a new date set in a highest resolution available, e.g. if you specify min-view="hour" the callback will be executed only when the user picks an hour, not just date, month or year. Alternatively, you can bind to a new event 'setMaxDate'.</p>
 
-#### Create picker with ID
+<p>Within your controller</p>
+```js
+function callback() {
+  doStuff();
+}
+```
+<p>In your html</p>
+```html
+<div date-picker="start" on-set-date="callback"></div>
+```
+
+##### input as datepicker
 
 ```html
-<input date-time id="pickerToUpdate">
+<input type="datetime" date-time ng-model="start">
 ```
 
-#### Update one picker.
+##### input with formatted value
 
-```javascript
-$scope.$broadcast('pickerUpdate', 'pickerToUpdate', {
-	format: 'D MMM YYYY HH:mm',
-	maxDate: maxSelectableDate, //A moment object, date object, or date/time string parsable by momentjs
-	minView: 'hours',
-	view: false //Use default
-});
+```html
+<input type="datetime" date-time ng-model="end" format="short">
 ```
 
-#### Update multiple pickers.
 
-```javascript
-$scope.$broadcast('pickerUpdate', ['pickerToUpdate', 'secondPickerToUpdate'], {
-	format: 'lll'
-});
+##### date-range picker
+
+```html
+<div date-range start="start" end="end"></div>
+```
+
+
+
+### How to release
+
+After a new distribution package has been pushed, a new release can be triggered with [grunt-bump](https://github.com/vojtajina/grunt-bump) :
+
+```
+grunt bump
+```
+
+You can see what the release process will do by doing a dry run :
+
+```
+grunt bump --dry-run
 ```
