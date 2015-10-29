@@ -46,25 +46,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       before: '=?'
     },
     link: function (scope, element, attrs, ngModel) {
-      function createMoment(input) {
-        return tz ? moment.tz(input, tz) : moment(input);
-      }
-
-      function getDate(name) {
-        var result = false;
-        if (attrs[name]) {
-          result = createMoment(attrs[name]);
-          if (!result.isValid()) {
-            result = datePickerUtils.findParam(scope, attrs[name]);
-            if (result) {
-              result = createMoment(result);
-            }
-          }
-        }
-
-        return result;
-      }
-
       function prepareViews() {
         scope.views = datePickerConfig.views.concat();
         scope.view = attrs.view || datePickerConfig.view;
@@ -79,8 +60,12 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
       }
 
+      datePickerUtils.setParams(attrs.timezone);
+
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
+        getDate = datePickerUtils.getDate,
+        createMoment = datePickerUtils.createMoment,
         step = parseInt(attrs.step || datePickerConfig.step, 10),
         partial = !!attrs.partial,
         minDate = getDate('minDate'),
@@ -152,6 +137,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function update() {
         var view = scope.view;
+        datePickerUtils.setParams(tz);
 
         if (scope.model && !arrowClick) {
           scope.date = createMoment(scope.model);
@@ -159,7 +145,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
 
         var date = scope.date;
-        datePickerUtils.setParams(tz);
 
         switch (view) {
           case 'year':
