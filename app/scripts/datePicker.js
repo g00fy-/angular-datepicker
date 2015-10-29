@@ -87,7 +87,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         maxDate = getDate('maxDate'),
         pickerID = element[0].id,
         now = scope.now = createMoment(),
-        selected = scope.date = createMoment(scope.model || now);
+        selected = scope.date = createMoment(scope.model || now),
+        autoclose = attrs.autoClose === 'true';
 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
@@ -126,7 +127,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
         if (nextView) {
           scope.setView(nextView);
-        } else if (attrs.autoClose === 'true') {
+        } else if (autoclose) {
           element.addClass('hidden');
           scope.$emit('hidePicker');
         } else {
@@ -228,11 +229,12 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           }
         } else {
           var params = datePickerConfig.viewConfig[view],
-              dates = scope[params[0]];
+              dates = scope[params[0]],
+              compareFunc = params[1];
 
           for (i = 0; i < dates.length; i++) {
             classList = '';
-            if (datePickerUtils[params[1]](date, dates[i])) {
+            if (datePickerUtils[compareFunc](date, dates[i])) {
               classList += 'active';
             }
             if (isNow(dates[i], view)) {
