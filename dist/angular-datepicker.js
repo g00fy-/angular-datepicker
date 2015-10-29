@@ -46,25 +46,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       before: '=?'
     },
     link: function (scope, element, attrs, ngModel) {
-      function createMoment(input) {
-        return tz ? moment.tz(input, tz) : moment(input);
-      }
-
-      function getDate(name) {
-        var result = false;
-        if (attrs[name]) {
-          result = createMoment(attrs[name]);
-          if (!result.isValid()) {
-            result = datePickerUtils.findParam(scope, attrs[name]);
-            if (result) {
-              result = createMoment(result);
-            }
-          }
-        }
-
-        return result;
-      }
-
       function prepareViews() {
         scope.views = datePickerConfig.views.concat();
         scope.view = attrs.view || datePickerConfig.view;
@@ -79,15 +60,23 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
       }
 
+      function getDate(name) {
+        return datePickerUtils.getDate(scope, attrs, name);
+      }
+
+      datePickerUtils.setParams(attrs.timezone);
+
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
+        createMoment = datePickerUtils.createMoment,
         step = parseInt(attrs.step || datePickerConfig.step, 10),
         partial = !!attrs.partial,
         minDate = getDate('minDate'),
         maxDate = getDate('maxDate'),
         pickerID = element[0].id,
         now = scope.now = createMoment(),
-        selected = scope.date = createMoment(scope.model || now);
+        selected = scope.date = createMoment(scope.model || now),
+        autoclose = attrs.autoClose === 'true';
 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
@@ -126,7 +115,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
         if (nextView) {
           scope.setView(nextView);
-        } else if (attrs.autoClose === 'true') {
+        } else if (autoclose) {
           element.addClass('hidden');
           scope.$emit('hidePicker');
         } else {
@@ -151,6 +140,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function update() {
         var view = scope.view;
+        datePickerUtils.setParams(tz);
 
         if (scope.model && !arrowClick) {
           scope.date = createMoment(scope.model);
@@ -158,7 +148,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
 
         var date = scope.date;
-        datePickerUtils.setParams(tz);
 
         switch (view) {
           case 'year':
@@ -228,11 +217,12 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           }
         } else {
           var params = datePickerConfig.viewConfig[view],
-              dates = scope[params[0]];
+              dates = scope[params[0]],
+              compareFunc = params[1];
 
           for (i = 0; i < dates.length; i++) {
             classList = '';
-            if (datePickerUtils[params[1]](date, dates[i])) {
+            if (datePickerUtils[compareFunc](date, dates[i])) {
               classList += 'active';
             }
             if (isNow(dates[i], view)) {
@@ -549,6 +539,32 @@ var tz;
       } while (parentScope.$parent);
 
       return false;
+    },
+    createMoment: function (m) {
+      if (tz) {
+        return moment.tz(m, tz);
+      } else {
+        //If input is a moment, and we have no TZ info, we need to remove TZ 
+        //info from the moment, otherwise the newly created moment will take 
+        //the timezone of the input moment. The easiest way to do that is to
+        //take the unix timestamp, and use that to create a new moment.
+        //The new moment will use the local timezone of the user machine.
+        return moment.isMoment(m) ? moment.unix(m.unix()) : moment(m);
+      }
+    },
+    getDate: function (scope, attrs, name) {
+      var result = false;
+      if (attrs[name]) {
+        result = this.createMoment(attrs[name]);
+        if (!result.isValid()) {
+          result = this.findParam(scope, attrs[name]);
+          if (result) {
+            result = this.createMoment(result);
+          }
+        }
+      }
+
+      return result;
     }
   };
 });
