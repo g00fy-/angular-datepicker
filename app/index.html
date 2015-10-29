@@ -86,15 +86,11 @@
       <h2>Update events</h2>
       <div>
         <h4>Minimum date</h4>
-
-        <input date-time ng-model="minDate" id="pickerMinSelector" date-change="changeMinMax" max-date="maxDate" view="date" timezone="UTC" format="lll">
-
+        <input date-time ng-model="dates.minDate" id="pickerMinSelector" date-change="changeMinMax" max-date="maxDate" view="date" timezone="UTC" format="lll">
       </div>
       <div>
         <h4>Maximum date</h4>
-
-        <input date-time ng-model="maxDate" id="pickerMaxSelector" date-change="changeMinMax" min-date="minDate" view="date" timezone="UTC" format="lll">
-
+        <input date-time ng-model="dates.maxDate" id="pickerMaxSelector" date-change="changeMinMax" min-date="minDate" view="date" timezone="UTC" format="lll">
       </div>
 
       <div>
@@ -203,14 +199,14 @@
           maxDate: false,
         }
 
-        if (modelName === 'minDate') {
+        if (modelName === 'dates.minDate') {
           values.minDate = newValue;
           $scope.$broadcast('pickerUpdate', ['pickerMinDate', 'pickerMinDateDiv', 'pickerMaxSelector'], values);
-          values.maxDate = $scope.maxDate;
-        } else if (modelName === 'maxDate') {
+          values.maxDate = $scope.dates.maxDate;
+        } else if (modelName === 'dates.maxDate') {
           values.maxDate = newValue;
           $scope.$broadcast('pickerUpdate', ['pickerMaxDate', 'pickerMaxDateDiv', 'pickerMinSelector'], values);
-          values.minDate = $scope.minDate;
+          values.minDate = $scope.dates.minDate;
         }
 
         //For either min/max update, update the pickers which use both.
