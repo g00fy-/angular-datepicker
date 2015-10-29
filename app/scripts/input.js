@@ -6,9 +6,10 @@ var PRISTINE_CLASS = 'ng-pristine',
 var Module = angular.module('datePicker');
 
 Module.constant('dateTimeConfig', {
-  template: function (attrs) {
+  template: function (attrs, id) {
     return '' +
         '<div ' +
+        (id ? 'id="' + id + '" ' : '') +
         'date-picker="' + attrs.ngModel + '" ' +
         (attrs.view ? 'view="' + attrs.view + '" ' : '') +
         (attrs.maxView ? 'max-view="' + attrs.maxView + '" ' : '') +
@@ -19,7 +20,7 @@ Module.constant('dateTimeConfig', {
         (attrs.minDate ? 'min-date="' + attrs.minDate + '" ' : '') +
         (attrs.partial ? 'partial="' + attrs.partial + '" ' : '') +
         (attrs.step ? 'step="' + attrs.step + '" ' : '') +
-        (attrs.onSetDate ? 'on-set-date="' + attrs.onSetDate + '" ' : '') +
+        (attrs.onSetDate ? 'date-change="' + attrs.onSetDate + '" ' : '') +
         (attrs.ngModel ? 'ng-model="' + attrs.ngModel + '" ' : '') +
         (attrs.timezone ? 'timezone="' + attrs.timezone + '" ' : '') +
         'class="date-picker-date-time"></div>';
