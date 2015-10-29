@@ -81,6 +81,13 @@
         </div>
       </div>
 
+      <div>
+        <h2>Range</h2>
+
+        <div date-range start="minDate" end="maxDate" date-change="changeDate" view="date" min-view="date"></div>
+
+      </div>
+
     </div>
     <div class="span4">
       <h2>Update events</h2>
@@ -187,7 +194,8 @@
 
       $scope.callbackState = 'Callback: Not fired';
 
-      $scope.changeDate = function () {
+      $scope.changeDate = function (modelName, newDate) {
+        console.log(modelName + ' has had a date change. New value is ' + newDate.format());
         $scope.callbackState = 'Callback: Fired';
       }
 
