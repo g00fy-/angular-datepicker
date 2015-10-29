@@ -60,11 +60,14 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
       }
 
+      function getDate(name) {
+        return datePickerUtils.getDate(scope, attrs, name);
+      }
+
       datePickerUtils.setParams(attrs.timezone);
 
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
-        getDate = datePickerUtils.getDate,
         createMoment = datePickerUtils.createMoment,
         step = parseInt(attrs.step || datePickerConfig.step, 10),
         partial = !!attrs.partial,

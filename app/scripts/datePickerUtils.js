@@ -199,7 +199,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         return moment.isMoment(m) ? moment.unix(m.unix()) : moment(m);
       }
     },
-    getDate: function (attrs, input) {
+    getDate: function (scope, attrs, name) {
       var result = false;
       if (attrs[name]) {
         result = this.createMoment(attrs[name]);
