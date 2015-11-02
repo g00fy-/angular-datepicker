@@ -65,20 +65,24 @@
       <div>
         <h4>Input with popup (date-time directive)</h4>
 
-        <div>
-          <h5>Minimum</h5>
-          <input date-time ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
-        </div>
+		  {{dates}}
 
-        <div>
-          <h5>Maximum</h5>
-          <input date-time ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-        </div>
+	  	<form name="demoForm">
+			<div>
+			  <h5>Min ({{demoForm.pickerMinDate.$error.min ? 'Min: invalid' : 'Min: valid'}})</h5>				
+				<input date-time name="pickerMinDate" ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
+			</div>
 
-        <div>
-          <h5>Minimum + maximum</h5>
-          <input date-time ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-        </div>
+			<div>
+			  <h5>Max ({{demoForm.pickerMaxDate.$error.max ? 'Max: invalid' : 'Max: valid'}})</h5>
+				<input date-time name="pickerMaxDate" ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+			</div>
+
+			<div>
+			  <h5>Min + max ({{demoForm.pickerBothDates.$error.min ? 'Min: invalid, ' : 'Min: valid, '}} {{demoForm.pickerBothDates.$error.max ? 'max: invalid' : 'max: valid'}})</h5>
+				<input date-time name="pickerBothDates" ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+			</div>
+		</form>
       </div>
 
       <div>
@@ -151,7 +155,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.4.1/moment-timezone-with-data.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
   <script src="scripts/datePicker.js"></script>
   <script src="scripts/datePickerUtils.js"></script>
