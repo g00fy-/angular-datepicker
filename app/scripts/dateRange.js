@@ -1,16 +1,14 @@
+/* global moment */
 'use strict';
 
 var Module = angular.module('datePicker');
 
 Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', function ($compile, datePickerUtils, dateTimeConfig) {
-  function getTemplate(attrs, id, model, minDate, maxDate) {
-    /*  Assuming that minDate and maxDate are going to be either moment 
-        objects or false (we will get an exception otherwise)       
-     */
+  function getTemplate(attrs, id, model, min, max) {
     return dateTimeConfig.template(angular.extend(attrs, {
       ngModel: model,
-      minDate: minDate ? minDate.format() : false,
-      maxDate: maxDate ? maxDate.format() : false
+      minDate: min && moment.isMoment(min) ? min.format() : false,
+      maxDate: max && moment.isMoment(max) ? max.format() : false
     }), id);
   }
 
@@ -26,8 +24,9 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
     link: function (scope, element, attrs) {
       var dateChange = null,
           pickerRangeID = element[0].id,
-          pickerIDs = [randomName(),randomName()],
-          createMoment = datePickerUtils.createMoment;
+          pickerIDs = [randomName(), randomName()],
+          createMoment = datePickerUtils.createMoment,
+          eventIsForPicker = datePickerUtils.eventIsForPicker;
 
       scope.dateChange = function (modelName, newDate) {
         //Received updated data from one of the pickers. Update the max/min date of the other picker. 
@@ -54,7 +53,7 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
 
       if (pickerRangeID) {
         scope.$on('pickerUpdate', function (event, targetIDs, data) {
-          if ((angular.isArray(targetIDs) && targetIDs.indexOf(pickerRangeID) > -1) || pickerRangeID === targetIDs) {
+          if (eventIsForPicker(targetIDs, pickerRangeID)) {
             //If we received an update event, dispatch it to the inner pickers using their IDs.
             scope.$broadcast('pickerUpdate', pickerIDs, data);
           }
@@ -72,16 +71,14 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
 
       attrs.onSetDate = 'dateChange';
 
-      var template = '<div><table><tr><td valign="top" style="width: 300px;">' +
+      var template = '<div><table><tr><td valign="top">' +
                     getTemplate(attrs, pickerIDs[0], 'start', false, scope.end) +
-                    '</td><td valign="top" style="width: 300px;">' +
+                    '</td><td valign="top">' +
                     getTemplate(attrs, pickerIDs[1], 'end', scope.start, false) +
                   '</td></tr></table></div>';
 
       var picker = $compile(template)(scope);
-      var container = angular.element('<div date-picker-wrapper></div>');
-      element[0].parentElement.insertBefore(container[0], element[0]);
-      container.append(picker);
+      element.append(picker);
     }
   };
 }]);

@@ -62,6 +62,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           minDate = null,
           maxDate = null,
           timezone = attrs.timezone || false,
+          eventIsForPicker = datePickerUtils.eventIsForPicker,
           dateChange = null,
           shownOnce = false,
           template;
@@ -130,7 +131,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
       if (pickerID) {
         scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if ((angular.isArray(pickerIDs) && pickerIDs.indexOf(pickerID) > -1) || pickerID === pickerIDs) {
+          if (eventIsForPicker(pickerIDs, pickerID)) {
             if (picker) {
               //Need to handle situation where the data changed but the picker is currently open.
               //However, this directive is not guaranteed to be present, as the date-picker directive can be used by itself.
