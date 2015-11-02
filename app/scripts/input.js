@@ -1,3 +1,4 @@
+/* global moment */
 'use strict';
 
 var PRISTINE_CLASS = 'ng-pristine',
@@ -90,11 +91,19 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       if (angular.isDefined(attrs.minDate)) {
         minDate = datePickerUtils.findParam(scope, attrs.minDate);
         attrs.minDate = minDate ? minDate.format() : minDate;
+
+        ngModel.$validators.min = function (value) {
+        	return moment.isMoment(value) && (minDate.isSame(value) || minDate.isBefore(value));
+        };
       }
 
       if (angular.isDefined(attrs.maxDate)) {
         maxDate = datePickerUtils.findParam(scope, attrs.maxDate);
         attrs.maxDate = maxDate ? maxDate.format() : maxDate;
+
+        ngModel.$validators.max = function (value) {
+        	return moment.isMoment(value) && (maxDate.isSame(value) || maxDate.isAfter(value));
+        };
       }
 
       if (angular.isDefined(attrs.dateChange)) {
@@ -141,11 +150,16 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
               //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
               //which picker is being updated.
             } else {
+              var validateRequired = false;
               if (angular.isDefined(data.minDate)) {
-                attrs.minDate = data.minDate ? data.minDate.format() : false;
+                minDate = data.minDate;
+                attrs.minDate = minDate ? minDate.format() : false;
+                validateRequired = true;
               }
               if (angular.isDefined(data.maxDate)) {
-                attrs.maxDate = data.maxDate ? data.maxDate.format() : false;
+                maxDate = data.maxDate;
+                attrs.maxDate = maxDate ? maxDate.format() : false;
+                validateRequired = true;
               }
 
               if (angular.isDefined(data.minView)) {
@@ -156,6 +170,9 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
               }
               attrs.view = data.view || attrs.view;
 
+              if (validateRequired) {
+                ngModel.$validate();
+              }
               if (angular.isDefined(data.format)) {
                 format = attrs.format = data.format || dateTimeConfig.format;
                 ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
