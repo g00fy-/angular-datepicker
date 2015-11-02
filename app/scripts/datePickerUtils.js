@@ -163,8 +163,10 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       tz = zone;
     },
     findFunction: function (scope, name) {
-      //Can probably combine these into a single search function and two comparison functions
       //Search scope ancestors for a matching function.
+      //Can probably combine this and the below function
+      //into a single search function and two comparison functions
+      //Need to add support for lodash style selectors (eg, 'objectA.objectB.function')
       var parentScope = scope;
       do {
         parentScope = parentScope.$parent;
@@ -212,6 +214,10 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       }
 
       return result;
+    },
+    eventIsForPicker: function (targetIDs, pickerID) {
+      //Checks if an event targeted at a specific picker, via either a string name, or an array of strings.
+      return (angular.isArray(targetIDs) && targetIDs.indexOf(pickerID) > -1 || targetIDs === pickerID);
     }
   };
 });
