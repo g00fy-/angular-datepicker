@@ -69,6 +69,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
         createMoment = datePickerUtils.createMoment,
+        eventIsForPicker = datePickerUtils.eventIsForPicker,
         step = parseInt(attrs.step || datePickerConfig.step, 10),
         partial = !!attrs.partial,
         minDate = getDate('minDate'),
@@ -317,7 +318,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       if (pickerID) {
         scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if ((angular.isArray(pickerIDs) && pickerIDs.indexOf(pickerID) > -1) || pickerID === pickerIDs) {
+          if (eventIsForPicker(pickerIDs, pickerID)) {
             var updateViews = false, updateViewData = false;
 
             if (angular.isDefined(data.minDate)) {
