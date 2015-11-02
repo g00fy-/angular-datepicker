@@ -84,7 +84,7 @@
       <div>
         <h2>Range</h2>
 
-        <div date-range start="minDate" end="maxDate" date-change="changeDate" view="date" min-view="date"></div>
+        <div date-range id="pickerRange" start="minDate" end="maxDate" date-change="changeDate" view="date" min-view="date"></div>
 
       </div>
 
@@ -223,7 +223,7 @@
 
       $scope.changeData = function (type) {
         var values = {},
-            pickersToUpdate = ['pickerMinDate', 'pickerMaxDate', 'pickerBothDates', 'pickerMinDateDiv', 'pickerMaxDateDiv', 'pickerBothDatesDiv'];
+            pickersToUpdate = ['pickerMinDate', 'pickerMaxDate', 'pickerBothDates', 'pickerMinDateDiv', 'pickerMaxDateDiv', 'pickerBothDatesDiv', 'pickerRange'];
 
         switch (type) {
           case 'view':
