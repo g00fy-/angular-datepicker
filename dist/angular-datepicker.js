@@ -134,7 +134,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
         //This is duplicated in the new functionality.
         if (scope.callbackOnSetDate) {
-          scope.callbackOnSetDate(attrs.ngModel, scope.date);
+          scope.callbackOnSetDate(attrs.datePicker, scope.date);
         }
       }
 
@@ -621,8 +621,8 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
       };
 
       if (pickerRangeID) {
-        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if ((angular.isArray(pickerIDs) && pickerIDs.indexOf(pickerRangeID) > -1) || pickerRangeID === pickerIDs) {
+        scope.$on('pickerUpdate', function (event, targetIDs, data) {
+          if ((angular.isArray(targetIDs) && targetIDs.indexOf(pickerRangeID) > -1) || pickerRangeID === targetIDs) {
             //If we received an update event, dispatch it to the inner pickers using their IDs.
             scope.$broadcast('pickerUpdate', pickerIDs, data);
           }
