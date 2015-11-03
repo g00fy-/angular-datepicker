@@ -1,3 +1,4 @@
+/* global moment */
 'use strict';
 
 var PRISTINE_CLASS = 'ng-pristine',
@@ -6,22 +7,26 @@ var PRISTINE_CLASS = 'ng-pristine',
 var Module = angular.module('datePicker');
 
 Module.constant('dateTimeConfig', {
-  template: function (attrs) {
+  template: function (attrs, id) {
     return '' +
         '<div ' +
+        (id ? 'id="' + id + '" ' : '') +
         'date-picker="' + attrs.ngModel + '" ' +
         (attrs.view ? 'view="' + attrs.view + '" ' : '') +
         (attrs.maxView ? 'max-view="' + attrs.maxView + '" ' : '') +
+        (attrs.maxDate ? 'max-date="' + attrs.maxDate + '" ' : '') +
         (attrs.autoClose ? 'auto-close="' + attrs.autoClose + '" ' : '') +
         (attrs.template ? 'template="' + attrs.template + '" ' : '') +
         (attrs.minView ? 'min-view="' + attrs.minView + '" ' : '') +
+        (attrs.minDate ? 'min-date="' + attrs.minDate + '" ' : '') +
         (attrs.partial ? 'partial="' + attrs.partial + '" ' : '') +
         (attrs.step ? 'step="' + attrs.step + '" ' : '') +
-        (attrs.onSetDate ? 'on-set-date="' + attrs.onSetDate + '" ' : '') +
+        (attrs.onSetDate ? 'date-change="' + attrs.onSetDate + '" ' : '') +
         (attrs.ngModel ? 'ng-model="' + attrs.ngModel + '" ' : '') +
+        (attrs.timezone ? 'timezone="' + attrs.timezone + '" ' : '') +
         'class="date-picker-date-time"></div>';
   },
-  format: 'yyyy-MM-dd HH:mm',
+  format: 'YYYY-MM-DD HH:mm',
   views: ['date', 'year', 'month', 'hours', 'minutes'],
   autoClose: false,
   position: 'relative'
@@ -37,24 +42,31 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils',
-                function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
   var body = $document.find('body');
-  var dateFilter = $filter('date');
+  var dateFilter = $filter('mFormat');
 
   return {
     require: 'ngModel',
-    scope:true,
+    scope: true,
     link: function (scope, element, attrs, ngModel) {
-      var format = attrs.format || dateTimeConfig.format;
-      var parentForm = element.inheritedData('$formController');
-      var views = $parse(attrs.views)(scope) || dateTimeConfig.views.concat();
-      var view = attrs.view || views[0];
-      var index = views.indexOf(view);
-      var dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose;
-      var picker = null;
-      var position = attrs.position || dateTimeConfig.position;
-      var container = null;
+      var format = attrs.format || dateTimeConfig.format,
+        parentForm = element.inheritedData('$formController'),
+          views = $parse(attrs.views)(scope) || dateTimeConfig.views.concat(),
+          view = attrs.view || views[0],
+          index = views.indexOf(view),
+          dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose,
+          picker = null,
+          pickerID = element[0].id,
+          position = attrs.position || dateTimeConfig.position,
+          container = null,
+          minDate = null,
+          maxDate = null,
+          timezone = attrs.timezone || false,
+          eventIsForPicker = datePickerUtils.eventIsForPicker,
+          dateChange = null,
+          shownOnce = false,
+          template;
 
       if (index === -1) {
         views.splice(index, 1);
@@ -62,26 +74,12 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
       views.unshift(view);
 
-
       function formatter(value) {
-        return dateFilter(value, format);
+        return dateFilter(value, format, timezone);
       }
 
-      /*
       function parser(viewValue) {
-        if(viewValue.length === format.length) {
-          var date = moment(viewValue, datePickerUtils.toMomentFormat(format));
-          if(date.isValid()) {
-            clear();
-            return date.toDate();
-          }
-          return viewValue;
-        }
-        return undefined;
-      }
-      */
-      function parser(viewValue) {
-        if(viewValue.length === format.length) {
+        if (viewValue.length === format.length) {
           return viewValue;
         }
         return undefined;
@@ -90,32 +88,31 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       ngModel.$formatters.push(formatter);
       ngModel.$parsers.unshift(parser);
 
-
-      //min. max date validators
       if (angular.isDefined(attrs.minDate)) {
-        var minVal;
+        minDate = datePickerUtils.findParam(scope, attrs.minDate);
+        attrs.minDate = minDate ? minDate.format() : minDate;
+
         ngModel.$validators.min = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(minVal) || value >= minVal;
-          };
-        attrs.$observe('minDate', function (val) {
-            minVal = new Date(val);
-            ngModel.$validate();
-          });
+        	return moment.isMoment(value) && (minDate.isSame(value) || minDate.isBefore(value));
+        };
       }
 
       if (angular.isDefined(attrs.maxDate)) {
-        var maxVal;
-        ngModel.$validators.max = function (value) {
-            return !datePickerUtils.isValidDate(value) || angular.isUndefined(maxVal) || value <= maxVal;
-          };
-        attrs.$observe('maxDate', function (val) {
-            maxVal = new Date(val);
-            ngModel.$validate();
-          });
-      }
-      //end min, max date validator
+        maxDate = datePickerUtils.findParam(scope, attrs.maxDate);
+        attrs.maxDate = maxDate ? maxDate.format() : maxDate;
 
-      var template = dateTimeConfig.template(attrs);
+        ngModel.$validators.max = function (value) {
+        	return moment.isMoment(value) && (maxDate.isSame(value) || maxDate.isAfter(value));
+        };
+      }
+
+      if (angular.isDefined(attrs.dateChange)) {
+        dateChange = datePickerUtils.findFunction(scope, attrs.dateChange);
+      }
+
+      function getTemplate() {
+        template = dateTimeConfig.template(attrs);
+      }
 
       function updateInput(event) {
         event.stopPropagation();
@@ -141,6 +138,51 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         }
       }
 
+      if (pickerID) {
+        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+          if (eventIsForPicker(pickerIDs, pickerID)) {
+            if (picker) {
+              //Need to handle situation where the data changed but the picker is currently open.
+              //However, this directive is not guaranteed to be present, as the date-picker directive can be used by itself.
+              //Therefore, we need to somehow catch this situation and update the inner picker. Perhaps we can use the same event
+              //for inner updates. If this directive exists, it will be caught here first, and then we can eat the event. Otherwise, 
+              //the inner directive can catch the pickerUpdate event and update appropriately. We just need to pass the name
+              //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
+              //which picker is being updated.
+            } else {
+              var validateRequired = false;
+              if (angular.isDefined(data.minDate)) {
+                minDate = data.minDate;
+                attrs.minDate = minDate ? minDate.format() : false;
+                validateRequired = true;
+              }
+              if (angular.isDefined(data.maxDate)) {
+                maxDate = data.maxDate;
+                attrs.maxDate = maxDate ? maxDate.format() : false;
+                validateRequired = true;
+              }
+
+              if (angular.isDefined(data.minView)) {
+                attrs.minView = data.minView;
+              }
+              if (angular.isDefined(data.maxView)) {
+                attrs.maxView = data.maxView;
+              }
+              attrs.view = data.view || attrs.view;
+
+              if (validateRequired) {
+                ngModel.$validate();
+              }
+              if (angular.isDefined(data.format)) {
+                format = attrs.format = data.format || dateTimeConfig.format;
+                ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
+              }
+              getTemplate();
+            }
+          }
+        });
+      }
+
       function showPicker() {
         if (picker) {
           return;
@@ -149,35 +191,43 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         picker = $compile(template)(scope);
         scope.$digest();
 
-        scope.$on('setDate', function (event, date, view) {
-          updateInput(event);
-          if (dismiss && views[views.length - 1] === view) {
-            clear();
-          }
-        });
+        //If the picker has already been shown before then we shouldn't be binding to events, as these events are already bound to in this scope.
+        if (!shownOnce) {
+          scope.$on('setDate', function (event, date, view) {
+            updateInput(event);
+            if (dateChange) {
+              dateChange(attrs.ngModel, date);
+            }
+            if (dismiss && views[views.length - 1] === view) {
+              clear();
+            }
+          });
 
-        scope.$on('hidePicker', function () {
-          element.triggerHandler('blur');
-        });
+          scope.$on('hidePicker', function () {
+            element.triggerHandler('blur');
+          });
 
-        scope.$on('$destroy', clear);
+          scope.$on('$destroy', clear);
+
+          shownOnce = true;
+        }
+
 
         // move picker below input element
 
         if (position === 'absolute') {
           var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
-          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position});
+          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position });
           body.append(picker);
         } else {
           // relative
           container = angular.element('<div date-picker-wrapper></div>');
           element[0].parentElement.insertBefore(container[0], element[0]);
           container.append(picker);
-//          this approach doesn't work
-//          element.before(picker);
-          picker.css({top: element[0].offsetHeight + 'px', display: 'block'});
+          //          this approach doesn't work
+          //          element.before(picker);
+          picker.css({ top: element[0].offsetHeight + 'px', display: 'block' });
         }
-
         picker.bind('mousedown', function (evt) {
           evt.preventDefault();
         });
@@ -185,6 +235,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
       element.bind('focus', showPicker);
       element.bind('blur', clear);
+      getTemplate();
     }
   };
 }]);

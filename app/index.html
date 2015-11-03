@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -7,175 +7,175 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="styles/bootstrap.css">
-  <link rel="stylesheet" href="styles/style.css"/>
-  <link rel="stylesheet" href="../dist/angular-datepicker.css"/>
+  <link rel="stylesheet" href="styles/style.css" />
+  <link rel="stylesheet" href="../dist/angular-datepicker.css" />
 </head>
 <body ng-app="sample">
-<div class="row-fluid">
-  <div class="span6">
-    <h2>Calendar</h2>
+  <div class="row-fluid">
+    <div class="span6">
+      <h2>Calendar</h2>
 
-    <div>
-      <h3>default views</h3>
+      <div>
+        <h3>default views</h3>
 
-      <h5>year</h5>
+        <h5>year</h5>
 
-      <div date-picker="start" view="year"></div>
+        <div date-picker="start" view="year"></div>
 
-      <h5>month</h5>
+        <h5>month</h5>
 
-      <div date-picker="start" view="month"></div>
+        <div date-picker="start" view="month"></div>
 
-      <h5>date</h5>
+        <h5>date</h5>
 
-      <div date-picker="start" view="date"></div>
+        <div date-picker="start" view="date"></div>
 
-      <h5>hours</h5>
+        <h5>hours</h5>
 
-      <div date-picker="start" view="hours"></div>
+        <div date-picker="start" view="hours"></div>
 
-      <h5>minutes</h5>
+        <h5>minutes</h5>
 
-      <div date-picker="start" view="minutes"></div>
+        <div date-picker="start" view="minutes"></div>
+      </div>
+
+
+      <div>
+        <h3>min views</h3>
+
+        <h5>year</h5>
+
+        <div date-picker="start" min-view="year"></div>
+
+        <h5>month</h5>
+
+        <div date-picker="start" min-view="month"></div>
+
+        <h5>date</h5>
+
+        <div date-picker="start" min-view="date"></div>
+
+        <h5>hours</h5>
+
+        <div date-picker="start" min-view="hours"></div>
+
+        <h5>minutes</h5>
+
+        <div date-picker="start" min-view="minutes"></div>
+      </div>
+
+
+      <div>
+        <h3>max views</h3>
+
+        <h5>year</h5>
+
+        <div date-picker="start" max-view="year"></div>
+
+        <h5>month</h5>
+
+        <div date-picker="start" max-view="month"></div>
+
+        <h5>date</h5>
+
+        <div date-picker="start" max-view="date"></div>
+
+        <h5>hours</h5>
+
+        <div date-picker="start" max-view="hours"></div>
+
+        <h5>maxutes</h5>
+
+        <div date-picker="start" max-view="minutes"></div>
+      </div>
+
+      <div>
+        <h3>max & min views</h3>
+
+        <h5>time</h5>
+
+        <div date-picker="start" max-view="hours" min-view="minutes"></div>
+
+        <h5>date</h5>
+
+        <div date-picker="start" max-view="year" min-view="date"></div>
+
+      </div>
+
+
     </div>
 
 
-    <div>
-      <h3>min views</h3>
+    <div class="span6">
+      <h3>Input</h3>
+      <h5>default</h5>
+      <input type="text" date-time ng-model="start" required="true" view="hours" partial="true">
 
-      <h5>year</h5>
+      <h3>Input with append</h3>
+      <h5>default</h5>
 
-      <div date-picker="start" min-view="year"></div>
+      <div class="input-append input-prepend" date-time-append>
+        <span class="add-on"><i class="icon-calendar"></i></span>
+        <input type="text" date-time ng-model="start" required="true" view="hours">
+        <span class="add-on"><i class="icon-calendar"></i></span>
+      </div>
+      <h3>Input with prepend</h3>
+      <h5>default</h5>
 
-      <h5>month</h5>
+      <div class="input-prepend" date-time-append>
+        <span class="add-on"><i class="icon-calendar"></i></span>
+        <input type="text" date-time ng-model="start" required="true" view="hours">
+      </div>
 
-      <div date-picker="start" min-view="month"></div>
+      <h3>Input with Auto close</h3>
+      <h5>default</h5>
 
-      <h5>date</h5>
+      <div class="" date-time-append>
+        <span class="add-on"><i class="icon-calendar"></i></span>
+        <input type="text" date-time auto-close="true" ng-model="start" required="true" view="hours">
+        <span class="add-on"><i class="icon-calendar"></i></span>
+      </div>
 
-      <div date-picker="start" min-view="date"></div>
+      <h5>Input format</h5>
+      <!--<input type="datetime" date-time ng-model="end" hours format="short">-->
+      <h5>A button</h5>
 
-      <h5>hours</h5>
+      <div class="dropdown">
+        <a class="dropdown-toggle btn btn-danger">
+          pick a date: {{(date|date)}}
+        </a>
 
-      <div date-picker="start" min-view="hours"></div>
-
-      <h5>minutes</h5>
-
-      <div date-picker="start" min-view="minutes"></div>
-    </div>
-
-
-    <div>
-      <h3>max views</h3>
-
-      <h5>year</h5>
-
-      <div date-picker="start" max-view="year"></div>
-
-      <h5>month</h5>
-
-      <div date-picker="start" max-view="month"></div>
-
-      <h5>date</h5>
-
-      <div date-picker="start" max-view="date"></div>
-
-      <h5>hours</h5>
-
-      <div date-picker="start" max-view="hours"></div>
-
-      <h5>maxutes</h5>
-
-      <div date-picker="start" max-view="minutes"></div>
-    </div>
-
-    <div>
-      <h3>max & min views</h3>
-
-      <h5>time</h5>
-
-      <div date-picker="start" max-view="hours" min-view="minutes"></div>
-
-      <h5>date</h5>
-
-      <div date-picker="start" max-view="year" min-view="date"></div>
-
-    </div>
+        <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
+          <div date-picker="date"></div>
+        </div>
+      </div>
 
 
-  </div>
+      <h5>Date range</h5>
 
+      <div date-range start="a" end="b" style="position: relative; z-index:0"></div>
+      <h5>Date range button</h5>
 
-  <div class="span6">
-    <h3>Input</h3>
-    <h5>default</h5>
-    <input type="text" date-time ng-model="start" required="true" view="hours" partial="true">
+      <div class="dropdown">
+        <a class="dropdown-toggle btn btn-danger">
+          {{(a|date)||"pick start"}} - {{(b|date)||"pick end"}}
+        </a>
 
-    <h3>Input with append</h3>
-    <h5>default</h5>
-
-    <div class="input-append input-prepend" date-time-append>
-      <span class="add-on"><i class="icon-calendar"></i></span>
-      <input type="text" date-time ng-model="start" required="true" view="hours">
-      <span class="add-on"><i class="icon-calendar"></i></span>
-    </div>
-    <h3>Input with prepend</h3>
-    <h5>default</h5>
-
-    <div class="input-prepend" date-time-append>
-      <span class="add-on"><i class="icon-calendar"></i></span>
-      <input type="text" date-time ng-model="start" required="true" view="hours">
-    </div>
-
-    <h3>Input with Auto close</h3>
-    <h5>default</h5>
-
-    <div class="" date-time-append>
-      <span class="add-on"><i class="icon-calendar"></i></span>
-      <input type="text" date-time auto-close="true" ng-model="start" required="true" view="hours">
-      <span class="add-on"><i class="icon-calendar"></i></span>
-    </div>
-
-    <h5>Input format</h5>
-    <!--<input type="datetime" date-time ng-model="end" hours format="short">-->
-    <h5>A button</h5>
-
-    <div class="dropdown">
-      <a class="dropdown-toggle btn btn-danger">
-        pick a date: {{(date|date)}}
-      </a>
-
-      <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
-        <div date-picker="date"></div>
+        <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
+          <div date-range start="a" end="b"></div>
+        </div>
       </div>
     </div>
-
-
-    <h5>Date range</h5>
-
-    <div date-range start="a" end="b" style="position: relative; z-index:0"></div>
-    <h5>Date range button</h5>
-
-    <div class="dropdown">
-      <a class="dropdown-toggle btn btn-danger">
-        {{(a|date)||"pick start"}} - {{(b|date)||"pick end"}}
-      </a>
-
-      <div class="dropdown-menu" ng-click="$event.preventDefault();$event.stopPropagation()">
-        <div date-range start="a" end="b"></div>
-      </div>
-    </div>
   </div>
-</div>
 
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
-<script src="scripts/datePicker.js"></script>
-<script src="scripts/datePickerUtils.js"></script>
-<script src="scripts/dateRange.js"></script>
-<script src="scripts/input.js"></script>
-<script>
-  angular.module('sample', ['datePicker', 'ui.bootstrap']);
-</script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js"></script>
+  <script src="scripts/datePicker.js"></script>
+  <script src="scripts/datePickerUtils.js"></script>
+  <script src="scripts/dateRange.js"></script>
+  <script src="scripts/input.js"></script>
+  <script>
+    angular.module('sample', ['datePicker', 'ui.bootstrap']);
+  </script>
 </body>
 </html>
