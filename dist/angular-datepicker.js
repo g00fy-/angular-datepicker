@@ -604,27 +604,23 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
           eventIsForPicker = datePickerUtils.eventIsForPicker;
 
       scope.dateChange = function (modelName, newDate) {
-        //Received updated data from one of the pickers. Update the max/min date of the other picker. 
-        var data = {},
-            pickerID;
-
-        if (modelName === 'start') {
-          //Start changed
-          data.minDate = newDate;
-          pickerID = pickerIDs[1];
-        } else {
-          //End changed
-          data.maxDate = newDate;
-          pickerID = pickerIDs[0];
-        }
-
-        scope.$broadcast('pickerUpdate', pickerID, data);
-
         //Notify user if callback exists.
         if (dateChange) {
           dateChange(modelName, newDate);
         }
       };
+
+      function setMax(date) {
+        scope.$broadcast('pickerUpdate', pickerIDs[0], {
+          maxDate: date
+        });
+      }
+
+      function setMin(date) {
+        scope.$broadcast('pickerUpdate', pickerIDs[1], {
+          minDate: date
+        });
+      }
 
       if (pickerRangeID) {
         scope.$on('pickerUpdate', function (event, targetIDs, data) {
@@ -639,6 +635,12 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
 
       scope.start = createMoment(scope.start);
       scope.end = createMoment(scope.end);
+
+      scope.$watchGroup(['start', 'end'], function (dates) {
+        //Scope data changed, update picker min/max
+        setMin(dates[0]);
+        setMax(dates[1]);
+      });
 
       if (angular.isDefined(attrs.dateChange)) {
         dateChange = datePickerUtils.findFunction(scope, attrs.dateChange);
@@ -718,7 +720,9 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           position = attrs.position || dateTimeConfig.position,
           container = null,
           minDate = null,
+          minValid = null,
           maxDate = null,
+          maxValid = null,
           timezone = attrs.timezone || false,
           eventIsForPicker = datePickerUtils.eventIsForPicker,
           dateChange = null,
@@ -742,24 +746,35 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         return undefined;
       }
 
+      function setMin(date) {
+        minDate = date;
+        attrs.minDate = date ? date.format() : date;
+        minValid = moment.isMoment(date);
+      }
+
+      function setMax(date) {
+        maxDate = date;
+        attrs.maxDate = date ? date.format() : date;
+        maxValid = moment.isMoment(date);
+      }
+
       ngModel.$formatters.push(formatter);
       ngModel.$parsers.unshift(parser);
 
       if (angular.isDefined(attrs.minDate)) {
-        minDate = datePickerUtils.findParam(scope, attrs.minDate);
-        attrs.minDate = minDate ? minDate.format() : minDate;
+        setMin(datePickerUtils.findParam(scope, attrs.minDate));
 
         ngModel.$validators.min = function (value) {
-        	return moment.isMoment(value) && (minDate.isSame(value) || minDate.isBefore(value));
+          //If we don't have a min / max value, then any value is valid.
+          return minValid ? moment.isMoment(value) && (minDate.isSame(value) || minDate.isBefore(value)) : true;
         };
       }
 
       if (angular.isDefined(attrs.maxDate)) {
-        maxDate = datePickerUtils.findParam(scope, attrs.maxDate);
-        attrs.maxDate = maxDate ? maxDate.format() : maxDate;
+        setMax(datePickerUtils.findParam(scope, attrs.maxDate));
 
         ngModel.$validators.max = function (value) {
-        	return moment.isMoment(value) && (maxDate.isSame(value) || maxDate.isAfter(value));
+          return maxValid ? moment.isMoment(value) && (maxDate.isSame(value) || maxDate.isAfter(value)) : true;
         };
       }
 
@@ -770,6 +785,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       function getTemplate() {
         template = dateTimeConfig.template(attrs);
       }
+
 
       function updateInput(event) {
         event.stopPropagation();
@@ -800,22 +816,16 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           if (eventIsForPicker(pickerIDs, pickerID)) {
             if (picker) {
               //Need to handle situation where the data changed but the picker is currently open.
-              //However, this directive is not guaranteed to be present, as the date-picker directive can be used by itself.
-              //Therefore, we need to somehow catch this situation and update the inner picker. Perhaps we can use the same event
-              //for inner updates. If this directive exists, it will be caught here first, and then we can eat the event. Otherwise, 
-              //the inner directive can catch the pickerUpdate event and update appropriately. We just need to pass the name
-              //of the model to the inner picker (or get it there somehow else if this directive doesn't exist) to determine
-              //which picker is being updated.
+              //To handle this, we can create the inner picker with a random ID, then forward 
+              //any events received to it.
             } else {
               var validateRequired = false;
               if (angular.isDefined(data.minDate)) {
-                minDate = data.minDate;
-                attrs.minDate = minDate ? minDate.format() : false;
+                setMin(data.minDate);
                 validateRequired = true;
               }
               if (angular.isDefined(data.maxDate)) {
-                maxDate = data.maxDate;
-                attrs.maxDate = maxDate ? maxDate.format() : false;
+                setMax(data.maxDate);
                 validateRequired = true;
               }
 

@@ -29,27 +29,23 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
           eventIsForPicker = datePickerUtils.eventIsForPicker;
 
       scope.dateChange = function (modelName, newDate) {
-        //Received updated data from one of the pickers. Update the max/min date of the other picker. 
-        var data = {},
-            pickerID;
-
-        if (modelName === 'start') {
-          //Start changed
-          data.minDate = newDate;
-          pickerID = pickerIDs[1];
-        } else {
-          //End changed
-          data.maxDate = newDate;
-          pickerID = pickerIDs[0];
-        }
-
-        scope.$broadcast('pickerUpdate', pickerID, data);
-
         //Notify user if callback exists.
         if (dateChange) {
           dateChange(modelName, newDate);
         }
       };
+
+      function setMax(date) {
+        scope.$broadcast('pickerUpdate', pickerIDs[0], {
+          maxDate: date
+        });
+      }
+
+      function setMin(date) {
+        scope.$broadcast('pickerUpdate', pickerIDs[1], {
+          minDate: date
+        });
+      }
 
       if (pickerRangeID) {
         scope.$on('pickerUpdate', function (event, targetIDs, data) {
@@ -64,6 +60,12 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
 
       scope.start = createMoment(scope.start);
       scope.end = createMoment(scope.end);
+
+      scope.$watchGroup(['start', 'end'], function (dates) {
+        //Scope data changed, update picker min/max
+        setMin(dates[0]);
+        setMax(dates[1]);
+      });
 
       if (angular.isDefined(attrs.dateChange)) {
         dateChange = datePickerUtils.findFunction(scope, attrs.dateChange);
