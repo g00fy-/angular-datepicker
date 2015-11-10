@@ -38,7 +38,7 @@ describe('Test date Picker Utils', function(){
 
   it('get visible weeks provided date', function(){
     var start = dateBuilder('2014-05-25T00:00:00+00:00'); // sunday
-    var end = dateBuilder('2014-07-05T00:00:00+00:00');  // sunday
+    var end = dateBuilder('2014-07-05T00:00:00+00:00');  // saturday
     var chosen = dateBuilder('2014-06-29T19:00:00+00:00'); // sunday
     var weeks = utils.getVisibleWeeks(chosen, constants.step);
 
