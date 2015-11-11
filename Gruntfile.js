@@ -4,6 +4,25 @@ var mountFolder = function (connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
 
+
+var banner =
+  '(function (root, factory) {\n' +
+  'if (typeof define === \'function\' && define.amd) {\n' +
+  'define([\'angular\', \'moment\'], function (angular, moment) {\n' +
+  'return factory({}, angular, moment);\n' +
+  '});\n' +
+  '}\n' +
+  'else if (typeof exports === \'object\') {\n' +
+  'module.exports = factory({}, require(\'angular\'), require(\'moment\'));\n' +
+  '}\n' +
+  'else if (angular) {\n' +
+  'factory(root, root.angular, root.moment);\n' +
+  '}\n' +
+  '}(this, function (global, angular, moment) {\n';
+
+var footer ='}));';
+
+
 module.exports = function (grunt) {
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
@@ -191,8 +210,8 @@ module.exports = function (grunt) {
         src: ['<%= yeoman.app %>/scripts/{datePicker,input,dateRange,datePickerUtils}.js', '<%= yeoman.tmp %>/templates.js'],
         dest: '<%= yeoman.dist %>/angular-datepicker.js',
         options: {
-          banner:'\'use strict\';\n(function(angular){\n',
-          footer:'})(angular);',
+          banner:banner,
+          footer:footer,
           // Replace all 'use strict' statements in the code with a single one at the top
           process: function(src) {
             return src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
