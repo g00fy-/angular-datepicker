@@ -6,6 +6,7 @@ var mountFolder = function (connect, dir) {
 
 
 var banner =
+  '\'use strict\';\n' +
   '(function (root, factory) {\n' +
   'if (typeof define === \'function\' && define.amd) {\n' +
   'define([\'angular\', \'moment\'], function (angular, moment) {\n' +
