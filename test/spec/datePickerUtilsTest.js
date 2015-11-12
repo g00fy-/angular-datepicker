@@ -19,7 +19,7 @@ describe('Test date Picker Utils', function(){
   }));
 
   /*
-   * At no point do we ever need to get minutes, weeks, years, months, or hours for an unknown date. 
+   * At no point do we ever need to get minutes, weeks, years, months, or hours for an unknown date.
    *    * The only date building util function which is called without a specific date is getDaysOfWeek.
    *        * This is called via the update() function in datePicker.js if scope.weekdays is falsy.
    *    * These tests have therefore been removed.
@@ -37,9 +37,9 @@ describe('Test date Picker Utils', function(){
   });
 
   it('get visible weeks provided date', function(){
-    var start = dateBuilder('2014-05-26T00:00:00+00:00'); // monday
-    var end = dateBuilder('2014-07-06T00:00:00+00:00');  // sunday
-    var chosen = ('2014-06-29T19:00:00+00:00'); // sunday
+    var start = dateBuilder('2014-05-25T00:00:00+00:00'); // sunday
+    var end = dateBuilder('2014-07-05T00:00:00+00:00');  // saturday
+    var chosen = dateBuilder('2014-06-29T19:00:00+00:00'); // sunday
     var weeks = utils.getVisibleWeeks(chosen, constants.step);
 
     expect(weeks).toBeDefined();
