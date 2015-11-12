@@ -382,21 +382,18 @@ var tz;
       var startYear = m.year(),
           startMonth = m.month();
 
-      // set date to start of the week
+      //Set date to the first day of the month
       m.date(1);
 
+      //Grab day of the week
       var day = m.day();
 
       if (day === 0) {
-        // day is sunday, let's get back to the previous week
-        m.date(-5);
-      } else {
-        // day is not sunday, let's get back to the start of the week
-        m.date(m.date() - day);
-      }
-      if (m.date() === 1) {
-        // day is monday, let's get back to the previous week
+        //If the first day of the month is a sunday, go back one week.
         m.date(-6);
+      } else {
+        //Otherwise, go back the required number of days to arrive at the previous sunday
+        m.date(1 - day);
       }
 
       var weeks = [];
