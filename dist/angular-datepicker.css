@@ -25,6 +25,12 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.date-picker-date-time {
+  position: absolute;
+}
+.date-range .date-picker-date-time {
+  position: inherit;
+}
 [date-picker-wrapper] {
   position: absolute;
   min-width: 220px;
