@@ -73,7 +73,7 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
 
       attrs.onSetDate = 'dateChange';
 
-      var template = '<div><table><tr><td valign="top">' +
+      var template = '<div><table class="date-range"><tr><td valign="top">' +
                     getTemplate(attrs, pickerIDs[0], 'start', false, scope.end) +
                     '</td><td valign="top">' +
                     getTemplate(attrs, pickerIDs[1], 'end', scope.start, false) +
