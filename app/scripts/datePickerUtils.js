@@ -159,32 +159,47 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     setParams: function (zone) {
       tz = zone;
     },
-    findFunction: function (scope, name) {
-      //Search scope ancestors for a matching function.
-      //Can probably combine this and the below function
-      //into a single search function and two comparison functions
-      //Need to add support for lodash style selectors (eg, 'objectA.objectB.function')
-      var parentScope = scope;
+    scopeSearch: function (scope, name, comparisonFn) {
+      var parentScope = scope,
+          nameArray = name.split('.'),
+          target, i, j = nameArray.length;
+
       do {
-        parentScope = parentScope.$parent;
-        if (angular.isFunction(parentScope[name])) {
-          return parentScope[name];
+        target = parentScope = parentScope.$parent;
+
+        //Loop through provided names.
+        for (i = 0; i < j; i++) {
+          target = target[nameArray[i]];
+          if (!target) {
+            continue;
+          }
         }
+
+        //If we reached the end of the list for this scope,
+        //and something was found, trigger the comparison
+        //function. If the comparison function is happy, return
+        //found result. Otherwise, continue to the next parent scope
+        if (target && comparisonFn(target)) {
+          return target;
+        }
+
       } while (parentScope.$parent);
 
       return false;
     },
+    findFunction: function (scope, name) {
+      //Search scope ancestors for a matching function.
+      return this.scopeSearch(scope, name, function(target) {
+        //Property must also be a function
+        return angular.isFunction(target);
+      });
+    },
     findParam: function (scope, name) {
       //Search scope ancestors for a matching parameter.
-      var parentScope = scope;
-      do {
-        parentScope = parentScope.$parent;
-        if (parentScope[name]) {
-          return parentScope[name];
-        }
-      } while (parentScope.$parent);
-
-      return false;
+      return this.scopeSearch(scope, name, function() {
+        //As long as the property exists, we're good
+        return true;
+      });
     },
     createMoment: function (m) {
       if (tz) {
