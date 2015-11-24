@@ -2,7 +2,7 @@
 
 angular.module('datePicker').factory('datePickerUtils', function () {
   'use strict';
-  var tz;
+  var tz, firstDay;
   var createNewDate = function (year, month, day, hour, minute) {
     var utc = Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0);
     return tz ? moment.tz(utc, tz) : moment(utc);
@@ -34,13 +34,8 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       //Grab day of the week
       var day = m.day();
 
-      if (day === 0) {
-        //If the first day of the month is a sunday, go back one week.
-        m.date(-6);
-      } else {
-        //Otherwise, go back the required number of days to arrive at the previous sunday
-        m.date(1 - day);
-      }
+      //Go back the required number of days to arrive at the previous week start
+      m.date(firstDay - (day + (firstDay >= day ? 6 : -1)));
 
       var weeks = [];
 
@@ -78,7 +73,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       return years;
     },
     getDaysOfWeek: function (m) {
-      m = m ? m : (tz ? moment.tz(tz).day(0) : moment().day(0));
+      m = m ? m : (tz ? moment.tz(tz).day(firstDay) : moment().day(firstDay));
 
       var year = m.year(),
         month = m.month(),
@@ -156,8 +151,9 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     isSameMinutes: function (model, date) {
       return this.isSameHour(model, date) && model.minutes() === date.minutes();
     },
-    setParams: function (zone) {
+    setParams: function (zone, fd) {
       tz = zone;
+      firstDay = fd;
     },
     scopeSearch: function (scope, name, comparisonFn) {
       var parentScope = scope,
