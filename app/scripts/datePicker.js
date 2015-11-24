@@ -20,7 +20,8 @@ Module.constant('datePickerConfig', {
     hours: ['hours', 'isSameHour'],
     minutes: ['minutes', 'isSameMinutes'],
   },
-  step: 5
+  step: 5,
+  firstDay: 0 //Sunday is the first day by default.
 });
 
 //Moment format filter.
@@ -64,8 +65,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return datePickerUtils.getDate(scope, attrs, name);
       }
 
-      datePickerUtils.setParams(attrs.timezone);
-
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
         createMoment = datePickerUtils.createMoment,
@@ -77,7 +76,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         pickerID = element[0].id,
         now = scope.now = createMoment(),
         selected = scope.date = createMoment(scope.model || now),
-        autoclose = attrs.autoClose === 'true';
+        autoclose = attrs.autoClose === 'true',
+        firstDay = attrs.firstDay && attrs.firstDay >= 0 && attrs.firstDay <= 6 ? parseInt(attrs.firstDay, 10) : datePickerConfig.firstDay;
+
+      datePickerUtils.setParams(tz, firstDay);
 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
@@ -141,7 +143,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function update() {
         var view = scope.view;
-        datePickerUtils.setParams(tz);
+        datePickerUtils.setParams(tz, firstDay);
 
         if (scope.model && !arrowClick) {
           scope.date = createMoment(scope.model);
@@ -194,7 +196,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           classes = [], classList = '',
           i, j;
 
-        datePickerUtils.setParams(tz);
+        datePickerUtils.setParams(tz, firstDay);
 
         if (view === 'date') {
           var weeks = scope.weeks, week;
