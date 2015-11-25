@@ -1,5 +1,5 @@
 describe('Test date Picker Utils', function(){
-  var utils, constants, tz = 'UTC';
+  var utils, constants, tz = 'UTC', firstDay = 0 //Sunday;
 
   /**
    * Creates a moment object from an iso8601 string, using a pre-set timezone.
@@ -15,7 +15,7 @@ describe('Test date Picker Utils', function(){
   beforeEach(angular.mock.inject(function($injector){
     utils = $injector.get('datePickerUtils');
     constants = $injector.get('datePickerConfig');
-    utils.setParams(tz);
+    utils.setParams(tz, firstDay);
   }));
 
   /*

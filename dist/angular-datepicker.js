@@ -20,7 +20,8 @@ Module.constant('datePickerConfig', {
     hours: ['hours', 'isSameHour'],
     minutes: ['minutes', 'isSameMinutes'],
   },
-  step: 5
+  step: 5,
+  firstDay: 0 //Sunday is the first day by default.
 });
 
 //Moment format filter.
@@ -64,8 +65,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return datePickerUtils.getDate(scope, attrs, name);
       }
 
-      datePickerUtils.setParams(attrs.timezone);
-
       var arrowClick = false,
         tz = scope.tz = attrs.timezone,
         createMoment = datePickerUtils.createMoment,
@@ -77,7 +76,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         pickerID = element[0].id,
         now = scope.now = createMoment(),
         selected = scope.date = createMoment(scope.model || now),
-        autoclose = attrs.autoClose === 'true';
+        autoclose = attrs.autoClose === 'true',
+        firstDay = attrs.firstDay && attrs.firstDay >= 0 && attrs.firstDay <= 6 ? parseInt(attrs.firstDay, 10) : datePickerConfig.firstDay;
+
+      datePickerUtils.setParams(tz, firstDay);
 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
@@ -141,7 +143,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function update() {
         var view = scope.view;
-        datePickerUtils.setParams(tz);
+        datePickerUtils.setParams(tz, firstDay);
 
         if (scope.model && !arrowClick) {
           scope.date = createMoment(scope.model);
@@ -194,7 +196,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           classes = [], classList = '',
           i, j;
 
-        datePickerUtils.setParams(tz);
+        datePickerUtils.setParams(tz, firstDay);
 
         if (view === 'date') {
           var weeks = scope.weeks, week;
@@ -356,7 +358,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 /* global moment */
 
 angular.module('datePicker').factory('datePickerUtils', function () {
-var tz;
+var tz, firstDay;
   var createNewDate = function (year, month, day, hour, minute) {
     var utc = Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0);
     return tz ? moment.tz(utc, tz) : moment(utc);
@@ -388,13 +390,8 @@ var tz;
       //Grab day of the week
       var day = m.day();
 
-      if (day === 0) {
-        //If the first day of the month is a sunday, go back one week.
-        m.date(-6);
-      } else {
-        //Otherwise, go back the required number of days to arrive at the previous sunday
-        m.date(1 - day);
-      }
+      //Go back the required number of days to arrive at the previous week start
+      m.date(firstDay - (day + (firstDay >= day ? 6 : -1)));
 
       var weeks = [];
 
@@ -432,7 +429,7 @@ var tz;
       return years;
     },
     getDaysOfWeek: function (m) {
-      m = m ? m : (tz ? moment.tz(tz).day(0) : moment().day(0));
+      m = m ? m : (tz ? moment.tz(tz).day(firstDay) : moment().day(firstDay));
 
       var year = m.year(),
         month = m.month(),
@@ -510,35 +507,51 @@ var tz;
     isSameMinutes: function (model, date) {
       return this.isSameHour(model, date) && model.minutes() === date.minutes();
     },
-    setParams: function (zone) {
+    setParams: function (zone, fd) {
       tz = zone;
+      firstDay = fd;
+    },
+    scopeSearch: function (scope, name, comparisonFn) {
+      var parentScope = scope,
+          nameArray = name.split('.'),
+          target, i, j = nameArray.length;
+
+      do {
+        target = parentScope = parentScope.$parent;
+
+        //Loop through provided names.
+        for (i = 0; i < j; i++) {
+          target = target[nameArray[i]];
+          if (!target) {
+            continue;
+          }
+        }
+
+        //If we reached the end of the list for this scope,
+        //and something was found, trigger the comparison
+        //function. If the comparison function is happy, return
+        //found result. Otherwise, continue to the next parent scope
+        if (target && comparisonFn(target)) {
+          return target;
+        }
+
+      } while (parentScope.$parent);
+
+      return false;
     },
     findFunction: function (scope, name) {
       //Search scope ancestors for a matching function.
-      //Can probably combine this and the below function
-      //into a single search function and two comparison functions
-      //Need to add support for lodash style selectors (eg, 'objectA.objectB.function')
-      var parentScope = scope;
-      do {
-        parentScope = parentScope.$parent;
-        if (angular.isFunction(parentScope[name])) {
-          return parentScope[name];
-        }
-      } while (parentScope.$parent);
-
-      return false;
+      return this.scopeSearch(scope, name, function(target) {
+        //Property must also be a function
+        return angular.isFunction(target);
+      });
     },
     findParam: function (scope, name) {
       //Search scope ancestors for a matching parameter.
-      var parentScope = scope;
-      do {
-        parentScope = parentScope.$parent;
-        if (parentScope[name]) {
-          return parentScope[name];
-        }
-      } while (parentScope.$parent);
-
-      return false;
+      return this.scopeSearch(scope, name, function() {
+        //As long as the property exists, we're good
+        return true;
+      });
     },
     createMoment: function (m) {
       if (tz) {
@@ -679,6 +692,7 @@ Module.constant('dateTimeConfig', {
         (attrs.step ? 'step="' + attrs.step + '" ' : '') +
         (attrs.onSetDate ? 'date-change="' + attrs.onSetDate + '" ' : '') +
         (attrs.ngModel ? 'ng-model="' + attrs.ngModel + '" ' : '') +
+        (attrs.firstDay ? 'first-day="' + attrs.firstDay + '" ' : '') +
         (attrs.timezone ? 'timezone="' + attrs.timezone + '" ' : '') +
         'class="date-picker-date-time"></div>';
   },
