@@ -1,7 +1,7 @@
 {
   "name": "angular-datepicker",
   "license": "MIT",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "main": [
     "./dist/angular-datepicker.js",
     "./dist/angular-datepicker.css"
