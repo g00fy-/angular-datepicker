@@ -30,5 +30,9 @@
     "angular-scenario": "1.2.14",
     "angular-bootstrap": "~0.3.0",
     "lodash": "~3.10.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leez79/Photo-Sphere-Viewer"
+  },
 }
