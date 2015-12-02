@@ -81,6 +81,8 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       function parser(viewValue) {
         if(viewValue.length === format.length) {
           return viewValue;
+        } else if (viewValue.length === 0 ) {
+          return null; // value has been cleared, it shouldn't null; not an empty string.
         }
         return undefined;
       }
