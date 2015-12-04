@@ -21,7 +21,7 @@
     "package.json"
   ],
   "dependencies": {
-    "angular": "1.2.14",
+    "angular": ">=1.2.14",
     "moment": "~2.10.6",
     "moment-timezone": "~0.4.1"
   },
