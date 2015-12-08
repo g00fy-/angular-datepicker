@@ -4,7 +4,7 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('month')" ng-bind="date|date:'yyyy MMMM'"></th>
+        <th colspan="5" class="switch" ng-click="setView('month')" ng-bind="getUnformattedDateHeader()|date:'yyyy MMMM'"></th>
         <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       <tr>
@@ -47,7 +47,7 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('year')" ng-bind="date|date:'yyyy'"></th>
+        <th colspan="5" class="switch" ng-click="setView('year')" ng-bind="getUnformattedDateHeader()|date:'yyyy'"></th>
         <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       </thead>
@@ -68,7 +68,7 @@
       <thead>
       <tr>
         <th ng-click="prev(24)">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('date')" ng-bind="date|date:'dd MMMM yyyy'"></th>
+        <th colspan="5" class="switch" ng-click="setView('date')" ng-bind="getUnformattedDateHeader()|date:'dd MMMM yyyy'"></th>
         <th ng-click="next(24)">&rsaquo;</i></th>
       </tr>
       </thead>
@@ -88,7 +88,7 @@
       <thead>
       <tr>
         <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('hours')" ng-bind="date|date:'dd MMMM yyyy'"></th>
+        <th colspan="5" class="switch" ng-click="setView('hours')" ng-bind="getUnformattedDateHeader()|date:'dd MMMM yyyy'"></th>
         <th ng-click="next()">&rsaquo;</i></th>
       </tr>
       </thead>

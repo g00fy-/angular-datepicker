@@ -50,6 +50,15 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
       scope.watchDirectChanges = attrs.watchDirectChanges !== undefined;
       scope.callbackOnSetDate = attrs.onSetDate ? _.get(scope.$parent, attrs.onSetDate) : undefined;
 
+      // for some reason having a similar check to this in the template doesn't work properly
+      scope.getUnformattedDateHeader = function() {
+        var dateToFormat = scope.now;
+        if ( scope.date && angular.isDate(scope.date) ) {
+          dateToFormat = scope.date;
+        }
+        return dateToFormat;
+      };
+
       var step = parseInt(attrs.step || datePickerConfig.step, 10);
       var partial = !!attrs.partial;
 
