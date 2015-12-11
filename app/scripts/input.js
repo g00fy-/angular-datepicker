@@ -225,8 +225,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         // move picker below input element
 
         if (position === 'absolute') {
-          var pos = angular.extend(element.offset(), { height: element[0].offsetHeight });
-          picker.css({ top: pos.top + pos.height, left: pos.left, display: 'block', position: position });
+          var pos = element[0].getBoundingClientRect();
+          // Support IE8
+          var height = pos.height || element[0].offsetHeight;
+          picker.css({ top: (pos.top + height) + 'px', left: pos.left + 'px', display: 'block', position: position });
           body.append(picker);
         } else {
           // relative
