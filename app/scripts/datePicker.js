@@ -20,8 +20,7 @@ Module.constant('datePickerConfig', {
     hours: ['hours', 'isSameHour'],
     minutes: ['minutes', 'isSameMinutes'],
   },
-  step: 5,
-  firstDay: 0 //Sunday is the first day by default.
+  step: 5
 });
 
 //Moment format filter.
