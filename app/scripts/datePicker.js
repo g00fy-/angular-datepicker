@@ -20,8 +20,7 @@ Module.constant('datePickerConfig', {
     hours: ['hours', 'isSameHour'],
     minutes: ['minutes', 'isSameMinutes'],
   },
-  step: 5,
-  firstDay: 0 //Sunday is the first day by default.
+  step: 5
 });
 
 //Moment format filter.
@@ -77,7 +76,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         now = scope.now = createMoment(),
         selected = scope.date = createMoment(scope.model || now),
         autoclose = attrs.autoClose === 'true',
-        firstDay = attrs.firstDay && attrs.firstDay >= 0 && attrs.firstDay <= 6 ? parseInt(attrs.firstDay, 10) : datePickerConfig.firstDay;
+        // Either gets the 1st day from the attributes, or asks moment.js to give it to us as it is localized.
+        firstDay = attrs.firstDay && attrs.firstDay >= 0 && attrs.firstDay <= 6 ? parseInt(attrs.firstDay, 10) : moment().weekday(0).day();
 
       datePickerUtils.setParams(tz, firstDay);
 
