@@ -1,11 +1,11 @@
-'use strict';
-(function(angular){
-(function (global, factory) {
-var fnc;
-  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
-        (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
-        factory(global.angular, global.moment);
-}(this, function (angular, moment) {
+(function (global, factory) {'use strict';var fnc;fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :(typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :factory(global.angular, global.moment);}(this, function (angular, moment) {
+//(function (global, factory) {
+//  'use strict';
+//  var fnc;
+//  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
+//        (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
+//        factory(global.angular, global.moment);
+//}(this, function (angular, moment) {
 var Module = angular.module('datePicker', []);
 
   Module.constant('datePickerConfig', {
@@ -366,14 +366,15 @@ var Module = angular.module('datePicker', []);
       }
     };
   }]);
-}));
+//}));
 
-(function (global, factory) {
-var fnc;
-  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
-    (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
-      factory(global.angular, global.moment);
-}(this, function (angular, moment) {
+//(function (global, factory) {
+//  'use strict';
+//  var fnc;
+//  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
+//    (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
+//      factory(global.angular, global.moment);
+//}(this, function (angular, moment) {
 angular.module('datePicker').factory('datePickerUtils', function () {
     var tz, firstDay;
     var createNewDate = function (year, month, day, hour, minute) {
@@ -602,14 +603,15 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       }
     };
   });
-}));
+//}));
 
-(function (global, factory) {
-var fnc;
-  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
-    (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
-      factory(global.angular, global.moment);
-}(this, function (angular, moment) {
+//(function (global, factory) {
+//  'use strict';
+//  var fnc;
+//  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
+//    (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
+//      factory(global.angular, global.moment);
+//}(this, function (angular, moment) {
 var Module = angular.module('datePicker');
 
   Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', function ($compile, datePickerUtils, dateTimeConfig) {
@@ -693,14 +695,15 @@ var Module = angular.module('datePicker');
       }
     };
   }]);
-}));
+//}));
 
-(function (global, factory) {
-var fnc;
-  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
-    (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
-      factory(global.angular, global.moment);
-}(this, function (angular, moment) {
+//(function (global, factory) {
+//  'use strict';
+//  var fnc;
+//  fnc = (typeof exports === 'object' && typeof module !== 'undefined') ? module.exports = factory(require('angular'), require('moment')) :
+//    (typeof define === 'function' && define.amd) ? define(['angular', 'moment'], factory) :
+//      factory(global.angular, global.moment);
+//}(this, function (angular, moment) {
 var PRISTINE_CLASS = 'ng-pristine',
     DIRTY_CLASS = 'ng-dirty';
 
@@ -950,7 +953,7 @@ var PRISTINE_CLASS = 'ng-pristine',
       }
     };
   }]);
-}));
+//}));
 
 angular.module('datePicker').run(['$templateCache', function($templateCache) {
 $templateCache.put('templates/datepicker.html',
@@ -1170,4 +1173,4 @@ $templateCache.put('templates/datepicker.html',
   );
 
 }]);
-})(angular);
+}));
