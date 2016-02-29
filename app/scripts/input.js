@@ -200,10 +200,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
 
         //If the picker has already been shown before then we shouldn't be binding to events, as these events are already bound to in this scope.
         if (!shownOnce) {
-          scope.$on('setDate', function (event, date, view) {
+          scope.$on('setDate', function (event, date, view, explicit) {
             updateInput(event);
             if (dateChange) {
-              dateChange(attrs.ngModel, date);
+              dateChange(attrs.ngModel, date, explicit);
             }
             if (dismiss && views[views.length - 1] === view) {
               clear();
