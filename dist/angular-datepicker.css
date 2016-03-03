@@ -211,6 +211,10 @@
   height: 54px;
   line-height: 54px;
 }
+[date-picker] [ng-switch-when="hours"] span.am-pm,
+[date-picker] [ng-switch-when="minutes"] span.am-pm {
+  width: 45%;
+}
 [date-picker] [ng-switch-when="date"] td {
   padding: 0;
 }
