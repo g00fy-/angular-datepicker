@@ -1,6 +1,6 @@
 'use strict';
 angular.module('datePicker').factory('datePickerUtils', function () {
-  var tz, firstDay;
+  var tz, firstDay, isAmPmFormat;
   var createNewDate = function (year, month, day, hour, minute) {
     var utc = Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0);
     return tz ? moment.tz(utc, tz) : moment(utc);
@@ -125,7 +125,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         }
         hours.push(pushedDate);
       }
-
+      hours.isAmPmFormat = isAmPmFormat;
       return hours;
     },
     isAfter: function (model, date) {
@@ -149,9 +149,10 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     isSameMinutes: function (model, date) {
       return this.isSameHour(model, date) && model.minutes() === date.minutes();
     },
-    setParams: function (zone, fd) {
-      tz = zone;
-      firstDay = fd;
+    setParams: function (params) {
+      tz = angular.isDefined(params.zone) ? params.zone : tz;
+      firstDay = angular.isDefined(params.fd) ? params.fd : firstDay;
+      isAmPmFormat = angular.isDefined(params.isAmPmFormat) ? params.isAmPmFormat : isAmPmFormat;
     },
     scopeSearch: function (scope, name, comparisonFn) {
       var parentScope = scope,
