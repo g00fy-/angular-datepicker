@@ -80,8 +80,9 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       }
 
       function parser(viewValue) {
-        if (viewValue.length === format.length) {
-          return viewValue;
+        var parsed = moment(viewValue, format);
+        if (parsed.isValid()) {
+          return parsed;
         }
         return undefined;
       }
