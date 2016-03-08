@@ -221,9 +221,19 @@ angular.module('datePicker').factory('datePickerUtils', function () {
 
       return result;
     },
+    //Checks if an event targeted at a specific picker, via either a string name, or an array of strings.
     eventIsForPicker: function (targetIDs, pickerID) {
-      //Checks if an event targeted at a specific picker, via either a string name, or an array of strings.
-      return (angular.isArray(targetIDs) && targetIDs.indexOf(pickerID) > -1 || targetIDs === pickerID);
+      function matches(id) {
+        if (id instanceof RegExp) {
+          return id.test(pickerID);
+        }
+        return id === pickerID;
+      }
+
+      if (angular.isArray(targetIDs)) {
+        return targetIDs.some(matches);
+      }
+      return matches(targetIDs);
     }
   };
 });
