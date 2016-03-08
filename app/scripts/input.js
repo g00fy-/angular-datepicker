@@ -69,6 +69,8 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         shownOnce = false,
         template;
 
+      datePickerUtils.setParams({ isAmPmFormat: format.match(/[aA]/) });
+
       if (index === -1) {
         views.splice(index, 1);
       }

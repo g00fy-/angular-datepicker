@@ -83,7 +83,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         isNow,
         inValidRange;
 
-      datePickerUtils.setParams(tz, firstDay);
+      datePickerUtils.setParams({ zone: tz, fd: firstDay });
 
       if (!scope.model) {
         selected.minute(Math.ceil(selected.minute() / step) * step).second(0);
@@ -147,7 +147,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       function update() {
         var view = scope.view;
-        datePickerUtils.setParams(tz, firstDay);
+        datePickerUtils.setParams({ zone: tz, fd: firstDay });
 
         if (scope.model && !arrowClick) {
           scope.date = createMoment(scope.model);
@@ -169,6 +169,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             break;
           case 'hours':
             scope.hours = datePickerUtils.getVisibleHours(date);
+            scope.hoursFormat = (scope.hours.isAmPmFormat ? 'hh:mm a' : 'HH:mm');
             break;
           case 'minutes':
             scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
@@ -200,7 +201,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           classes = [], classList = '',
           i, j;
 
-        datePickerUtils.setParams(tz, firstDay);
+        datePickerUtils.setParams({ zone: tz, fd: firstDay });
 
         if (view === 'date') {
           var weeks = scope.weeks, week;

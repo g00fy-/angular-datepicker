@@ -15,7 +15,7 @@ describe('Test date Picker Utils', function(){
   beforeEach(angular.mock.inject(function($injector){
     utils = $injector.get('datePickerUtils');
     constants = $injector.get('datePickerConfig');
-    utils.setParams(tz, firstDay);
+    utils.setParams({zone: tz, fd: firstDay});
   }));
 
   /*

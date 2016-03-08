@@ -54,7 +54,7 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
         });
       }
 
-      datePickerUtils.setParams(attrs.timezone);
+      datePickerUtils.setParams({zone: attrs.timezone});
 
       scope.start = createMoment(scope.start);
       scope.end = createMoment(scope.end);

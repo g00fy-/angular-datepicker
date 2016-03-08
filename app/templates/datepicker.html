@@ -77,7 +77,7 @@
         <td colspan="7">
           <span ng-repeat="hour in hours"
                 ng-class="classes[$index]"
-                ng-click="selectDate(hour)" ng-bind="hour|mFormat:'HH:mm':tz"></span>
+                ng-click="selectDate(hour)" ng-bind="hour|mFormat:hoursFormat:tz"></span>
         </td>
       </tr>
       </tbody>
@@ -98,7 +98,7 @@
           <span ng-repeat="minute in minutes"
                 ng-class="classes[$index]"
                 ng-click="selectDate(minute)"
-                ng-bind="minute|mFormat:'HH:mm':tz"></span>
+                ng-bind="minute|mFormat:'hoursFormat:tz"></span>
         </td>
       </tr>
       </tbody>
