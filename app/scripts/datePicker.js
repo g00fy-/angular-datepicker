@@ -344,6 +344,10 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
               attrs.maxView = data.maxView;
               updateViews = true;
             }
+            if (angular.isDefined(data.timezone)) {
+              tz = scope.tz = data.timezone;
+              updateViewData = true;
+            }
             attrs.view = data.view || attrs.view;
 
             if (updateViews) {
