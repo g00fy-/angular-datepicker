@@ -41,7 +41,7 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
+Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', '$interpolate', function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils, $interpolate) {
   var body = $document.find('body');
   var dateFilter = $filter('mFormat');
 
@@ -56,7 +56,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         index = views.indexOf(view),
         dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose,
         picker = null,
-        pickerID = element[0].id,
+        pickerID = $interpolate(element[0].id)(scope),
         position = attrs.position || dateTimeConfig.position,
         container = null,
         minDate = null,
