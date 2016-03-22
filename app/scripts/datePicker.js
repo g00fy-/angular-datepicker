@@ -265,7 +265,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         date = clipDate(date);
         if (date) {
           scope.date = date;
-          setDate(date);
           arrowClick = true;
           update();
         }

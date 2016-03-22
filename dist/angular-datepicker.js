@@ -272,7 +272,6 @@ var Module = angular.module('datePicker', []);
           date = clipDate(date);
           if (date) {
             scope.date = date;
-            setDate(date);
             arrowClick = true;
             update();
           }
@@ -916,7 +915,7 @@ var PRISTINE_CLASS = 'ng-pristine',
             });
 
             scope.$on('hidePicker', function () {
-              element.triggerHandler('blur');
+              element[0].blur();
             });
 
             scope.$on('$destroy', clear);
