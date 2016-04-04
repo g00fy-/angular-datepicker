@@ -948,6 +948,7 @@ var PRISTINE_CLASS = 'ng-pristine',
         }
 
         element.bind('focus', showPicker);
+        element.bind('click', showPicker);
         element.bind('blur', clear);
         getTemplate();
       }
