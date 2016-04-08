@@ -32,6 +32,7 @@
     "karma-chrome-launcher": "^0.1.12",
     "karma-firefox-launcher": "^0.1.6",
     "karma-jasmine": "^0.3.5",
+    "karma-ng-html2js-preprocessor": "^0.2.1",
     "karma-phantomjs-launcher": "0.2.0",
     "karma-script-launcher": "^0.1.0",
     "load-grunt-tasks": "3.2.0",
