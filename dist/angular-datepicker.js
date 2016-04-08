@@ -32,7 +32,7 @@ var Module = angular.module('datePicker', []);
   Module.filter('mFormat', function () {
     return function (m, format, tz) {
       if (!(moment.isMoment(m))) {
-        return moment(m).format(format);
+        return (m) ? moment(m).format(format) : '';
       }
       return tz ? moment.tz(m, tz).format(format) : m.format(format);
     };
@@ -788,7 +788,7 @@ var PRISTINE_CLASS = 'ng-pristine',
           if (viewValue.length === format.length) {
             return viewValue;
           }
-          return undefined;
+          return (viewValue.length === 0) ? viewValue : undefined;
         }
 
         function setMin(date) {
@@ -948,6 +948,7 @@ var PRISTINE_CLASS = 'ng-pristine',
         }
 
         element.bind('focus', showPicker);
+        element.bind('click', showPicker);
         element.bind('blur', clear);
         getTemplate();
       }
