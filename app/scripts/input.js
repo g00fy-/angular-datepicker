@@ -76,15 +76,19 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
       views.unshift(view);
 
       function formatter(value) {
-        return dateFilter(value, format, timezone);
+        if (value) {
+          return dateFilter(value, format, timezone);
+        }
       }
 
       function parser(viewValue) {
+        if (!viewValue) {
+          return '';
+        }
         var parsed = moment(viewValue, format);
         if (parsed.isValid()) {
           return parsed;
         }
-        return undefined;
       }
 
       function setMin(date) {
