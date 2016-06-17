@@ -56,7 +56,7 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         index = views.indexOf(view),
         dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose,
         picker = null,
-        pickerID = element[0].id,
+        pickerID = attrs.id,
         position = attrs.position || dateTimeConfig.position,
         container = null,
         minDate = null,
