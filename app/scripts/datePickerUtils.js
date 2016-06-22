@@ -114,14 +114,16 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         month = m.month(),
         day = m.date(),
         hours = [],
-        hour, pushedDate, actualOffset,
-        offset = m.utcOffset() / 60;
+        hour, pushedDate, actualOffset, actualOffsetMinute,
+        offsetHour = Math.floor(m.utcOffset() / 60),
+        offsetMinute = m.utcOffset() % 60;
 
-      for (hour = 0; hour < 24; hour++) {
-        pushedDate = createNewDate(year, month, day, hour - offset, 0, false);
-        actualOffset = pushedDate.utcOffset() / 60;
-        if (actualOffset !== offset) {
-          pushedDate = createNewDate(year, month, day, hour - actualOffset, 0, false);
+      for (hour = 0 ; hour < 24 ; hour++) {
+        pushedDate = createNewDate(year, month, day, hour - offsetHour, -offsetMinute, false);
+        actualOffset = Math.floor(pushedDate.utcOffset() / 60);
+        actualOffsetMinute = pushedDate.utcOffset() % 60;
+        if (actualOffset !== offsetHour && actualOffsetMinute !== offsetMinute) {
+          pushedDate = createNewDate(year, month, day, hour - actualOffset, -offsetMinute, false);
         }
         hours.push(pushedDate);
       }
