@@ -38,7 +38,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       var weeks = [];
 
       while (weeks.length < 6) {
-        if (m.year() === startYear && m.month() > startMonth) {
+        if ((m.year()*100 + m.month()) > (startYear*100 + startMonth)) {
           break;
         }
         weeks.push(this.getDaysOfWeek(m));
