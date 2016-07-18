@@ -180,6 +180,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
               if (angular.isDefined(data.maxView)) {
                 attrs.maxView = data.maxView;
               }
+              if (angular.isDefined(data.timezone)) {
+                timezone = attrs.timezone = data.timezone;
+                validateRequired = true;
+              }
               attrs.view = data.view || attrs.view;
 
               if (validateRequired) {

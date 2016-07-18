@@ -116,6 +116,7 @@ This fork of angular-datepicker contains several features.
   * `format`: Format string used to display dates on the input field. Set to default value if this value is falsy. 
     * See: [format options](http://momentjs.com/docs/#/displaying/format/)
 	* This option cannot be used on the `date-picker` directive directly, it must be used on a `date-time` input field.
+  * `timezone`: Time zone to use
 * The possible for the `view`, `minView` and `maxView` fields are:
   * `year`, `month`, `date`, `hours`, `minutes`.
 * The event is targeted at specific pickers using their `ID` attributes.
