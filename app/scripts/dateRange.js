@@ -17,14 +17,16 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
   return {
     scope: {
       start: '=',
-      end: '='
+      end: '=',
+      minDate: '=',
+      maxDate: '='
     },
     link: function (scope, element, attrs) {
       var dateChange = null,
-        pickerRangeID = element[0].id,
-        pickerIDs = [randomName(), randomName()],
-        createMoment = datePickerUtils.createMoment,
-        eventIsForPicker = datePickerUtils.eventIsForPicker;
+          pickerRangeID = element[0].id,
+          pickerIDs = [randomName(), randomName()],
+          createMoment = datePickerUtils.createMoment,
+          eventIsForPicker = datePickerUtils.eventIsForPicker;
 
       scope.dateChange = function (modelName, newDate) {
         //Notify user if callback exists.
@@ -72,10 +74,10 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
       attrs.onSetDate = 'dateChange';
 
       var template = '<div><table class="date-range"><tr><td valign="top">' +
-        getTemplate(attrs, pickerIDs[0], 'start', false, scope.end) +
-        '</td><td valign="top">' +
-        getTemplate(attrs, pickerIDs[1], 'end', scope.start, false) +
-        '</td></tr></table></div>';
+                    getTemplate(attrs, pickerIDs[0], 'start', scope.minDate ? scope.minDate : false, scope.end) +
+                    '</td><td valign="top">' +
+                    getTemplate(attrs, pickerIDs[1], 'end', scope.start, scope.maxDate ? scope.maxDate : false) +
+                  '</td></tr></table></div>';
 
       var picker = $compile(template)(scope);
       element.append(picker);
