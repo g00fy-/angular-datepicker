@@ -70,7 +70,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         partial = !!attrs.partial,
         minDate = getDate('minDate'),
         maxDate = getDate('maxDate'),
-        pickerID = element[0].id,
         now = scope.now = createMoment(),
         selected = scope.date = createMoment(scope.model || now),
         autoclose = attrs.autoClose === 'true',
@@ -321,40 +320,38 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return scope.next(-delta || -1);
       };
 
-      if (pickerID) {
-        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if (eventIsForPicker(pickerIDs, pickerID)) {
-            var updateViews = false, updateViewData = false;
+      scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+        if (eventIsForPicker(pickerIDs, element[0].id)) {
+          var updateViews = false, updateViewData = false;
 
-            if (angular.isDefined(data.minDate)) {
-              minDate = data.minDate ? data.minDate : false;
-              updateViewData = true;
-            }
-            if (angular.isDefined(data.maxDate)) {
-              maxDate = data.maxDate ? data.maxDate : false;
-              updateViewData = true;
-            }
-
-            if (angular.isDefined(data.minView)) {
-              attrs.minView = data.minView;
-              updateViews = true;
-            }
-            if (angular.isDefined(data.maxView)) {
-              attrs.maxView = data.maxView;
-              updateViews = true;
-            }
-            attrs.view = data.view || attrs.view;
-
-            if (updateViews) {
-              prepareViews();
-            }
-
-            if (updateViewData) {
-              update();
-            }
+          if (angular.isDefined(data.minDate)) {
+            minDate = data.minDate ? data.minDate : false;
+            updateViewData = true;
           }
-        });
-      }
+          if (angular.isDefined(data.maxDate)) {
+            maxDate = data.maxDate ? data.maxDate : false;
+            updateViewData = true;
+          }
+
+          if (angular.isDefined(data.minView)) {
+            attrs.minView = data.minView;
+            updateViews = true;
+          }
+          if (angular.isDefined(data.maxView)) {
+            attrs.maxView = data.maxView;
+            updateViews = true;
+          }
+          attrs.view = data.view || attrs.view;
+
+          if (updateViews) {
+            prepareViews();
+          }
+
+          if (updateViewData) {
+            update();
+          }
+        }
+      });
     }
   };
 }]);
