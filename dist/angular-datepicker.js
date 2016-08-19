@@ -70,7 +70,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         partial = !!attrs.partial,
         minDate = getDate('minDate'),
         maxDate = getDate('maxDate'),
-        pickerID = element[0].id,
         now = scope.now = createMoment(),
         selected = scope.date = createMoment(scope.model || now),
         autoclose = attrs.autoClose === 'true',
@@ -321,40 +320,38 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return scope.next(-delta || -1);
       };
 
-      if (pickerID) {
-        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if (eventIsForPicker(pickerIDs, pickerID)) {
-            var updateViews = false, updateViewData = false;
+      scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+        if (eventIsForPicker(pickerIDs, element[0].id)) {
+          var updateViews = false, updateViewData = false;
 
-            if (angular.isDefined(data.minDate)) {
-              minDate = data.minDate ? data.minDate : false;
-              updateViewData = true;
-            }
-            if (angular.isDefined(data.maxDate)) {
-              maxDate = data.maxDate ? data.maxDate : false;
-              updateViewData = true;
-            }
-
-            if (angular.isDefined(data.minView)) {
-              attrs.minView = data.minView;
-              updateViews = true;
-            }
-            if (angular.isDefined(data.maxView)) {
-              attrs.maxView = data.maxView;
-              updateViews = true;
-            }
-            attrs.view = data.view || attrs.view;
-
-            if (updateViews) {
-              prepareViews();
-            }
-
-            if (updateViewData) {
-              update();
-            }
+          if (angular.isDefined(data.minDate)) {
+            minDate = data.minDate ? data.minDate : false;
+            updateViewData = true;
           }
-        });
-      }
+          if (angular.isDefined(data.maxDate)) {
+            maxDate = data.maxDate ? data.maxDate : false;
+            updateViewData = true;
+          }
+
+          if (angular.isDefined(data.minView)) {
+            attrs.minView = data.minView;
+            updateViews = true;
+          }
+          if (angular.isDefined(data.maxView)) {
+            attrs.maxView = data.maxView;
+            updateViews = true;
+          }
+          attrs.view = data.view || attrs.view;
+
+          if (updateViews) {
+            prepareViews();
+          }
+
+          if (updateViewData) {
+            update();
+          }
+        }
+      });
     }
   };
 }]);
@@ -739,7 +736,6 @@ Module.directive('dateTime', ['$compile', '$timeout', '$document', '$filter', 'd
         index = views.indexOf(view),
         dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose,
         picker = null,
-        pickerID = element[0].id,
         position = attrs.position || dateTimeConfig.position,
         container = null,
         minDate = null,
@@ -839,44 +835,42 @@ Module.directive('dateTime', ['$compile', '$timeout', '$document', '$filter', 'd
         }
       }
 
-      if (pickerID) {
-        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if (eventIsForPicker(pickerIDs, pickerID)) {
-            if (picker) {
-              //Need to handle situation where the data changed but the picker is currently open.
-              //To handle this, we can create the inner picker with a random ID, then forward
-              //any events received to it.
-            } else {
-              var validateRequired = false;
-              if (angular.isDefined(data.minDate)) {
-                setMin(data.minDate);
-                validateRequired = true;
-              }
-              if (angular.isDefined(data.maxDate)) {
-                setMax(data.maxDate);
-                validateRequired = true;
-              }
-
-              if (angular.isDefined(data.minView)) {
-                attrs.minView = data.minView;
-              }
-              if (angular.isDefined(data.maxView)) {
-                attrs.maxView = data.maxView;
-              }
-              attrs.view = data.view || attrs.view;
-
-              if (validateRequired) {
-                ngModel.$validate();
-              }
-              if (angular.isDefined(data.format)) {
-                format = attrs.format = data.format || dateTimeConfig.format;
-                ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
-              }
-              getTemplate();
+      scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+        if (eventIsForPicker(pickerIDs, element[0].id)) {
+          if (picker) {
+            //Need to handle situation where the data changed but the picker is currently open.
+            //To handle this, we can create the inner picker with a random ID, then forward
+            //any events received to it.
+          } else {
+            var validateRequired = false;
+            if (angular.isDefined(data.minDate)) {
+              setMin(data.minDate);
+              validateRequired = true;
             }
+            if (angular.isDefined(data.maxDate)) {
+              setMax(data.maxDate);
+              validateRequired = true;
+            }
+
+            if (angular.isDefined(data.minView)) {
+              attrs.minView = data.minView;
+            }
+            if (angular.isDefined(data.maxView)) {
+              attrs.maxView = data.maxView;
+            }
+            attrs.view = data.view || attrs.view;
+
+            if (validateRequired) {
+              ngModel.$validate();
+            }
+            if (angular.isDefined(data.format)) {
+              format = attrs.format = data.format || dateTimeConfig.format;
+              ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
+            }
+            getTemplate();
           }
-        });
-      }
+        }
+      });
 
       function showPicker() {
         if (picker) {
