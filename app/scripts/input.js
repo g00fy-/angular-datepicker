@@ -41,7 +41,7 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
+Module.directive('dateTime', ['$compile', '$timeout', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $timeout, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
   var body = $document.find('body');
   var dateFilter = $filter('mFormat');
 
@@ -216,7 +216,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           });
 
           scope.$on('hidePicker', function () {
-            element[0].blur();
+            element.triggerHandler('blur');
+              $timeout(function() {
+              element[0].blur();
+            }, 0);
           });
 
           scope.$on('$destroy', clear);
