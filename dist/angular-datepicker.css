@@ -67,7 +67,8 @@
 [date-range] [date-picker] .after.before:active,
 [date-range] [date-picker] .after.before.active,
 [date-range] [date-picker] .after.before.disabled,
-[date-range] [date-picker] .after.before[disabled] {
+[date-range] [date-picker] .after.before[disabled],
+[date-range] [date-picker] .after.before.muted {
   color: #ffffff;
   background-color: #2f6ab4;
   *background-color: #2a5ea0;
@@ -126,7 +127,9 @@
   background: #eeeeee;
 }
 [date-picker] span.disabled,
-[date-picker] span.disabled:hover {
+[date-picker] span.disabled:hover,
+[date-picker] span.muted,
+[date-picker] span.muted:hover {
   background: none;
   color: #999999;
   cursor: default;
@@ -159,7 +162,9 @@
 [date-picker] .active.disabled,
 [date-picker] .now.disabled,
 [date-picker] .active[disabled],
-[date-picker] .now[disabled] {
+[date-picker] .now[disabled],
+[date-picker] .active.muted,
+[date-picker] .now.muted {
   color: #ffffff;
   background-color: #0044cc;
   *background-color: #003bb3;
@@ -191,7 +196,8 @@
 [date-picker] .now:active,
 [date-picker] .now.active,
 [date-picker] .now.disabled,
-[date-picker] .now[disabled] {
+[date-picker] .now[disabled],
+[date-picker] .now.muted {
   color: #ffffff;
   background-color: #ee905b;
   *background-color: #ec8044;
@@ -200,7 +206,8 @@
 [date-picker] .now.active {
   background-color: #e9712d \9;
 }
-[date-picker] .disabled {
+[date-picker] .disabled,
+[date-picker] .muted {
   background: none;
   color: #999999 !important;
   cursor: default;

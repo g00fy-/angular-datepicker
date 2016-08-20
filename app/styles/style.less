@@ -73,7 +73,7 @@
 			&:hover {
 				background: @grayLighter;
 			}
-			&.disabled, &.disabled:hover {
+			&.disabled, &.disabled:hover, &.muted, &.muted:hover {
 				background:none;
 				color: @grayLight;
 				cursor: default;
@@ -91,7 +91,7 @@
     .buttonBackground(@btnDangerBackground, spin(@btnDangerBackground, 20));
   }
 
-  .disabled {
+  .disabled, .muted {
     background: none;
     color: #999999 !important;
     cursor: default;

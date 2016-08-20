@@ -215,8 +215,11 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
                 classList += ' now';
               }
               //if (week[j].month() !== date.month()) classList += ' disabled';
-              if (week[j].month() !== date.month() || !inValidRange(week[j])) {
+              if (!inValidRange(week[j])) {
                 classList += ' disabled';
+              }
+              if (week[j].month() !== date.month()) {
+                classList += ' muted';
               }
               classes[i].push(classList);
             }
