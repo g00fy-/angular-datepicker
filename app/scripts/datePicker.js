@@ -207,7 +207,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             classes.push([]);
             for (j = 0; j < week.length; j++) {
               classList = '';
-              if (datePickerUtils.isSameDay(ngModel.$viewValue, week[j])) {
+              if (datePickerUtils.isSameDay(date, week[j])) {
                 classList += 'active';
               }
               if (isNow(week[j], view)) {
@@ -217,7 +217,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
               if (!inValidRange(week[j])) {
                 classList += ' disabled';
               }
-              if (!datePickerUtils.isSameMonth(ngModel.$viewValue, week[j])) {
+              if (!datePickerUtils.isSameMonth(date, week[j])) {
                 classList += ' muted';
               }
               classes[i].push(classList);
@@ -230,7 +230,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
           for (i = 0; i < dates.length; i++) {
             classList = '';
-            if (datePickerUtils[compareFunc](ngModel.$viewValue, dates[i])) {
+            if (datePickerUtils[compareFunc](date, dates[i])) {
               classList += 'active';
             }
             if (isNow(dates[i], view)) {
