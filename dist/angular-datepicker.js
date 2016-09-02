@@ -195,7 +195,6 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       prepareViewData = function () {
         var view = scope.view,
-          date = scope.date,
           classes = [], classList = '',
           i, j;
 
@@ -208,7 +207,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
             classes.push([]);
             for (j = 0; j < week.length; j++) {
               classList = '';
-              if (datePickerUtils.isSameDay(date, week[j])) {
+              if (datePickerUtils.isSameDay(ngModel.$viewValue, week[j])) {
                 classList += 'active';
               }
               if (isNow(week[j], view)) {
@@ -218,7 +217,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
               if (!inValidRange(week[j])) {
                 classList += ' disabled';
               }
-              if (week[j].month() !== date.month()) {
+              if (!datePickerUtils.isSameMonth(ngModel.$viewValue, week[j])) {
                 classList += ' muted';
               }
               classes[i].push(classList);
@@ -231,7 +230,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
           for (i = 0; i < dates.length; i++) {
             classList = '';
-            if (datePickerUtils[compareFunc](date, dates[i])) {
+            if (datePickerUtils[compareFunc](ngModel.$viewValue, dates[i])) {
               classList += 'active';
             }
             if (isNow(dates[i], view)) {
@@ -949,17 +948,17 @@ $templateCache.put('templates/datepicker.html',
     "\n" +
     "      <tr>\r" +
     "\n" +
-    "        <th ng-click=\"prev()\">&lsaquo;</th>\r" +
+    "        <th><span ng-click=\"prev()\">&lsaquo;</span></th>\r" +
     "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('month')\" ng-bind=\"date|mFormat:'YYYY MMMM':tz\"></th>\r" +
+    "        <th colspan=\"5\" class=\"switch\"><span ng-bind=\"date|mFormat:'MMMM YYYY':tz\" ng-click=\"setView('month')\"></span></th>\r" +
     "\n" +
-    "        <th ng-click=\"next()\">&rsaquo;</i></th>\r" +
+    "        <th><span ng-click=\"next()\">&rsaquo;</span></th>\r" +
     "\n" +
     "      </tr>\r" +
     "\n" +
     "      <tr>\r" +
     "\n" +
-    "        <th ng-repeat=\"day in weekdays\" style=\"overflow: hidden\" ng-bind=\"day|mFormat:'ddd':tz\"></th>\r" +
+    "        <th class=\"weekday\" ng-repeat=\"day in weekdays\" style=\"overflow: hidden\"><span ng-bind=\"day|mFormat:'ddd':tz\"></span></th>\r" +
     "\n" +
     "      </tr>\r" +
     "\n" +
@@ -995,11 +994,11 @@ $templateCache.put('templates/datepicker.html',
     "\n" +
     "      <tr>\r" +
     "\n" +
-    "        <th ng-click=\"prev(10)\">&lsaquo;</th>\r" +
+    "        <th><span ng-click=\"prev(10)\">&lsaquo;</span></th>\r" +
     "\n" +
-    "        <th colspan=\"5\" class=\"switch\"ng-bind=\"years[0].year()+' - '+years[years.length-1].year()\"></th>\r" +
+    "        <th colspan=\"5\" class=\"switch\"><span ng-bind=\"years[0].year()+' - '+years[years.length-1].year()\"></span></th>\r" +
     "\n" +
-    "        <th ng-click=\"next(10)\">&rsaquo;</i></th>\r" +
+    "        <th><span ng-click=\"next(10)\">&rsaquo;</span></th>\r" +
     "\n" +
     "      </tr>\r" +
     "\n" +
@@ -1035,11 +1034,11 @@ $templateCache.put('templates/datepicker.html',
     "\n" +
     "      <tr>\r" +
     "\n" +
-    "        <th ng-click=\"prev()\">&lsaquo;</th>\r" +
+    "        <th><span ng-click=\"prev()\">&lsaquo;</span></th>\r" +
     "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('year')\" ng-bind=\"date|mFormat:'YYYY':tz\"></th>\r" +
+    "        <th colspan=\"5\" class=\"switch\"><span ng-click=\"setView('year')\" ng-bind=\"date|mFormat:'YYYY':tz\"></span></th>\r" +
     "\n" +
-    "        <th ng-click=\"next()\">&rsaquo;</i></th>\r" +
+    "        <th><span ng-click=\"next()\">&rsaquo;</span></th>\r" +
     "\n" +
     "      </tr>\r" +
     "\n" +
@@ -1077,11 +1076,11 @@ $templateCache.put('templates/datepicker.html',
     "\n" +
     "      <tr>\r" +
     "\n" +
-    "        <th ng-click=\"prev(24)\">&lsaquo;</th>\r" +
+    "        <th><span ng-click=\"prev(24)\">&lsaquo;</span></th>\r" +
     "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('date')\" ng-bind=\"date|mFormat:'DD MMMM YYYY':tz\"></th>\r" +
+    "        <th colspan=\"5\" class=\"switch\"><span ng-click=\"setView('date')\" ng-bind=\"date|mFormat:'DD MMMM YYYY':tz\"></span></th>\r" +
     "\n" +
-    "        <th ng-click=\"next(24)\">&rsaquo;</i></th>\r" +
+    "        <th><span ng-click=\"next(24)\">&rsaquo;</span></th>\r" +
     "\n" +
     "      </tr>\r" +
     "\n" +
@@ -1117,11 +1116,11 @@ $templateCache.put('templates/datepicker.html',
     "\n" +
     "      <tr>\r" +
     "\n" +
-    "        <th ng-click=\"prev()\">&lsaquo;</th>\r" +
+    "        <th><span ng-click=\"prev()\">&lsaquo;</span></th>\r" +
     "\n" +
-    "        <th colspan=\"5\" class=\"switch\" ng-click=\"setView('hours')\" ng-bind=\"date|mFormat:'DD MMMM YYYY':tz\"></th>\r" +
+    "        <th colspan=\"5\" class=\"switch\"><span ng-click=\"setView('hours')\" ng-bind=\"date|mFormat:'DD MMMM YYYY':tz\"></span></th>\r" +
     "\n" +
-    "        <th ng-click=\"next()\">&rsaquo;</i></th>\r" +
+    "        <th><span ng-click=\"next()\">&rsaquo;</span></th>\r" +
     "\n" +
     "      </tr>\r" +
     "\n" +
