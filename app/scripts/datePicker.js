@@ -195,6 +195,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       prepareViewData = function () {
         var view = scope.view,
+          date = ngModel.$viewValue,
           classes = [], classList = '',
           i, j;
 
