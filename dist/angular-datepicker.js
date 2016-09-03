@@ -218,7 +218,7 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
               if (!inValidRange(week[j])) {
                 classList += ' disabled';
               }
-              if (!datePickerUtils.isSameMonth(date, week[j])) {
+              if (!datePickerUtils.isSameMonth(scope.date, week[j])) {
                 classList += ' muted';
               }
               classes[i].push(classList);
