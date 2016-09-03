@@ -104,13 +104,13 @@
 
   /* SPECIFIC */
 
-  [ng-switch-when="year"], [ng-switch-when="month"], [ng-switch-when="minutes"]{
+  .year, .month, .minutes {
     td span {
       height: 54px;
       line-height: 54px;
     }
   }
-  [ng-switch-when="date"]{
+  .date {
     td {
       padding: 0;
     }
@@ -121,7 +121,7 @@
     }
   }
 
-  th span:hover, [ng-switch-when="date"] td span:hover{
+  th span:hover, .date td span:hover{
     background: @grayLighter;
 	  cursor: pointer;
   }
