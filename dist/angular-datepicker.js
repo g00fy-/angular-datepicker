@@ -32,7 +32,8 @@ var Module = angular.module('datePicker', []);
   Module.filter('mFormat', function () {
     return function (m, format, tz) {
       if (!(moment.isMoment(m))) {
-        return (m) ? moment(m).format(format) : '';
+        var value = moment(m);
+        return value.isValid() ? value.format(format) : null;
       }
       return tz ? moment.tz(m, tz).format(format) : m.format(format);
     };
