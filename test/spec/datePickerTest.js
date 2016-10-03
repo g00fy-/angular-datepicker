@@ -27,6 +27,20 @@ describe('Test date Picker Filter', function(){
 
     expect(formattedDate).toBe('2015_01_02');
   });
+
+  it('returns null when receiving an invalid date', function() {
+    var date = 'an invalid date';
+    var formattedDate = mFormatFilter(date, 'YYYY_MM_DD');
+
+    expect(formattedDate).toBe(null);
+  });
+
+  it('returns null when receiving null', function() {
+    var date = null;
+    var formattedDate = mFormatFilter(date, 'YYYY_MM_DD');
+
+    expect(formattedDate).toBe(null);
+  });
 });
 
 describe('Test date Picker Directive', function(){
