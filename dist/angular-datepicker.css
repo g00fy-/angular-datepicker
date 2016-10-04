@@ -67,7 +67,8 @@
 [date-range] [date-picker] .after.before:active,
 [date-range] [date-picker] .after.before.active,
 [date-range] [date-picker] .after.before.disabled,
-[date-range] [date-picker] .after.before[disabled] {
+[date-range] [date-picker] .after.before[disabled],
+[date-range] [date-picker] .after.before.muted {
   color: #ffffff;
   background-color: #2f6ab4;
   *background-color: #2a5ea0;
@@ -98,7 +99,6 @@
 }
 [date-picker] td,
 [date-picker] th {
-  padding: 4px 5px;
   text-align: center;
   width: 20px;
   height: 20px;
@@ -107,10 +107,14 @@
   border-radius: 4px;
   border: none;
 }
+[date-picker] td {
+  padding: 4px 5px;
+}
 [date-picker] .switch {
   width: 145px;
 }
-[date-picker] span {
+[date-picker] td span,
+[date-picker] th span {
   display: block;
   width: 23%;
   height: 26px;
@@ -122,14 +126,25 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
-[date-picker] span:hover {
+[date-picker] td span:hover,
+[date-picker] th span:hover {
   background: #eeeeee;
 }
-[date-picker] span.disabled,
-[date-picker] span.disabled:hover {
+[date-picker] td span.disabled,
+[date-picker] th span.disabled,
+[date-picker] td span.disabled:hover,
+[date-picker] th span.disabled:hover,
+[date-picker] td span.muted,
+[date-picker] th span.muted,
+[date-picker] td span.muted:hover,
+[date-picker] th span.muted:hover {
   background: none;
   color: #999999;
   cursor: default;
+}
+[date-picker] th span {
+  padding: 4px 5px;
+  width: 100%;
 }
 [date-picker] .active,
 [date-picker] .now {
@@ -159,7 +174,9 @@
 [date-picker] .active.disabled,
 [date-picker] .now.disabled,
 [date-picker] .active[disabled],
-[date-picker] .now[disabled] {
+[date-picker] .now[disabled],
+[date-picker] .active.muted,
+[date-picker] .now.muted {
   color: #ffffff;
   background-color: #0044cc;
   *background-color: #003bb3;
@@ -191,7 +208,8 @@
 [date-picker] .now:active,
 [date-picker] .now.active,
 [date-picker] .now.disabled,
-[date-picker] .now[disabled] {
+[date-picker] .now[disabled],
+[date-picker] .now.muted {
   color: #ffffff;
   background-color: #ee905b;
   *background-color: #ec8044;
@@ -200,27 +218,36 @@
 [date-picker] .now.active {
   background-color: #e9712d \9;
 }
-[date-picker] .disabled {
+[date-picker] .disabled,
+[date-picker] .muted {
   background: none;
   color: #999999 !important;
   cursor: default;
 }
-[date-picker] [ng-switch-when="year"] span,
-[date-picker] [ng-switch-when="month"] span,
-[date-picker] [ng-switch-when="minutes"] span {
+[date-picker] .year td span,
+[date-picker] .month td span,
+[date-picker] .minutes td span {
   height: 54px;
   line-height: 54px;
 }
-[date-picker] [ng-switch-when="date"] td {
+[date-picker] .date td {
   padding: 0;
 }
-[date-picker] [ng-switch-when="date"] span {
+[date-picker] .date td span {
   width: 100%;
   height: 26px;
   line-height: 26px;
 }
-[date-picker] th:hover,
-[date-picker] [ng-switch-when="date"] td span:hover {
+[date-picker] th span:hover,
+[date-picker] .date td span:hover {
   background: #eeeeee;
   cursor: pointer;
+}
+[date-picker] th.weekday span,
+[date-picker] th.weekday span:hover {
+  background: none;
+  cursor: default;
+}
+[date-picker] th.switch {
+  text-transform: capitalize;
 }

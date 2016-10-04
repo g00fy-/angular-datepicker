@@ -48,20 +48,21 @@
   }
 
   td, th {
-    padding: 4px 5px;
     text-align: center;
     width: 20px;
     height: 20px;
     .border-radius(4px);
     border: none;
-
   }
-
+  td {
+    padding: 4px 5px;
+  }
+  
   .switch{
     width: 145px;
   }
 
-  span {
+  td span, th span {
       display: block;
 			width: 23%;
 			height: 26px;
@@ -73,14 +74,18 @@
 			&:hover {
 				background: @grayLighter;
 			}
-			&.disabled, &.disabled:hover {
+			&.disabled, &.disabled:hover, &.muted, &.muted:hover {
 				background:none;
 				color: @grayLight;
 				cursor: default;
 			}
 
   }
-
+  th span {
+    padding: 4px 5px;
+    width: 100%;
+  }
+  
   .active , .now{
     .buttonBackground(@btnPrimaryBackground, spin(@btnPrimaryBackground, 20));
     color: #fff;
@@ -91,7 +96,7 @@
     .buttonBackground(@btnDangerBackground, spin(@btnDangerBackground, 20));
   }
 
-  .disabled {
+  .disabled, .muted {
     background: none;
     color: #999999 !important;
     cursor: default;
@@ -99,25 +104,32 @@
 
   /* SPECIFIC */
 
-  [ng-switch-when="year"], [ng-switch-when="month"], [ng-switch-when="minutes"]{
-    span {
+  .year, .month, .minutes {
+    td span {
       height: 54px;
       line-height: 54px;
     }
   }
-  [ng-switch-when="date"]{
+  .date {
     td {
       padding: 0;
     }
-    span{
+    td span {
       width: 100%;
       height: 26px;
       line-height: 26px;
     }
   }
 
-  th:hover, [ng-switch-when="date"] td span:hover{
+  th span:hover, .date td span:hover{
     background: @grayLighter;
 	  cursor: pointer;
+  }
+  th.weekday span, th.weekday span:hover {
+    background: none;
+    cursor: default;
+  }
+  th.switch {
+    text-transform: capitalize;
   }
 }

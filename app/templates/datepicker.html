@@ -1,106 +1,105 @@
 <div ng-switch="view">
-  <div ng-switch-when="date">
+  <div class="date" ng-switch-when="date">
     <table>
       <thead>
-      <tr>
-        <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('month')" ng-bind="date|mFormat:'YYYY MMMM':tz"></th>
-        <th ng-click="next()">&rsaquo;</i></th>
-      </tr>
-      <tr>
-        <th ng-repeat="day in weekdays" style="overflow: hidden" ng-bind="day|mFormat:'ddd':tz"></th>
-      </tr>
+        <tr>
+          <th class="prev"><span ng-click="prev()">&lsaquo;</span></th>
+          <th colspan="5" class="switch"><span ng-bind="date|mFormat:'MMMM YYYY':tz" ng-click="setView('month')"></span></th>
+          <th class="next"><span ng-click="next()">&rsaquo;</span></th>
+        </tr>
+        <tr>
+          <th class="weekday" ng-repeat="day in weekdays" style="overflow: hidden"><span ng-bind="day|mFormat:'ddd':tz"></span></th>
+        </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="week in weeks" ng-init="$index2 = $index">
-        <td ng-repeat="day in week">
-          <span
-            ng-class="classes[$index2][$index]"
-            ng-click="selectDate(day)" ng-bind="day|mFormat:'DD':tz"></span>
-        </td>
-      </tr>
+        <tr ng-repeat="week in weeks" ng-init="$index2 = $index">
+          <td ng-repeat="day in week">
+            <span ng-class="classes[$index2][$index]"
+                  ng-click="selectDate(day)" ng-bind="day|mFormat:'DD':tz"></span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
-  <div ng-switch-when="year">
+  <div class="year" ng-switch-when="year">
     <table>
       <thead>
-      <tr>
-        <th ng-click="prev(10)">&lsaquo;</th>
-        <th colspan="5" class="switch"ng-bind="years[0].year()+' - '+years[years.length-1].year()"></th>
-        <th ng-click="next(10)">&rsaquo;</i></th>
-      </tr>
+        <tr>
+          <th class="prev"><span ng-click="prev(10)">&lsaquo;</span></th>
+          <th colspan="5" class="switch"><span ng-bind="years[0].year()+' - '+years[years.length-1].year()"></span></th>
+          <th class="next"><span ng-click="next(10)">&rsaquo;</span></th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td colspan="7">
-          <span ng-class="classes[$index]"
-                ng-repeat="year in years"
-                ng-click="selectDate(year)" ng-bind="year.year()"></span>
-        </td>
-      </tr>
+        <tr>
+          <td colspan="7">
+            <span ng-class="classes[$index]"
+                  ng-repeat="year in years"
+                  ng-click="selectDate(year)" ng-bind="year.year()"></span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
-  <div ng-switch-when="month">
+  <div class="month" ng-switch-when="month">
     <table>
       <thead>
-      <tr>
-        <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('year')" ng-bind="date|mFormat:'YYYY':tz"></th>
-        <th ng-click="next()">&rsaquo;</i></th>
-      </tr>
+        <tr>
+          <th class="prev"><span ng-click="prev()">&lsaquo;</span></th>
+          <th colspan="5" class="switch"><span ng-click="setView('year')" ng-bind="date|mFormat:'YYYY':tz"></span></th>
+          <th class="next"><span ng-click="next()">&rsaquo;</span></th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td colspan="7">
-          <span ng-repeat="month in months"
-                ng-class="classes[$index]"
-                ng-click="selectDate(month)"
-                ng-bind="month|mFormat:'MMM':tz"></span>
-        </td>
-      </tr>
+        <tr>
+          <td colspan="7">
+            <span ng-repeat="month in months"
+                  ng-class="classes[$index]"
+                  ng-click="selectDate(month)"
+                  ng-bind="month|mFormat:'MMM':tz"></span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
-  <div ng-switch-when="hours">
+  <div class="hours" ng-switch-when="hours">
     <table>
       <thead>
-      <tr>
-        <th ng-click="prev(24)">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('date')" ng-bind="date|mFormat:'DD MMMM YYYY':tz"></th>
-        <th ng-click="next(24)">&rsaquo;</i></th>
-      </tr>
+        <tr>
+          <th class="prev"><span ng-click="prev(24)">&lsaquo;</span></th>
+          <th colspan="5" class="switch"><span ng-click="setView('date')" ng-bind="date|mFormat:'DD MMMM YYYY':tz"></span></th>
+          <th class="next"><span ng-click="next(24)">&rsaquo;</span></th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td colspan="7">
-          <span ng-repeat="hour in hours"
-                ng-class="classes[$index]"
-                ng-click="selectDate(hour)" ng-bind="hour|mFormat:'HH:mm':tz"></span>
-        </td>
-      </tr>
+        <tr>
+          <td colspan="7">
+            <span ng-repeat="hour in hours"
+                  ng-class="classes[$index]"
+                  ng-click="selectDate(hour)" ng-bind="hour|mFormat:'HH:mm':tz"></span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
-  <div ng-switch-when="minutes">
+  <div class="mintes" ng-switch-when="minutes">
     <table>
       <thead>
-      <tr>
-        <th ng-click="prev()">&lsaquo;</th>
-        <th colspan="5" class="switch" ng-click="setView('hours')" ng-bind="date|mFormat:'DD MMMM YYYY':tz"></th>
-        <th ng-click="next()">&rsaquo;</i></th>
-      </tr>
+        <tr>
+          <th><span ng-click="prev()">&lsaquo;</span></th>
+          <th colspan="5" class="switch"><span ng-click="setView('hours')" ng-bind="date|mFormat:'DD MMMM YYYY':tz"></span></th>
+          <th><span ng-click="next()">&rsaquo;</span></th>
+        </tr>
       </thead>
       <tbody>
-      <tr>
-        <td colspan="7">
-          <span ng-repeat="minute in minutes"
-                ng-class="classes[$index]"
-                ng-click="selectDate(minute)"
-                ng-bind="minute|mFormat:'HH:mm':tz"></span>
-        </td>
-      </tr>
+        <tr>
+          <td colspan="7">
+            <span ng-repeat="minute in minutes"
+                  ng-class="classes[$index]"
+                  ng-click="selectDate(minute)"
+                  ng-bind="minute|mFormat:'HH:mm':tz"></span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

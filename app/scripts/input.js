@@ -41,7 +41,7 @@ Module.directive('dateTimeAppend', function () {
   };
 });
 
-Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
+Module.directive('dateTime', ['$compile', '$timeout', '$document', '$filter', 'dateTimeConfig', '$parse', 'datePickerUtils', function ($compile, $timeout, $document, $filter, dateTimeConfig, $parse, datePickerUtils) {
   var body = $document.find('body');
   var dateFilter = $filter('mFormat');
 
@@ -56,7 +56,6 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         index = views.indexOf(view),
         dismiss = attrs.autoClose ? $parse(attrs.autoClose)(scope) : dateTimeConfig.autoClose,
         picker = null,
-        pickerID = element[0].id,
         position = attrs.position || dateTimeConfig.position,
         container = null,
         minDate = null,
@@ -156,44 +155,42 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
         }
       }
 
-      if (pickerID) {
-        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if (eventIsForPicker(pickerIDs, pickerID)) {
-            if (picker) {
-              //Need to handle situation where the data changed but the picker is currently open.
-              //To handle this, we can create the inner picker with a random ID, then forward
-              //any events received to it.
-            } else {
-              var validateRequired = false;
-              if (angular.isDefined(data.minDate)) {
-                setMin(data.minDate);
-                validateRequired = true;
-              }
-              if (angular.isDefined(data.maxDate)) {
-                setMax(data.maxDate);
-                validateRequired = true;
-              }
-
-              if (angular.isDefined(data.minView)) {
-                attrs.minView = data.minView;
-              }
-              if (angular.isDefined(data.maxView)) {
-                attrs.maxView = data.maxView;
-              }
-              attrs.view = data.view || attrs.view;
-
-              if (validateRequired) {
-                ngModel.$validate();
-              }
-              if (angular.isDefined(data.format)) {
-                format = attrs.format = data.format || dateTimeConfig.format;
-                ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
-              }
-              getTemplate();
+      scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+        if (eventIsForPicker(pickerIDs, element[0].id)) {
+          if (picker) {
+            //Need to handle situation where the data changed but the picker is currently open.
+            //To handle this, we can create the inner picker with a random ID, then forward
+            //any events received to it.
+          } else {
+            var validateRequired = false;
+            if (angular.isDefined(data.minDate)) {
+              setMin(data.minDate);
+              validateRequired = true;
             }
+            if (angular.isDefined(data.maxDate)) {
+              setMax(data.maxDate);
+              validateRequired = true;
+            }
+
+            if (angular.isDefined(data.minView)) {
+              attrs.minView = data.minView;
+            }
+            if (angular.isDefined(data.maxView)) {
+              attrs.maxView = data.maxView;
+            }
+            attrs.view = data.view || attrs.view;
+
+            if (validateRequired) {
+              ngModel.$validate();
+            }
+            if (angular.isDefined(data.format)) {
+              format = attrs.format = data.format || dateTimeConfig.format;
+              ngModel.$modelValue = -1; //Triggers formatters. This value will be discarded.
+            }
+            getTemplate();
           }
-        });
-      }
+        }
+      });
 
       function showPicker() {
         if (picker) {
@@ -216,7 +213,10 @@ Module.directive('dateTime', ['$compile', '$document', '$filter', 'dateTimeConfi
           });
 
           scope.$on('hidePicker', function () {
-            element[0].blur();
+            element.triggerHandler('blur');
+              $timeout(function() {
+              element[0].blur();
+            }, 0);
           });
 
           scope.$on('$destroy', clear);

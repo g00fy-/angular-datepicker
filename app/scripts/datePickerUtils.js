@@ -165,7 +165,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         for (i = 0; i < j; i++) {
           target = target[nameArray[i]];
           if (!target) {
-            continue;
+            break;
           }
         }
 

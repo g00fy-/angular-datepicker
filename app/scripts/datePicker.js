@@ -70,9 +70,8 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         partial = !!attrs.partial,
         minDate = getDate('minDate'),
         maxDate = getDate('maxDate'),
-        pickerID = element[0].id,
         now = scope.now = createMoment(),
-        selected = scope.date = createMoment(scope.model || now),
+        selected = scope.date = createMoment(scope.model || minDate || now),
         autoclose = attrs.autoClose === 'true',
       // Either gets the 1st day from the attributes, or asks moment.js to give it to us as it is localized.
         firstDay = attrs.firstDay && attrs.firstDay >= 0 && attrs.firstDay <= 6 ? parseInt(attrs.firstDay, 10) : moment().weekday(0).day(),
@@ -196,13 +195,13 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
 
       prepareViewData = function () {
         var view = scope.view,
-          date = scope.date,
+          date = ngModel.$viewValue,
           classes = [], classList = '',
           i, j;
 
         datePickerUtils.setParams(tz, firstDay);
 
-        if (view === 'date') {
+        if(view === 'date') {
           var weeks = scope.weeks, week;
           for (i = 0; i < weeks.length; i++) {
             week = weeks[i];
@@ -216,8 +215,11 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
                 classList += ' now';
               }
               //if (week[j].month() !== date.month()) classList += ' disabled';
-              if (week[j].month() !== date.month() || !inValidRange(week[j])) {
+              if (!inValidRange(week[j])) {
                 classList += ' disabled';
+              }
+              if (!datePickerUtils.isSameMonth(scope.date, week[j])) {
+                classList += ' muted';
               }
               classes[i].push(classList);
             }
@@ -321,40 +323,38 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         return scope.next(-delta || -1);
       };
 
-      if (pickerID) {
-        scope.$on('pickerUpdate', function (event, pickerIDs, data) {
-          if (eventIsForPicker(pickerIDs, pickerID)) {
-            var updateViews = false, updateViewData = false;
+      scope.$on('pickerUpdate', function (event, pickerIDs, data) {
+        if (eventIsForPicker(pickerIDs, element[0].id)) {
+          var updateViews = false, updateViewData = false;
 
-            if (angular.isDefined(data.minDate)) {
-              minDate = data.minDate ? data.minDate : false;
-              updateViewData = true;
-            }
-            if (angular.isDefined(data.maxDate)) {
-              maxDate = data.maxDate ? data.maxDate : false;
-              updateViewData = true;
-            }
-
-            if (angular.isDefined(data.minView)) {
-              attrs.minView = data.minView;
-              updateViews = true;
-            }
-            if (angular.isDefined(data.maxView)) {
-              attrs.maxView = data.maxView;
-              updateViews = true;
-            }
-            attrs.view = data.view || attrs.view;
-
-            if (updateViews) {
-              prepareViews();
-            }
-
-            if (updateViewData) {
-              update();
-            }
+          if (angular.isDefined(data.minDate)) {
+            minDate = data.minDate ? data.minDate : false;
+            updateViewData = true;
           }
-        });
-      }
+          if (angular.isDefined(data.maxDate)) {
+            maxDate = data.maxDate ? data.maxDate : false;
+            updateViewData = true;
+          }
+
+          if (angular.isDefined(data.minView)) {
+            attrs.minView = data.minView;
+            updateViews = true;
+          }
+          if (angular.isDefined(data.maxView)) {
+            attrs.maxView = data.maxView;
+            updateViews = true;
+          }
+          attrs.view = data.view || attrs.view;
+
+          if (updateViews) {
+            prepareViews();
+          }
+
+          if (updateViewData) {
+            update();
+          }
+        }
+      });
     }
   };
 }]);
