@@ -28,7 +28,7 @@ Add the following module to your page : `datePicker`
 
 ## Usage Example
 
-[Live demo](https://rawgithub.com/DanTalash/angular-datepicker/master/app/index.html)
+[Live demo](https://rawgithub.com/g00fy-/angular-datepicker/master/app/index.html)
 
 ## New features
 
