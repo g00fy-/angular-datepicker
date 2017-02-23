@@ -72,22 +72,22 @@
       <div>
         <h4>Input with popup (date-time directive)</h4>
 
-	  	<form name="demoForm">
-			<div>
-			  <h5>Min ({{demoForm.pickerMinDate.$error.min ? 'Min: invalid' : 'Min: valid'}})</h5>				
-				<input date-time name="pickerMinDate" ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
-			</div>
+      <form name="demoForm">
+      <div>
+        <h5>Min ({{demoForm.pickerMinDate.$error.min ? 'Min: invalid' : 'Min: valid'}})</h5>        
+        <input date-time name="pickerMinDate" ng-model="dates.today" id="pickerMinDate" min-date="minDate" view="date" min-view="hours" timezone="UTC" format="lll">
+      </div>
 
-			<div>
-			  <h5>Max ({{demoForm.pickerMaxDate.$error.max ? 'Max: invalid' : 'Max: valid'}})</h5>
-				<input date-time name="pickerMaxDate" ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-			</div>
+      <div>
+        <h5>Max ({{demoForm.pickerMaxDate.$error.max ? 'Max: invalid' : 'Max: valid'}})</h5>
+        <input date-time name="pickerMaxDate" ng-model="dates.today" id="pickerMaxDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+      </div>
 
-			<div>
-			  <h5>Min + max ({{demoForm.pickerBothDates.$error.min ? 'Min: invalid, ' : 'Min: valid, '}} {{demoForm.pickerBothDates.$error.max ? 'max: invalid' : 'max: valid'}})</h5>
-				<input date-time name="pickerBothDates" ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
-			</div>
-		</form>
+      <div>
+        <h5>Min + max ({{demoForm.pickerBothDates.$error.min ? 'Min: invalid, ' : 'Min: valid, '}} {{demoForm.pickerBothDates.$error.max ? 'max: invalid' : 'max: valid'}})</h5>
+        <input date-time name="pickerBothDates" ng-model="dates.today" id="pickerBothDates" min-date="minDate" max-date="maxDate" view="date" min-view="hours" timezone="UTC" format="lll">
+      </div>
+    </form>
       </div>
 
       <div>

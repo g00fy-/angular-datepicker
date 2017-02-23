@@ -6,6 +6,26 @@
 -  MomentJS
 -  Moment Timezone (If timezones are being used)
 
+## Installation
+
+### via bower 
+
+```
+bower install  angular-datepicker --save
+```
+
+
+### via npm 
+
+```
+npm install  angular-datepicker --save
+```
+
+After the install add the js, css and the moment files to your page.
+
+Add the following module to your page : `datePicker`
+
+
 ## Usage Example
 
 [Live demo](https://rawgithub.com/DanTalash/angular-datepicker/master/app/index.html)

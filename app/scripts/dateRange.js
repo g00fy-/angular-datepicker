@@ -1,6 +1,4 @@
-/* global moment */
 'use strict';
-
 var Module = angular.module('datePicker');
 
 Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', function ($compile, datePickerUtils, dateTimeConfig) {
@@ -23,10 +21,10 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
     },
     link: function (scope, element, attrs) {
       var dateChange = null,
-          pickerRangeID = element[0].id,
-          pickerIDs = [randomName(), randomName()],
-          createMoment = datePickerUtils.createMoment,
-          eventIsForPicker = datePickerUtils.eventIsForPicker;
+        pickerRangeID = element[0].id,
+        pickerIDs = [randomName(), randomName()],
+        createMoment = datePickerUtils.createMoment,
+        eventIsForPicker = datePickerUtils.eventIsForPicker;
 
       scope.dateChange = function (modelName, newDate) {
         //Notify user if callback exists.
@@ -74,10 +72,10 @@ Module.directive('dateRange', ['$compile', 'datePickerUtils', 'dateTimeConfig', 
       attrs.onSetDate = 'dateChange';
 
       var template = '<div><table class="date-range"><tr><td valign="top">' +
-                    getTemplate(attrs, pickerIDs[0], 'start', false, scope.end) +
-                    '</td><td valign="top">' +
-                    getTemplate(attrs, pickerIDs[1], 'end', scope.start, false) +
-                  '</td></tr></table></div>';
+        getTemplate(attrs, pickerIDs[0], 'start', false, scope.end) +
+        '</td><td valign="top">' +
+        getTemplate(attrs, pickerIDs[1], 'end', scope.start, false) +
+        '</td></tr></table></div>';
 
       var picker = $compile(template)(scope);
       element.append(picker);

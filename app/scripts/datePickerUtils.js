@@ -1,7 +1,5 @@
-/* global moment */
-
+'use strict';
 angular.module('datePicker').factory('datePickerUtils', function () {
-  'use strict';
   var tz, firstDay;
   var createNewDate = function (year, month, day, hour, minute) {
     var utc = Date.UTC(year | 0, month | 0, day | 0, hour | 0, minute | 0);
@@ -17,7 +15,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         offset = m.utcOffset() / 60,
         minutes = [], minute;
 
-      for (minute = 0 ; minute < 60 ; minute += step) {
+      for (minute = 0; minute < 60; minute += step) {
         pushedDate = createNewDate(year, month, day, hour - offset, minute);
         minutes.push(pushedDate);
       }
@@ -26,7 +24,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     getVisibleWeeks: function (m) {
       m = moment(m);
       var startYear = m.year(),
-          startMonth = m.month();
+        startMonth = m.month();
 
       //Set date to the first day of the month
       m.date(1);
@@ -119,7 +117,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         hour, pushedDate, actualOffset,
         offset = m.utcOffset() / 60;
 
-      for (hour = 0 ; hour < 24 ; hour++) {
+      for (hour = 0; hour < 24; hour++) {
         pushedDate = createNewDate(year, month, day, hour - offset, 0, false);
         actualOffset = pushedDate.utcOffset() / 60;
         if (actualOffset !== offset) {
@@ -157,8 +155,8 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     },
     scopeSearch: function (scope, name, comparisonFn) {
       var parentScope = scope,
-          nameArray = name.split('.'),
-          target, i, j = nameArray.length;
+        nameArray = name.split('.'),
+        target, i, j = nameArray.length;
 
       do {
         target = parentScope = parentScope.$parent;
@@ -185,14 +183,14 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     },
     findFunction: function (scope, name) {
       //Search scope ancestors for a matching function.
-      return this.scopeSearch(scope, name, function(target) {
+      return this.scopeSearch(scope, name, function (target) {
         //Property must also be a function
         return angular.isFunction(target);
       });
     },
     findParam: function (scope, name) {
       //Search scope ancestors for a matching parameter.
-      return this.scopeSearch(scope, name, function() {
+      return this.scopeSearch(scope, name, function () {
         //As long as the property exists, we're good
         return true;
       });
@@ -201,8 +199,8 @@ angular.module('datePicker').factory('datePickerUtils', function () {
       if (tz) {
         return moment.tz(m, tz);
       } else {
-        //If input is a moment, and we have no TZ info, we need to remove TZ 
-        //info from the moment, otherwise the newly created moment will take 
+        //If input is a moment, and we have no TZ info, we need to remove TZ
+        //info from the moment, otherwise the newly created moment will take
         //the timezone of the input moment. The easiest way to do that is to
         //take the unix timestamp, and use that to create a new moment.
         //The new moment will use the local timezone of the user machine.
@@ -223,9 +221,19 @@ angular.module('datePicker').factory('datePickerUtils', function () {
 
       return result;
     },
+    //Checks if an event targeted at a specific picker, via either a string name, or an array of strings.
     eventIsForPicker: function (targetIDs, pickerID) {
-      //Checks if an event targeted at a specific picker, via either a string name, or an array of strings.
-      return (angular.isArray(targetIDs) && targetIDs.indexOf(pickerID) > -1 || targetIDs === pickerID);
+      function matches(id) {
+        if (id instanceof RegExp) {
+          return id.test(pickerID);
+        }
+        return id === pickerID;
+      }
+
+      if (angular.isArray(targetIDs)) {
+        return targetIDs.some(matches);
+      }
+      return matches(targetIDs);
     }
   };
 });
