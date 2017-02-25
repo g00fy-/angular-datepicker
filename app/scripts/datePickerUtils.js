@@ -156,13 +156,15 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     scopeSearch: function (scope, name, comparisonFn) {
       var parentScope = scope,
         nameArray = name.split('.'),
-        target, i, j = nameArray.length;
+        target, i, j = nameArray.length,
+        lastTarget;
 
       do {
-        target = parentScope = parentScope.$parent;
+        lastTarget = target = parentScope = parentScope.$parent;
 
         //Loop through provided names.
         for (i = 0; i < j; i++) {
+          lastTarget = target;
           target = target[nameArray[i]];
           if (!target) {
             continue;
@@ -174,7 +176,7 @@ angular.module('datePicker').factory('datePickerUtils', function () {
         //function. If the comparison function is happy, return
         //found result. Otherwise, continue to the next parent scope
         if (target && comparisonFn(target)) {
-          return target;
+          return [target, lastTarget];
         }
 
       } while (parentScope.$parent);
@@ -183,17 +185,24 @@ angular.module('datePicker').factory('datePickerUtils', function () {
     },
     findFunction: function (scope, name) {
       //Search scope ancestors for a matching function.
-      return this.scopeSearch(scope, name, function (target) {
+      var result = this.scopeSearch(scope, name, function (target) {
         //Property must also be a function
         return angular.isFunction(target);
       });
+
+
+      return result ? function () {
+        result[0].apply(result[1], arguments);
+      } : false;
     },
     findParam: function (scope, name) {
       //Search scope ancestors for a matching parameter.
-      return this.scopeSearch(scope, name, function () {
+      var result = this.scopeSearch(scope, name, function () {
         //As long as the property exists, we're good
         return true;
       });
+
+      return result ? result[0] : false;
     },
     createMoment: function (m) {
       if (tz) {
