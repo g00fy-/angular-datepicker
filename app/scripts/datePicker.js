@@ -102,6 +102,15 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
         }
       };
 
+      // for some reason having a similar check to this in the template doesn't work properly
+      scope.getUnformattedDateHeader = function() {
+          var dateToFormat = scope.now;
+          if ( scope.date && angular.isDate(scope.date) ) {
+              dateToFormat = scope.date;
+          }
+          return dateToFormat;
+      };
+
       scope.selectDate = function (date) {
         if (attrs.disabled) {
           return false;
@@ -154,24 +163,28 @@ Module.directive('datePicker', ['datePickerConfig', 'datePickerUtils', function 
           arrowClick = false;
         }
 
-        var date = scope.date;
+        var refDate = scope.date;
+        // Default the picker menu to the current date when passed an invalid date (e.g. 'year' view of 2010-2020 is more user friendly than 1899-1899).
+        if ( !datePickerUtils.isValidDate(refDate)) {
+          refDate = new Date();
+        }
 
         switch (view) {
           case 'year':
-            scope.years = datePickerUtils.getVisibleYears(date);
+            scope.years = datePickerUtils.getVisibleYears(refDate);
             break;
           case 'month':
-            scope.months = datePickerUtils.getVisibleMonths(date);
+            scope.months = datePickerUtils.getVisibleMonths(refDate);
             break;
           case 'date':
             scope.weekdays = scope.weekdays || datePickerUtils.getDaysOfWeek();
-            scope.weeks = datePickerUtils.getVisibleWeeks(date);
+            scope.weeks = datePickerUtils.getVisibleWeeks(refDate);
             break;
           case 'hours':
-            scope.hours = datePickerUtils.getVisibleHours(date);
+            scope.hours = datePickerUtils.getVisibleHours(refDate);
             break;
           case 'minutes':
-            scope.minutes = datePickerUtils.getVisibleMinutes(date, step);
+            scope.minutes = datePickerUtils.getVisibleMinutes(refDate, step);
             break;
         }
 
