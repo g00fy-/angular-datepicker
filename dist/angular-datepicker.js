@@ -810,6 +810,7 @@ var PRISTINE_CLASS = 'ng-pristine',
 
           ngModel.$validators.min = function (value) {
             //If we don't have a min / max value, then any value is valid.
+            value = moment(value, format, true);
             return minValid ? moment.isMoment(value) && (minDate.isSame(value) || minDate.isBefore(value)) : true;
           };
         }
@@ -818,6 +819,7 @@ var PRISTINE_CLASS = 'ng-pristine',
           setMax(datePickerUtils.findParam(scope, attrs.maxDate));
 
           ngModel.$validators.max = function (value) {
+            value = moment(value, format, true);
             return maxValid ? moment.isMoment(value) && (maxDate.isSame(value) || maxDate.isAfter(value)) : true;
           };
         }
