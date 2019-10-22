@@ -7,7 +7,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "bower": "1.5.3",
+    "bower": "1.8.8",
     "grunt": "0.4.5",
     "grunt-angular-templates": "0.5.7",
     "grunt-bump": "0.3.1",
